@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Genre]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Name] NVARCHAR(50) NOT NULL, 
+    [Description] NVARCHAR(10) NOT NULL
+)
+
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [NIX_Genre_Name] ON [dbo].[Genre] ([Name])
