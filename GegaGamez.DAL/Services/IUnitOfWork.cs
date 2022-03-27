@@ -7,13 +7,13 @@ namespace GegaGamez.DAL.Services
         ICommentRepository Comments { get; }
         ICountryRepository Countries { get; }
         IDefaultCollectionRepository DefaultCollections { get; }
-        IDefaultCollectionTypeRepository DefaultCollectionType { get; }
+        IDefaultCollectionTypeRepository DefaultCollectionTypes { get; }
         IDeveloperRepository Developers { get; }
         IGameRepository Games { get; }
         IGenreRepository Genres { get; }
         IRatingRepository Ratings { get; }
         IUserRepository Users { get; }
-        IUserCollectionRepository UsersCollections { get; }
+        IUserCollectionRepository UserCollections { get; }
 
         int Save();
 

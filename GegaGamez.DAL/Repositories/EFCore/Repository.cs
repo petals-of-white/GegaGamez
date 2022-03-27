@@ -44,7 +44,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(id), $"Record with Id {id}");
+                throw new ArgumentOutOfRangeException(nameof(id), $"Record with Id {id} does not exist");
             }
         }
 
