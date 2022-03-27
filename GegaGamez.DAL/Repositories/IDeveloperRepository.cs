@@ -11,6 +11,6 @@ namespace GegaGamez.DAL.Repositories
     {
         IEnumerable<Developer> GetActiveDevelopers();
 
-        Developer? GetByName(string name);
+        IEnumerable<Developer> GetAllByName(string name);
     }
 }

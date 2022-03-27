@@ -2,6 +2,9 @@
 
 namespace GegaGamez.DAL.Repositories
 {
+    /// <summary>
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     public interface IRepository<TEntity> where TEntity : class
     {
         void Add(TEntity entity);

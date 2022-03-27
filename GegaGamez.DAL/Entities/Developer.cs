@@ -23,7 +23,7 @@ namespace GegaGamez.DAL.Entities
         public DateTime BeginDate { get; set; }
 
         [Column(TypeName = "date")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [InverseProperty("Developer")]
         public virtual ICollection<Game> Games { get; set; }
