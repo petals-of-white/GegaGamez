@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="GegaGamez.DAL.Data.GegaGamezContext" Collapsed="true">
+    <Position X="18.25" Y="16.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>QAAAACAAEAAQAAAAAgICAQAAEAAAAAAAAAAAAAAAJAA=</HashCode>
+      <FileName>Data\GegaGamezContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.Comment" Collapsed="true">
+    <Position X="40.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAAAAAEAAAgAAAgAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Entities\Comment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.Country" Collapsed="true">
+    <Position X="42.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAAAAAAAAAABAAQAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Entities\Country.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.DefaultCollection" Collapsed="true">
+    <Position X="44.25" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>CAADAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Entities\DefaultCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.DefaultCollectionType" Collapsed="true">
+    <Position X="46" Y="1.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAEAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\DefaultCollectionType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.Developer" Collapsed="true">
+    <Position X="40.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAAAAAAIAAAAAAAQgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Developer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.Game" Collapsed="true">
+    <Position X="42.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAEQAoAEAAAgICAAQAAIAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Entities\Game.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.Genre" Collapsed="true">
+    <Position X="44.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Genre.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.Rating" Collapsed="true">
+    <Position X="46" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAgAAAAAAEAAAgAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Rating.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.User" Collapsed="true">
+    <Position X="40.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAEAAAAAEAAwACAAQAAAIQAAACAAAAAAAAIAA=</HashCode>
+      <FileName>Entities\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Entities.UserCollection" Collapsed="true">
+    <Position X="42.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAADAAAAAAAgAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\UserCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.CommentRepository">
+    <Position X="4.75" Y="2.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\EFCore\CommentRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.CountryRepository">
+    <Position X="13" Y="2.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\EFCore\CountryRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.DefaultCollectionRepository">
+    <Position X="15.75" Y="2.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Repositories\EFCore\DefaultCollectionRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.DefaultCollectionTypeRepository">
+    <Position X="24.25" Y="2.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\EFCore\DefaultCollectionTypeRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.DeveloperRepository">
+    <Position X="31.75" Y="2.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\EFCore\DeveloperRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.GameRepository">
+    <Position X="36.25" Y="2.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAAABAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\EFCore\GameRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.GenreRepository">
+    <Position X="0.75" Y="2.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\EFCore\GenreRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.RatingRepository">
+    <Position X="9.25" Y="2.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Repositories\EFCore\RatingRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.Repository&lt;TEntity&gt;" Collapsed="true">
+    <Position X="19.25" Y="1.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAIBAAAAAAAAAABAAAAAJAQAAAAAAAAAIgAAAIAEAAI=</HashCode>
+      <FileName>Repositories\EFCore\Repository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.UserCollectionRepository">
+    <Position X="20" Y="2.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\EFCore\UserCollectionRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Repositories.EFCore.UserRepository">
+    <Position X="27.75" Y="2.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Repositories\EFCore\UserRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GegaGamez.DAL.Services.EFCore.UnitOfWork" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="11" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>QARBAKAAEiAAEAAAAgIKAQAAAAAQAYAAgACAAAAAJAQ=</HashCode>
+      <FileName>Services\EFCore\UnitOfWork.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_comments" />
+      <Field Name="_countries" />
+      <Field Name="_dbContext" />
+      <Field Name="_defaultCollections" />
+      <Field Name="_defaultCollectionTypes" />
+      <Field Name="_developers" />
+      <Field Name="_games" />
+      <Field Name="_ratings" />
+      <Field Name="_userCollections" />
+      <Field Name="_users" />
+      <Field Name="_genres" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="GegaGamez.DAL.Repositories.ICommentRepository" Collapsed="true">
+    <Position X="19.25" Y="9.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\ICommentRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.ICountryRepository" Collapsed="true">
+    <Position X="24.5" Y="9.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\ICountryRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.IDefaultCollectionRepository" Collapsed="true">
+    <Position X="27" Y="9.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Repositories\IDefaultCollectionRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.IDefaultCollectionTypeRepository">
+    <Position X="0.5" Y="9.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\IDefaultCollectionTypeRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.IDeveloperRepository">
+    <Position X="8" Y="9.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\IDeveloperRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.IGameRepository">
+    <Position X="12.5" Y="9.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAAABAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\IGameRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.IGenreRepository" Collapsed="true">
+    <Position X="16.75" Y="9.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\IGenreRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.IRatingRepository" Collapsed="true">
+    <Position X="22" Y="9.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Repositories\IRatingRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.IRepository&lt;TEntity&gt;">
+    <Position X="15" Y="5.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>BAIAAAAAAAAAAABAAAAABAQAAAAAAAAAIgAAAIAEAAI=</HashCode>
+      <FileName>Repositories\IRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.IUserCollectionRepository" Collapsed="true">
+    <Position X="30.25" Y="9.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\IUserCollectionRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Repositories.IUserRepository">
+    <Position X="4" Y="9.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Repositories\IUserRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GegaGamez.DAL.Services.IUnitOfWork" Collapsed="true">
+    <Position X="40.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQAAKAAEAAAAAAAAgICAQAAAAAAAAAAAAAAAAAAJAA=</HashCode>
+      <FileName>Services\IUnitOfWork.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="10" />
+</ClassDiagram>

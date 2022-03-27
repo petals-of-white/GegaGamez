@@ -18,11 +18,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Entities\" />
-    <Folder Include="Repositories\EFCore\" />
-    <Folder Include="Services\EFCore\" />
-  </ItemGroup>
-
 </Project>
