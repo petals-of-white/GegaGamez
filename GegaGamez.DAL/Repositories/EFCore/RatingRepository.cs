@@ -11,7 +11,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public int GetAverageGameRatingScore(Game game)
         {
-            throw new NotImplementedException();
+            return (int) Math.Floor(_dbSet.Where(r => r.GameId == game.Id).Average(r => r.RatingScore));
         }
     }
 }

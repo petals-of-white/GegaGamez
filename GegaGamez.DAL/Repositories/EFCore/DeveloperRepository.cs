@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GegaGamez.DAL.Entities;
+﻿using GegaGamez.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.DAL.Repositories.EFCore
@@ -18,7 +13,17 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public IEnumerable<Developer> GetAllByName(string name)
         {
-            throw new NotImplementedException();
+            // this anonymous comparer method might be replaced by something better in the future
+            var titleSearcher = delegate (string inputTitle, string compareToTitle)
+            {
+                return compareToTitle.ToLower().Contains(inputTitle.ToLower());
+            };
+
+            var devsByName = (from dev in _dbSet
+                              where titleSearcher(name, dev.Name)
+                              select dev).ToList();
+
+            return devsByName;
         }
     }
 }

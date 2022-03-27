@@ -2,7 +2,7 @@
 
 namespace GegaGamez.DAL.Services
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         ICommentRepository Comments { get; }
         ICountryRepository Countries { get; }

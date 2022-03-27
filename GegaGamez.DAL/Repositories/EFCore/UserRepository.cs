@@ -9,14 +9,26 @@ namespace GegaGamez.DAL.Repositories.EFCore
         {
         }
 
-        public User? GetByCredentials(string username, string password)
+        public IEnumerable<User> GetAllByUsername(string username)
         {
-            throw new NotImplementedException();
+            // this anonymous comparer method might be replaced by something better in the future
+            var usernameSearcher = delegate (string inputUsername, string compareToUsername)
+            {
+                return compareToUsername.ToLower().Contains(inputUsername.ToLower());
+            };
+
+            var usersByUsername = (from user in _dbSet
+                                   where usernameSearcher(username, user.Username)
+                                   select user).ToList();
+
+            return usersByUsername;
         }
 
-        public User? GetByUsername(string username)
+        public User? GetByCredentials(string username, string password)
         {
-            throw new NotImplementedException();
+            User? user = _dbSet.SingleOrDefault(u => u.Username == username);
+
+            return user ?? throw new ArgumentException("User found, but the password was incorrect.", nameof(password));
         }
     }
 }
