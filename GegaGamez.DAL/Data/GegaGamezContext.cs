@@ -1,4 +1,5 @@
-﻿using GegaGamez.DAL.Entities;
+﻿using GegaGamez.DAL.Data.EntityConfigurations;
+using GegaGamez.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.DAL.Data
@@ -27,6 +28,19 @@ namespace GegaGamez.DAL.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder
+                .ApplyConfiguration(new CommentConfiguration())
+                .ApplyConfiguration(new CountryConfiguration())
+                .ApplyConfiguration(new DefaultCollectionConfiguration())
+                .ApplyConfiguration(new DefaultCollectionTypeConfiguration())
+                .ApplyConfiguration(new DeveloperConfiguration())
+                .ApplyConfiguration(new GameConfiguration())
+                .ApplyConfiguration(new GenreConfiguration())
+                .ApplyConfiguration(new RatingConfiguration())
+                .ApplyConfiguration(new UserConfiguration())
+                .ApplyConfiguration(new UserCollectionConfiguration());
+
+            /*
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasOne(d => d.Game)
@@ -148,7 +162,7 @@ namespace GegaGamez.DAL.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserCollection_User");
             });
-
+            */
             OnModelCreatingPartial(modelBuilder);
         }
 
