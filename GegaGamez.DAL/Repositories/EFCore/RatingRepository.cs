@@ -13,5 +13,11 @@ namespace GegaGamez.DAL.Repositories.EFCore
         {
             return (int) Math.Floor(_dbSet.Where(r => r.GameId == game.Id).Average(r => r.RatingScore));
         }
+
+        public async Task<int> GetAverageGameRatingScoreAsync(Game game)
+        {
+            var avg = await _dbSet.Where(r => r.GameId == game.Id).AverageAsync(r => r.RatingScore);
+            return (int) Math.Floor(avg);
+        }
     }
 }

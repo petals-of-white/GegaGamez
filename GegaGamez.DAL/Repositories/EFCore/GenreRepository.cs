@@ -23,5 +23,22 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
             return genresByName;
         }
+
+        public async Task<IEnumerable<Genre>> GetAllByNameAsync(string name)
+        {
+            // this anonymous comparer method might be replaced by something better in the future
+            var titleSearcher = delegate (string inputTitle, string compareToTitle)
+            {
+                return compareToTitle.ToLower().Contains(inputTitle.ToLower());
+            };
+
+            var genresByName = await (from genre in _dbSet
+                                where titleSearcher(name, genre.Name)
+                                select genre).ToListAsync();
+
+            return genresByName;
+        }
+
+
     }
 }

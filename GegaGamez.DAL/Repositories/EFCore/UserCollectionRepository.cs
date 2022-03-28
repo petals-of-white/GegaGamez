@@ -10,5 +10,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
         }
 
         public IEnumerable<UserCollection> GetAllByUser(User user) => GetAll(uc => uc.UserId == user.Id);
+
+        public Task<IEnumerable<UserCollection>> GetAllByUserAsync(User user)=> GetAllAsync(uc => uc.UserId == user.Id);
     }
 }

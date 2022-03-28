@@ -9,5 +9,7 @@ namespace GegaGamez.DAL.Repositories
         /// <param name="game"></param>
         /// <returns>Int number (1-10) that describes average rating for a game</returns>
         int GetAverageGameRatingScore(Game game);
+
+        Task<int> GetAverageGameRatingScoreAsync(Game game);
     }
 }
