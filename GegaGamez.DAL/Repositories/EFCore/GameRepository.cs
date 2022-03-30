@@ -14,17 +14,25 @@ namespace GegaGamez.DAL.Repositories.EFCore
             return _dbSet.Where(g => Math.Floor(g.Ratings.Average(r => r.RatingScore)) == score).ToList();
         }
 
+        public async Task<IEnumerable<Game>> GetAllByRatingScoreAsync(int score)
+        {
+            return await _dbSet.Where(g => Math.Floor(g.Ratings.Average(r => r.RatingScore)) == score).ToListAsync();
+        }
+
         public IEnumerable<Game> GetAllByTitle(string title)
         {
-            // this anonymous comparer method might be replaced by something better in the future
-            var titleSearcher = delegate (string inputTitle, string compareToTitle)
-            {
-                return compareToTitle.ToLower().Contains(inputTitle.ToLower());
-            };
-
             var gamesByTitle = (from game in _dbSet
-                                where titleSearcher(title, game.Title)
+                                where game.Title.Contains(title, StringComparison.OrdinalIgnoreCase)
                                 select game).ToList();
+
+            return gamesByTitle;
+        }
+
+        public async Task<IEnumerable<Game>> GetAllByTitleAsync(string title)
+        {
+            var gamesByTitle = await (from game in _dbSet
+                                      where game.Title.Contains(title, StringComparison.OrdinalIgnoreCase)
+                                      select game).ToListAsync();
 
             return gamesByTitle;
         }
@@ -34,6 +42,14 @@ namespace GegaGamez.DAL.Repositories.EFCore
             var gamesByGenre = (from game in _dbSet
                                 where game.Genres.Select(g => g.Id).Contains(genre.Id)
                                 select game).ToList();
+            return gamesByGenre;
+        }
+
+        public async Task<IEnumerable<Game>> GetByGenreAsync(Genre genre)
+        {
+            var gamesByGenre = await (from game in _dbSet
+                                      where game.Genres.Select(g => g.Id).Contains(genre.Id)
+                                      select game).ToListAsync();
             return gamesByGenre;
         }
     }

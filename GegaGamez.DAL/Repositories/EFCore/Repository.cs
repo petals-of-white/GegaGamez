@@ -20,17 +20,46 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public void Add(TEntity entity) => _dbSet.Add(entity);
 
+        public Task AddAsync(TEntity entity)
+        {
+            return _dbSet.AddAsync(entity).AsTask();
+        }
+
         public void AddRange(IEnumerable<TEntity> entities) => _dbSet.AddRange(entities);
+
+        public Task AddRangeAsync(IEnumerable<TEntity> entities) => _dbSet.AddRangeAsync(entities);
 
         public int Count() => _dbSet.Count();
 
         public int CountAll(Expression<Func<TEntity, bool>> predicate) => _dbSet.Count(predicate);
 
+        public Task<int> CountAllAsync(Expression<Func<TEntity, bool>> predicate) => _dbSet.CountAsync(predicate);
+
+        public Task<int> CountAsync() => _dbSet.CountAsync();
+
         public TEntity? Get(int id) => _dbSet.Find(id);
 
         public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate) => _dbSet.Where(predicate).ToList();
 
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            var list = await _dbSet.Where(predicate).ToListAsync();
+            var enumerable = await Task.FromResult(list.AsEnumerable());
+
+            return enumerable;
+        }
+
+        public Task<TEntity?> GetAsync(int id) => _dbSet.FindAsync(id).AsTask();
+
         public IEnumerable<TEntity> List() => _dbSet.ToList();
+
+        public async Task<IEnumerable<TEntity>> ListAsync()
+        {
+            var list = await _dbSet.ToListAsync();
+            var enumerable = await Task.FromResult(list.AsEnumerable());
+
+            return enumerable;
+        }
 
         public void Remove(TEntity entity) => _dbSet.Remove(entity);
 
@@ -49,6 +78,20 @@ namespace GegaGamez.DAL.Repositories.EFCore
         }
 
         public void RemoveAll(Expression<Func<TEntity, bool>> predicate) => RemoveRange(GetAll(predicate));
+
+        public async Task RemoveAsync(int id)
+        {
+            TEntity? entity = await GetAsync(id);
+
+            if (entity is not null)
+            {
+                Remove(entity);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(id), $"Record with Id {id} does not exist");
+            }
+        }
 
         public void RemoveRange(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
     }

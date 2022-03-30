@@ -10,5 +10,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
         }
 
         public IEnumerable<Comment> GetUserComments(User user) => GetAll(c => c.UserId == user.Id);
+
+        public Task<IEnumerable<Comment>> GetUserCommentsAsync(User user) => GetAllAsync(c => c.UserId == user.Id);
     }
 }
