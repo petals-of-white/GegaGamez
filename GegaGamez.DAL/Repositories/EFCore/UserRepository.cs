@@ -11,14 +11,8 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public IEnumerable<User> GetAllByUsername(string username)
         {
-            // this anonymous comparer method might be replaced by something better in the future
-            var usernameSearcher = delegate (string inputUsername, string compareToUsername)
-            {
-                return compareToUsername.ToLower().Contains(inputUsername.ToLower());
-            };
-
             var usersByUsername = (from user in _dbSet
-                                   where usernameSearcher(username, user.Username)
+                                   where user.Username.Contains(username, StringComparison.OrdinalIgnoreCase)
                                    select user).ToList();
 
             return usersByUsername;
@@ -26,14 +20,8 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public async Task<IEnumerable<User>> GetAllByUsernameAsync(string username)
         {
-            // this anonymous comparer method might be replaced by something better in the future
-            var usernameSearcher = delegate (string inputUsername, string compareToUsername)
-            {
-                return compareToUsername.ToLower().Contains(inputUsername.ToLower());
-            };
-
             var usersByUsername = await (from user in _dbSet
-                                         where usernameSearcher(username, user.Username)
+                                         where user.Username.Contains(username, StringComparison.OrdinalIgnoreCase)
                                          select user).ToListAsync();
 
             var task = await Task.FromResult(usersByUsername.AsEnumerable());

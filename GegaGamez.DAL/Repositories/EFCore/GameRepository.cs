@@ -21,14 +21,8 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public IEnumerable<Game> GetAllByTitle(string title)
         {
-            // this anonymous comparer method might be replaced by something better in the future
-            var titleSearcher = delegate (string inputTitle, string compareToTitle)
-            {
-                return compareToTitle.ToLower().Contains(inputTitle.ToLower());
-            };
-
             var gamesByTitle = (from game in _dbSet
-                                where titleSearcher(title, game.Title)
+                                where game.Title.Contains(title, StringComparison.OrdinalIgnoreCase)
                                 select game).ToList();
 
             return gamesByTitle;
@@ -36,14 +30,8 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public async Task<IEnumerable<Game>> GetAllByTitleAsync(string title)
         {
-            // this anonymous comparer method might be replaced by something better in the future
-            var titleSearcher = delegate (string inputTitle, string compareToTitle)
-            {
-                return compareToTitle.ToLower().Contains(inputTitle.ToLower());
-            };
-
             var gamesByTitle = await (from game in _dbSet
-                                      where titleSearcher(title, game.Title)
+                                      where game.Title.Contains(title, StringComparison.OrdinalIgnoreCase)
                                       select game).ToListAsync();
 
             return gamesByTitle;

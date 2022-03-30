@@ -63,8 +63,6 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public void Remove(TEntity entity) => _dbSet.Remove(entity);
 
-        //public void RemoveAsync(TEntity entity)
-
         public void Remove(int id)
         {
             TEntity? entity = _dbSet.Find(id);
@@ -95,14 +93,6 @@ namespace GegaGamez.DAL.Repositories.EFCore
             }
         }
 
-        //public Task RemoveAllAsync(Expression<Func<TEntity, bool>> predicate)
-        //{
-        //}
-
         public void RemoveRange(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
-
-        //public Task RemoveRangeAsync(IEnumerable<TEntity>)
-        //{
-        //}
     }
 }
