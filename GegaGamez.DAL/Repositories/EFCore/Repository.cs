@@ -79,20 +79,6 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public void RemoveAll(Expression<Func<TEntity, bool>> predicate) => RemoveRange(GetAll(predicate));
 
-        public async Task RemoveAsync(int id)
-        {
-            TEntity? entity = await GetAsync(id);
-
-            if (entity is not null)
-            {
-                Remove(entity);
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(id), $"Record with Id {id} does not exist");
-            }
-        }
-
         public void RemoveRange(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
     }
 }
