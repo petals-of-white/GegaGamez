@@ -8,6 +8,8 @@ namespace GegaGamez.DAL.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Rating> builder)
         {
+            builder.HasKey(e => new { e.UserId, e.RatingScore, e.GameId });
+
             builder.HasOne(d => d.Game)
                 .WithMany(p => p.Ratings)
                 .HasForeignKey(d => d.GameId)
