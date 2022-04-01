@@ -6,3 +6,7 @@
     CONSTRAINT [FK_Games_Genres_GameId] FOREIGN KEY ([GameId]) REFERENCES [Game]([Id]),
     CONSTRAINT [FK_Games_Genres_GenreID] FOREIGN KEY ([GenreId]) REFERENCES [Genre]([Id])
 )
+
+GO
+
+CREATE NONCLUSTERED INDEX [NIX_Games_Genres_GenreId] ON [dbo].[Games_Genres] ([GenreId])
