@@ -5,14 +5,17 @@ using Microsoft.EntityFrameworkCore;
 namespace GegaGamez.DAL.Entities
 {
     [Table("Rating")]
-    [Index("GameId", "UserId", Name = "NIX_Rating_GameId_UserId")]
+    [Index("GameId", Name = "NIX_Rating_GameId")]
+    [Index("RatingScore", Name = "NIX_Rating_RatingScore")]
     public partial class Rating
     {
         [Key]
-        public int Id { get; set; }
-
-        public int GameId { get; set; }
         public int UserId { get; set; }
+
+        [Key]
+        public int GameId { get; set; }
+
+        [Key]
         public byte RatingScore { get; set; }
 
         [ForeignKey("GameId")]

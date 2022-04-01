@@ -29,16 +29,16 @@ namespace GegaGamez.DAL.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .ApplyConfiguration(new CommentConfiguration())
-                .ApplyConfiguration(new CountryConfiguration())
-                .ApplyConfiguration(new DefaultCollectionConfiguration())
-                .ApplyConfiguration(new DefaultCollectionTypeConfiguration())
-                .ApplyConfiguration(new DeveloperConfiguration())
-                .ApplyConfiguration(new GameConfiguration())
-                .ApplyConfiguration(new GenreConfiguration())
-                .ApplyConfiguration(new RatingConfiguration())
-                .ApplyConfiguration(new UserConfiguration())
-                .ApplyConfiguration(new UserCollectionConfiguration());
+                   .ApplyConfiguration(new CommentConfiguration())
+                   .ApplyConfiguration(new CountryConfiguration())
+                   .ApplyConfiguration(new DefaultCollectionConfiguration())
+                   .ApplyConfiguration(new DefaultCollectionTypeConfiguration())
+                   .ApplyConfiguration(new DeveloperConfiguration())
+                   .ApplyConfiguration(new GameConfiguration())
+                   .ApplyConfiguration(new GenreConfiguration())
+                   .ApplyConfiguration(new RatingConfiguration())
+                   .ApplyConfiguration(new UserConfiguration())
+                   .ApplyConfiguration(new UserCollectionConfiguration());
 
             /*
             modelBuilder.Entity<Comment>(entity =>
@@ -115,6 +115,8 @@ namespace GegaGamez.DAL.Data
                             j.HasKey("GameId", "GenreId");
 
                             j.ToTable("Games_Genres");
+
+                            j.HasIndex(new [] { "GenreId" }, "NIX_Games_Genres_GenreId");
                         });
 
                 entity.HasMany(d => d.UserCollections)
@@ -133,6 +135,8 @@ namespace GegaGamez.DAL.Data
 
             modelBuilder.Entity<Rating>(entity =>
             {
+                entity.HasKey(e => new { e.UserId, e.RatingScore, e.GameId });
+
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.Ratings)
                     .HasForeignKey(d => d.GameId)
