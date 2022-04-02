@@ -11,6 +11,10 @@ namespace GegaGamez.DAL.Repositories.EFCore
         {
         }
 
+        public override DefaultCollection? Get(int id) => DbSetWithIncludedProperties.SingleOrDefault(dc => dc.Id == id);
+
+        public override Task<DefaultCollection?> GetAsync(int id) => DbSetWithIncludedProperties.SingleOrDefaultAsync(dc => dc.Id == id);
+
         public IEnumerable<DefaultCollection> GetByUser(User user) => GetAll(dc => dc.UserId == user.Id);
 
         public Task<IEnumerable<DefaultCollection>> GetByUserAsync(User user) => GetAllAsync(dc => dc.UserId == user.Id);

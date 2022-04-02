@@ -11,6 +11,8 @@ namespace GegaGamez.DAL.Repositories.EFCore
         {
         }
 
+        public override User? Get(int id) => DbSetWithIncludedProperties.SingleOrDefault(u => u.Id == id);
+
         public IEnumerable<User> GetAllByUsername(string username)
         {
             var usersByUsername = (from user in DbSetWithIncludedProperties
@@ -29,6 +31,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
             return usersByUsername;
         }
 
+        public override Task<User?> GetAsync(int id) => DbSetWithIncludedProperties.SingleOrDefaultAsync(u => u.Id == id);
         /// <summary>
         /// </summary>
         /// <param name="username"></param>

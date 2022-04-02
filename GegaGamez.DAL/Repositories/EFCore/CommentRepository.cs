@@ -11,12 +11,16 @@ namespace GegaGamez.DAL.Repositories.EFCore
         {
         }
 
-        public IEnumerable<Comment> GetUserComments(User user) => GetAll(c => c.UserId == user.Id);
+        public override Comment? Get(int id) => DbSetWithIncludedProperties.SingleOrDefault(c => c.Id == id);
 
-        public Task<IEnumerable<Comment>> GetUserCommentsAsync(User user) => GetAllAsync(c => c.UserId == user.Id);
+        public override Task<Comment?> GetAsync(int id) => DbSetWithIncludedProperties.SingleOrDefaultAsync(c => c.Id == id);
 
         public IEnumerable<Comment> GetGameComments(Game game) => GetAll(c => c.GameId == game.Id);
 
         public Task<IEnumerable<Comment>> GetGameCommentsAsync(Game game) => GetAllAsync(c => c.GameId == game.Id);
+
+        public IEnumerable<Comment> GetUserComments(User user) => GetAll(c => c.UserId == user.Id);
+
+        public Task<IEnumerable<Comment>> GetUserCommentsAsync(User user) => GetAllAsync(c => c.UserId == user.Id);
     }
 }
