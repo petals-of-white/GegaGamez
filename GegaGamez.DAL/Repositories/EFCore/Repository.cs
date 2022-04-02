@@ -42,13 +42,30 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public Task<int> CountAsync() => _dbSet.CountAsync();
 
+        //public virtual TEntity? Get(int id) => _dbSet.Find(id);
+
         /// <summary>
         /// Finds an entry by Id. This method doesn't use eager loading by default, So it can be
         /// overriden to do so
         /// </summary>
         /// <param name="id"></param>
         /// <returns>TEntity if found, otherwise null</returns>
-        public virtual TEntity? Get(int id) => _dbSet.Find(id);
+        public virtual TEntity? Get(int id)
+        {
+            TEntity? outputEntity;
+
+            var idProperty = typeof(TEntity).GetProperty("Id");
+
+            if (idProperty != null)
+            {
+                outputEntity = DbSetWithIncludedProperties.SingleOrDefault(e => (int) idProperty.GetValue(e)! == id);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            return outputEntity;
+        }
 
         /// <summary>
         /// Finds all the entries by predicate.
@@ -73,7 +90,25 @@ namespace GegaGamez.DAL.Repositories.EFCore
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public virtual Task<TEntity?> GetAsync(int id) => _dbSet.FindAsync(id).AsTask();
+
+        // public virtual Task<TEntity?> GetAsync(int id) => _dbSet.FindAsync(id).AsTask();
+
+        public virtual Task<TEntity?> GetAsync(int id)
+        {
+            Task<TEntity?> outputEntity;
+
+            var idProperty = typeof(TEntity).GetProperty("Id");
+
+            if (idProperty != null)
+            {
+                outputEntity = DbSetWithIncludedProperties.SingleOrDefaultAsync(e => (int) idProperty.GetValue(e)! == id);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            return outputEntity;
+        }
 
         public virtual IEnumerable<TEntity> List() => DbSetWithIncludedProperties.ToList();
 
@@ -88,7 +123,8 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public void Remove(int id)
         {
-            TEntity? entity = _dbSet.Find(id);
+            // TEntity? entity = _dbSet.Find(id);
+            TEntity? entity = Get(id);
 
             if (entity is not null)
             {
