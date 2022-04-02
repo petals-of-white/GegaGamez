@@ -11,5 +11,9 @@ namespace GegaGamez.DAL.Repositories
         int GetAverageGameRatingScore(Game game);
 
         Task<int> GetAverageGameRatingScoreAsync(Game game);
+
+        Rating? GetUserRatingForAGame(User user, Game game);
+
+        Task<Rating?> GetUserRatingForAGameAsync(User user, Game game);
     }
 }
