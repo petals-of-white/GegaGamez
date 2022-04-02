@@ -5,13 +5,15 @@ namespace GegaGamez.DAL.Repositories.EFCore
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
+        protected override IQueryable<User> DbSetWithIncludedProperties => _dbSet.Include(u => u.Country);
+
         public UserRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
         public IEnumerable<User> GetAllByUsername(string username)
         {
-            var usersByUsername = (from user in _dbSet
+            var usersByUsername = (from user in DbSetWithIncludedProperties
                                    where user.Username.Contains(username, StringComparison.OrdinalIgnoreCase)
                                    select user).ToList();
 
@@ -20,25 +22,35 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public async Task<IEnumerable<User>> GetAllByUsernameAsync(string username)
         {
-            var usersByUsername = await (from user in _dbSet
+            var usersByUsername = await (from user in DbSetWithIncludedProperties
                                          where user.Username.Contains(username, StringComparison.OrdinalIgnoreCase)
                                          select user).ToListAsync();
 
-            var task = await Task.FromResult(usersByUsername.AsEnumerable());
-
-            return task;
+            return usersByUsername;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public User? GetByCredentials(string username, string password)
         {
-            User? user = _dbSet.SingleOrDefault(u => u.Username == username);
+            User? user = DbSetWithIncludedProperties.SingleOrDefault(u => u.Username == username);
 
             return user ?? throw new ArgumentException("User found, but the password was incorrect.", nameof(password));
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task<User?> GetByCredentialsAsync(string username, string password)
         {
-            User? user = await _dbSet.SingleOrDefaultAsync(u => u.Username == username);
+            User? user = await DbSetWithIncludedProperties.SingleOrDefaultAsync(u => u.Username == username);
 
             return user ?? throw new ArgumentException("User found, but the password was incorrect.", nameof(password));
         }
