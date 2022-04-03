@@ -41,8 +41,6 @@ namespace GegaGamez.DAL.Repositories
 
         void RemoveAll(Expression<Func<TEntity, bool>> predicate);
 
-        Task RemoveAsync(int id);
-
         void RemoveRange(IEnumerable<TEntity> entities);
     }
 }

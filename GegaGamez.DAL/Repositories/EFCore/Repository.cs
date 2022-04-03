@@ -12,6 +12,11 @@ namespace GegaGamez.DAL.Repositories.EFCore
         protected DbContext _dbContext;
         protected DbSet<TEntity> _dbSet;
 
+        /// <summary>
+        /// Override this property to include more
+        /// </summary>
+        protected virtual IQueryable<TEntity> DbSetWithIncludedProperties { get => _dbSet.AsQueryable(); }
+
         public Repository(DbContext dbContext)
         {
             _dbContext = dbContext;
@@ -37,35 +42,54 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public Task<int> CountAsync() => _dbSet.CountAsync();
 
-        public TEntity? Get(int id) => _dbSet.Find(id);
+        /// <summary>
+        /// Finds an entry by Id. This method doesn't use eager loading by default, So it can be
+        /// overriden to do so
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>TEntity if found, otherwise null</returns>
+        public virtual TEntity? Get(int id) => _dbSet.Find(id);
 
-        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate) => _dbSet.Where(predicate).ToList();
+        /// <summary>
+        /// Finds all the entries by predicate.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public virtual IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate) => DbSetWithIncludedProperties.Where(predicate).ToList();
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
+        /// <summary>
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            var list = await _dbSet.Where(predicate).ToListAsync();
-            var enumerable = await Task.FromResult(list.AsEnumerable());
+            var list = await DbSetWithIncludedProperties.Where(predicate).ToListAsync();
 
-            return enumerable;
+            return list;
         }
 
-        public Task<TEntity?> GetAsync(int id) => _dbSet.FindAsync(id).AsTask();
+        /// <summary>
+        /// This method doesn't use eager loading by default, So it can be overriden to do so
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public virtual Task<TEntity?> GetAsync(int id) => _dbSet.FindAsync(id).AsTask();
 
-        public IEnumerable<TEntity> List() => _dbSet.ToList();
+        public virtual IEnumerable<TEntity> List() => DbSetWithIncludedProperties.ToList();
 
-        public async Task<IEnumerable<TEntity>> ListAsync()
+        public virtual async Task<IEnumerable<TEntity>> ListAsync()
         {
-            var list = await _dbSet.ToListAsync();
-            var enumerable = await Task.FromResult(list.AsEnumerable());
+            var list = await DbSetWithIncludedProperties.ToListAsync();
 
-            return enumerable;
+            return list;
         }
 
         public void Remove(TEntity entity) => _dbSet.Remove(entity);
 
         public void Remove(int id)
         {
-            TEntity? entity = _dbSet.Find(id);
+            // TEntity? entity = _dbSet.Find(id);
+            TEntity? entity = Get(id);
 
             if (entity is not null)
             {
@@ -78,20 +102,6 @@ namespace GegaGamez.DAL.Repositories.EFCore
         }
 
         public void RemoveAll(Expression<Func<TEntity, bool>> predicate) => RemoveRange(GetAll(predicate));
-
-        public async Task RemoveAsync(int id)
-        {
-            TEntity? entity = await GetAsync(id);
-
-            if (entity is not null)
-            {
-                Remove(entity);
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(id), $"Record with Id {id} does not exist");
-            }
-        }
 
         public void RemoveRange(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
     }

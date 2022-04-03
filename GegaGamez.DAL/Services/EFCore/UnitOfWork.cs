@@ -7,8 +7,6 @@ namespace GegaGamez.DAL.Services.EFCore
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        #region Fields
-
         private readonly GegaGamezContext _dbContext;
 
         private readonly ICommentRepository _comments;
@@ -22,9 +20,11 @@ namespace GegaGamez.DAL.Services.EFCore
         private readonly IUserCollectionRepository _userCollections;
         private readonly IUserRepository _users;
 
-        #endregion Fields
-
-        #region Constructors
+        private void AddDbProvider(DbContextOptionsBuilder<GegaGamezContext> optionsBuilder, string connectionString)
+        {
+            //use another provider if neccessary
+            optionsBuilder.UseSqlServer(connectionString);
+        }
 
         public UnitOfWork(string connectionString)
         {
@@ -72,10 +72,6 @@ namespace GegaGamez.DAL.Services.EFCore
         //    _users = new UserRepository(dbContext);
         //}
 
-        #endregion Constructors
-
-        #region Properties
-
         public ICommentRepository Comments => _comments;
 
         public ICountryRepository Countries => _countries;
@@ -96,10 +92,6 @@ namespace GegaGamez.DAL.Services.EFCore
 
         public IUserRepository Users => _users;
 
-        #endregion Properties
-
-        #region Public methods
-
         public void Dispose()
         {
             _dbContext.Dispose();
@@ -119,17 +111,5 @@ namespace GegaGamez.DAL.Services.EFCore
 
             _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
         }
-
-        #endregion Public methods
-
-        #region Private methods
-
-        private void AddDbProvider(DbContextOptionsBuilder<GegaGamezContext> optionsBuilder, string connectionString)
-        {
-            //use another provider if neccessary
-            optionsBuilder.UseSqlServer(connectionString);
-        }
-
-        #endregion Private methods
     }
 }

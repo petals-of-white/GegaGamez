@@ -15,7 +15,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public IEnumerable<Developer> GetAllByName(string name)
         {
-            var devsByName = (from dev in _dbSet
+            var devsByName = (from dev in DbSetWithIncludedProperties
                               where dev.Name.Contains(name, StringComparison.OrdinalIgnoreCase)
                               select dev).ToList();
 
@@ -24,11 +24,11 @@ namespace GegaGamez.DAL.Repositories.EFCore
 
         public async Task<IEnumerable<Developer>> GetAllByNameAsync(string name)
         {
-            var devsByName = await (from dev in _dbSet
+            var devsByName = await (from dev in DbSetWithIncludedProperties
                                     where dev.Name.Contains(name, StringComparison.OrdinalIgnoreCase)
                                     select dev).ToListAsync();
 
-            return devsByName.AsEnumerable();
+            return devsByName;
         }
     }
 }
