@@ -32,6 +32,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
         }
 
         public override Task<User?> GetAsync(int id) => DbSetWithIncludedProperties.SingleOrDefaultAsync(u => u.Id == id);
+
         /// <summary>
         /// </summary>
         /// <param name="username"></param>
