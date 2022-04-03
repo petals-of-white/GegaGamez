@@ -10,6 +10,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
         public GameRepository(DbContext dbContext) : base(dbContext)
         {
         }
+
         public override Game? Get(int id) => DbSetWithIncludedProperties.SingleOrDefault(g => g.Id == id);
 
         public IEnumerable<Game> GetAllByRatingScore(int score)
@@ -41,6 +42,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
         }
 
         public override Task<Game?> GetAsync(int id) => DbSetWithIncludedProperties.SingleOrDefaultAsync(g => g.Id == id);
+
         public IEnumerable<Game> GetByGenre(Genre genre)
         {
             var gamesByGenre = (from game in DbSetWithIncludedProperties
