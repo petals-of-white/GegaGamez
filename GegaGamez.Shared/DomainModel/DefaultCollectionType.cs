@@ -4,14 +4,6 @@ namespace GegaGamez.Shared.DomainModel
 {
     public class DefaultCollectionType
     {
-        /*
-        public DefaultCollectionType()
-        {
-            DefaultCollections = new HashSet<DefaultCollection>();
-            Games = new HashSet<Game>();
-        }
-        */
-
         [Key]
         public int Id { get; set; }
 
@@ -22,13 +14,8 @@ namespace GegaGamez.Shared.DomainModel
         [StringLength(500)]
         public string? Description { get; set; }
 
-        /*
-        [InverseProperty("DefaultCollectionType")]
-        public virtual ICollection<DefaultCollection> DefaultCollections { get; set; }
+        public ICollection<DefaultCollection> DefaultCollections { get; set; }
 
-        [ForeignKey("DefaultCollectionId")]
-        [InverseProperty("DefaultCollections")]
-        public virtual ICollection<Game> Games { get; set; }
-        */
+        public ICollection<Game> Games { get; set; }
     }
 }

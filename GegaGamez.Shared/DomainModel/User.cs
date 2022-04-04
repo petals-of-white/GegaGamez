@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GegaGamez.Shared.DomainModel
 {
-    [Table("User")]
     public class User
     {
         /*
@@ -35,19 +33,12 @@ namespace GegaGamez.Shared.DomainModel
 
         public Country? Country { get; set; }
 
-        /*
+        public ICollection<Comment> Comments { get; set; }
 
-        [InverseProperty("User")]
-        public virtual ICollection<Comment> Comments { get; set; }
+        public ICollection<DefaultCollection> DefaultCollections { get; set; }
 
-        [InverseProperty("User")]
-        public virtual ICollection<DefaultCollection> DefaultCollections { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
 
-        [InverseProperty("User")]
-        public virtual ICollection<Rating> Ratings { get; set; }
-
-        [InverseProperty("User")]
         public virtual ICollection<UserCollection> UserCollections { get; set; }
-        */
     }
 }

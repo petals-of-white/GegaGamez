@@ -12,9 +12,9 @@ namespace GegaGamez.Shared.DomainModel
         public string Text { get; set; }
 
         [Required]
-        public virtual Game Game { get; set; }
+        public Game Game { get; set; }
 
         [Required]
-        public virtual User User { get; set; }
+        public User User { get; set; }
     }
 }

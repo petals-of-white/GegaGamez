@@ -4,13 +4,6 @@ namespace GegaGamez.Shared.DomainModel
 {
     public class Developer
     {
-        /*
-        public Developer()
-        {
-            Games = new HashSet<Game>();
-        }
-        */
-
         [Key]
         public int Id { get; set; }
 
@@ -23,8 +16,7 @@ namespace GegaGamez.Shared.DomainModel
 
         public DateTime? EndDate { get; set; }
 
-        /*
-        public virtual ICollection<Game> Games { get; set; }
-        */
+        public ICollection<Game> Games { get; set; }
+       
     }
 }

@@ -4,17 +4,6 @@ namespace GegaGamez.Shared.DomainModel
 {
     public class Game
     {
-        /*
-        public Game()
-        {
-            Comments = new HashSet<Comment>();
-            Ratings = new HashSet<Rating>();
-            DefaultCollections = new HashSet<DefaultCollectionType>();
-            Genres = new HashSet<Genre>();
-            UserCollections = new HashSet<UserCollection>();
-        }
-        */
-
         [Key]
         public int Id { get; set; }
 
@@ -32,24 +21,15 @@ namespace GegaGamez.Shared.DomainModel
         public decimal Price { get; set; }
 
         public Developer Developer { get; set; } = null!;
-        /*
-        [InverseProperty("Game")]
-        public virtual ICollection<Comment> Comments { get; set; }
 
-        [InverseProperty("Game")]
-        public virtual ICollection<Rating> Ratings { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
-        [ForeignKey("GameId")]
-        [InverseProperty("Games")]
-        public virtual ICollection<DefaultCollectionType> DefaultCollections { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
 
-        [ForeignKey("GameId")]
-        [InverseProperty("Games")]
-        public virtual ICollection<Genre> Genres { get; set; }
+        public ICollection<DefaultCollectionType> DefaultCollections { get; set; }
 
-        [ForeignKey("GameId")]
-        [InverseProperty("Games")]
-        public virtual ICollection<UserCollection> UserCollections { get; set; }
-        */
+        public ICollection<Genre> Genres { get; set; }
+
+        public ICollection<UserCollection> UserCollections { get; set; }
     }
 }

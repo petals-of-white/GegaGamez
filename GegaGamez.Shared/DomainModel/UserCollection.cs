@@ -4,12 +4,6 @@ namespace GegaGamez.Shared.DomainModel
 {
     public class UserCollection
     {
-        /*
-        public UserCollection()
-        {
-            Games = new HashSet<Game>();
-        }
-        */
 
         [Key]
         public int Id { get; set; }
@@ -23,11 +17,9 @@ namespace GegaGamez.Shared.DomainModel
 
         [Required]
         public User User { get; set; }
-
-        /*
-        [ForeignKey("UserCollectionId")]
-        [InverseProperty("UserCollections")]
-        public virtual ICollection<Game> Games { get; set; }
-        */
+        
+        [Required]
+        public ICollection<Game> Games { get; set; }
+        
     }
 }

@@ -15,10 +15,7 @@ namespace GegaGamez.Shared.DomainModel
         [Required]
         public string Description { get; set; }
 
-        /*
-        [ForeignKey("GenreId")]
-        [InverseProperty("Genres")]
-        public virtual ICollection<Game> Games { get; set; }
-        */
+        public ICollection<Game> Games { get; set; }
+        
     }
 }
