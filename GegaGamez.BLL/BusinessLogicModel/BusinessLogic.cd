@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.UserModel">
+    <Position X="12" Y="9" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>CCQCgAAAEQJAAAEAAwACAAQAAAIAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>BusinessLogicModel\UserModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Country" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="DefaultCollections" />
+      <Property Name="UserCollections" />
+      <Property Name="Ratings" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.UserCollection">
+    <Position X="6" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BusinessLogicModel\UserCollection.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Games" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.DefaultCollection">
+    <Position X="6" Y="4.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>SAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BusinessLogicModel\DefaultCollection.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DefaultCollectionType" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Games" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.Comment">
+    <Position X="9" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>BusinessLogicModel\Comment.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="User" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.Game">
+    <Position X="9.25" Y="3.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AACCgAAAAQAoAEAAAAIAAAAAAIgAAAAAAAgAAAAAIAA=</HashCode>
+      <FileName>BusinessLogicModel\Game.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Developer" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Comments" />
+      <Property Name="Genres" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.Genre">
+    <Position X="9" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BusinessLogicModel\Genre.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.Rating">
+    <Position X="13" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BusinessLogicModel\Rating.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Game" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.Developer">
+    <Position X="5.75" Y="1.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAIAAAAAAAQgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BusinessLogicModel\Developer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.Country">
+    <Position X="15.75" Y="9.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAABAAQAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>BusinessLogicModel\Country.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GegaGamez.BLL.BusinessLogicModel.DefaultCollectionType">
+    <Position X="2.75" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BusinessLogicModel\DefaultCollectionType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="10" />
+</ClassDiagram>

@@ -10,4 +10,8 @@
     <ProjectReference Include="..\GegaGamez.DAL\GegaGamez.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Searchers\" />
+  </ItemGroup>
+
 </Project>

@@ -1,23 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using GegaGamez.DAL.Services;
+﻿using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 
 namespace GegaGamez.BLL.BusinessLogicModel
 {
     public class UserModel
     {
-        private string _password;
         private readonly IUnitOfWork _db;
+        private string _password;
 
         public UserModel(string connectionString)
         {
             _db = new UnitOfWork(connectionString);
-        }
-
-        public void CreateUser()
-        {
-            // add this to the db
-            throw new NotImplementedException();
         }
 
         public int Id
@@ -44,7 +37,7 @@ namespace GegaGamez.BLL.BusinessLogicModel
             }
         }
 
-        public int Country
+        public Country Country
         {
             get => default;
             set
@@ -68,7 +61,7 @@ namespace GegaGamez.BLL.BusinessLogicModel
             }
         }
 
-        public int DefaultCollections
+        public ICollection<DefaultCollection> DefaultCollections
         {
             get => default;
             set
@@ -76,7 +69,7 @@ namespace GegaGamez.BLL.BusinessLogicModel
             }
         }
 
-        public int UserCollections
+        public ICollection<UserCollection> UserCollections
         {
             get => default;
             set
@@ -84,7 +77,7 @@ namespace GegaGamez.BLL.BusinessLogicModel
             }
         }
 
-        public int Comments
+        public ICollection<Rating> Ratings
         {
             get => default;
             set
@@ -92,12 +85,10 @@ namespace GegaGamez.BLL.BusinessLogicModel
             }
         }
 
-        public int Ratings
+        public void CreateUser()
         {
-            get => default;
-            set
-            {
-            }
+            // add this to the db
+            throw new NotImplementedException();
         }
 
         public void CreateUserCollection()
@@ -109,7 +100,6 @@ namespace GegaGamez.BLL.BusinessLogicModel
         {
             throw new NotImplementedException();
         }
-
 
         public void RateGame(byte ratingScore)
         {
