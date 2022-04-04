@@ -1,9 +1,10 @@
-﻿using GegaGamez.DAL.Services;
+﻿using System.ComponentModel.DataAnnotations;
+using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 
 namespace GegaGamez.BLL.BusinessLogicModel
 {
-    public class UserModel
+    public class UserModel : IValidatableObject
     {
         private readonly IUnitOfWork _db;
         private string _password;
@@ -13,14 +14,11 @@ namespace GegaGamez.BLL.BusinessLogicModel
             _db = new UnitOfWork(connectionString);
         }
 
-        public int Id
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        [Key]
+        public int Id { get; private set; }
 
+        [Required]
+        [StringLength(50)]
         public string Username
         {
             get => default;
@@ -29,30 +27,8 @@ namespace GegaGamez.BLL.BusinessLogicModel
             }
         }
 
-        public int Name
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public Country Country
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public string About
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
+        [StringLength(512)]
+        [Required]
         public string Password
         {
             set
@@ -61,13 +37,35 @@ namespace GegaGamez.BLL.BusinessLogicModel
             }
         }
 
-        public ICollection<DefaultCollection> DefaultCollections
+        [StringLength(100)]
+        public string? Name
         {
             get => default;
             set
             {
             }
         }
+
+        [StringLength(100)]
+        public string? About
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public Country? Country
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        [Required]
+        public ICollection<DefaultCollection> DefaultCollections { get; set; }
+
 
         public ICollection<UserCollection> UserCollections
         {
@@ -109,6 +107,15 @@ namespace GegaGamez.BLL.BusinessLogicModel
         public void LeaveComment(string commentText)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var validationResults = new List<ValidationResult>();
+
+            Validator.TryValidateObject(this, validationContext, validationResults, true);
+
+            return validationResults;
         }
     }
 }

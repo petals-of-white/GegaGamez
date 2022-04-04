@@ -1,4 +1,5 @@
-﻿using GegaGamez.DAL.Services;
+﻿using System.ComponentModel.DataAnnotations;
+using GegaGamez.DAL.Services;
 
 namespace GegaGamez.BLL.BusinessLogicModel
 {
@@ -11,19 +12,27 @@ namespace GegaGamez.BLL.BusinessLogicModel
             _db = db;
         }
 
+        [Key]
         public int Id { get; set; }
 
+        [StringLength(100)]
+        [Required]
         public string Title { get; set; }
 
         public DateTime? ReleaseDate { get; set; }
 
+        [StringLength(1000)]
         public string Description { get; set; }
 
+        [Required]
+        [Range(0, double.MaxValue)]
         public decimal Price { get; set; }
 
         public byte AvgRatingScore { get; set; }
 
         public Developer Developer { get; set; }
+
+        public ICollection<Rating> Ratings { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
 

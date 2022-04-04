@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GegaGamez.DAL\GegaGamez.DAL.csproj" />
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Searchers\" />
+    <ProjectReference Include="..\GegaGamez.DAL\GegaGamez.DAL.csproj" />
   </ItemGroup>
 
 </Project>
