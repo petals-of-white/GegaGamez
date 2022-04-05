@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using GegaGamez.BLL.Exceptions;
+using GegaGamez.Shared.Exceptions;
 
-namespace GegaGamez.BLL
+namespace GegaGamez.Shared.Validation
 {
     public static class ValidationManager
     {

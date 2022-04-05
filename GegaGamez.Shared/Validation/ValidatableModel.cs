@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GegaGamez.BLL
+namespace GegaGamez.Shared.Validation
 {
     /// <summary>
     /// An abstract class that repsesents a model that can be validated.

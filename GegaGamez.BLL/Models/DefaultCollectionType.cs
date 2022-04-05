@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using GegaGamez.Shared.Validation;
 
 namespace GegaGamez.BLL.Models
 {

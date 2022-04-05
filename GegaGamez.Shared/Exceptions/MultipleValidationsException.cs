@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GegaGamez.BLL.Exceptions
+namespace GegaGamez.Shared.Exceptions
 {
     public class MultipleValidationsException : Exception
     {

@@ -1,7 +1,8 @@
-﻿using GegaGamez.BLL.Exceptions;
-using GegaGamez.BLL.Models;
+﻿using GegaGamez.BLL.Models;
 using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
+using GegaGamez.Shared.Exceptions;
+using GegaGamez.Shared.Validation;
 
 namespace GegaGamez.BLL.Logic
 {
