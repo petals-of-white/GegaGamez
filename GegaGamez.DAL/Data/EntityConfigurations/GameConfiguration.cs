@@ -28,19 +28,6 @@ namespace GegaGamez.DAL.Data.EntityConfigurations
 
                         j.HasIndex(new [] { "GenreId" }, "NIX_Games_Genres_GenreId");
                     });
-
-            builder.HasMany(d => d.UserCollections)
-                .WithMany(p => p.Games)
-                .UsingEntity<Dictionary<string, object>>(
-                    "GamesInUserCollection",
-                    l => l.HasOne<UserCollection>().WithMany().HasForeignKey("UserCollectionId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_GamesInUserCollections_Collection"),
-                    r => r.HasOne<Game>().WithMany().HasForeignKey("GameId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_GamesInUserCollections_Game"),
-                    j =>
-                    {
-                        j.HasKey("GameId", "UserCollectionId").HasName("PK__GamesInU__E8A366C9457A57E6");
-
-                        j.ToTable("GamesInUserCollections");
-                    });
         }
     }
 }
