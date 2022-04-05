@@ -6,7 +6,7 @@
       <HashCode>CAAAgAAAACIAAAAAAAAQAAAAAAAAAAAIABAAAAAAAAA=</HashCode>
       <FileName>Logic\CollectionsBL.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="GegaGamez.BLL.Logic.CommentsBL" BaseTypeListCollapsed="true">
     <Position X="10" Y="8.5" Width="4" />
@@ -14,7 +14,7 @@
       <HashCode>AAAIgAAIBCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Logic\CommentsBL.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="GegaGamez.BLL.Logic.DeveloperBL" BaseTypeListCollapsed="true">
     <Position X="0.5" Y="3" Width="3.25" />
@@ -22,7 +22,7 @@
       <HashCode>AAAAgAAAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
       <FileName>Logic\DeveloperBL.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="GegaGamez.BLL.Logic.GameBL" BaseTypeListCollapsed="true">
     <Position X="14.75" Y="5.5" Width="3" />
@@ -30,7 +30,7 @@
       <HashCode>ACIAgAAAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
       <FileName>Logic\GameBL.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="GegaGamez.BLL.Logic.GenreBL" BaseTypeListCollapsed="true">
     <Position X="0.5" Y="7.75" Width="2.75" />
@@ -38,7 +38,7 @@
       <HashCode>AAAAgAAAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
       <FileName>Logic\GenreBL.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="GegaGamez.BLL.Logic.UserBL">
     <Position X="6" Y="5.5" Width="3.25" />
