@@ -4,7 +4,7 @@ using GegaGamez.DAL.Services.EFCore;
 
 namespace GegaGamez.BLL.Logic
 {
-    public class CommentsBL
+    public class CommentsBL : IDisposable
     {
         private readonly IUnitOfWork _db;
 
@@ -20,6 +20,29 @@ namespace GegaGamez.BLL.Logic
             var comments = _db.Comments.GetGameComments(gameEntity);
 
             return AutoMapping.Mapper.Map<IEnumerable<Comment>>(comments);
+        }
+
+        public void AddComment(Comment comment)
+        {
+            var commentEntity = AutoMapping.Mapper.Map<DAL.Entities.Comment>(comment);
+
+            _db.Comments.Add(commentEntity);
+
+            _db.Save();
+        }
+
+        public void RemoveComment(Comment comment)
+        {
+            var commentEntity = AutoMapping.Mapper.Map<DAL.Entities.Comment>(comment);
+
+            _db.Comments.Remove(commentEntity);
+
+            _db.Save();
+        }
+
+        public void Dispose()
+        {
+            _db.Dispose();
         }
     }
 }

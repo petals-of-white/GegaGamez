@@ -2,7 +2,7 @@
 
 namespace GegaGamez.BLL
 {
-    public static class AutoMapping
+    internal static class AutoMapping
     {
         public static readonly Mapper Mapper;
 

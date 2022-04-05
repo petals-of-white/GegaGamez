@@ -1,9 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using GegaGamez.BLL.Exceptions;
+﻿using GegaGamez.BLL.Exceptions;
 using GegaGamez.BLL.Models;
 using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.BLL.Logic
 {
@@ -24,12 +22,15 @@ namespace GegaGamez.BLL.Logic
             return user;
         }
 
+        public IEnumerable<User> ListAll()
+        {
+            var allUsers = _db.Users.List();
+            return AutoMapping.Mapper.Map<IEnumerable<User>>(allUsers);
+        }
+
         public User CreateNewUser(string username, string password, string? name = null, Country? country = null, string? about = null)
         {
-            throw new NotImplementedException();
-
             User newUser;
-            ICollection<DefaultCollection> userDefaultCollections = new HashSet<DefaultCollection>();
 
             newUser = new()
             {
@@ -40,50 +41,44 @@ namespace GegaGamez.BLL.Logic
                 About = about,
             };
 
+            return CreateNewUser(newUser);
+        }
+
+        public User CreateNewUser(User newUser)
+        {
             try
             {
                 ValidationManager.Validate(newUser);
-
-                var defaultCollectionTypes = AutoMapping.Mapper
-                    .Map<IEnumerable<DefaultCollectionType>>(_db.DefaultCollectionTypes.List());
-
-                foreach (var collectionType in defaultCollectionTypes)
-                {
-                    userDefaultCollections.Add(new DefaultCollection() { DefaultCollectionType = collectionType });
-                }
-
-                return newUser;
             }
             catch (MultipleValidationsException)
             {
                 throw;
             }
-        }
 
-        public void CreateNewUser(User newUser)
-        {
-            throw new NotImplementedException();
+            ICollection<DefaultCollection> userDefaultCollections = new HashSet<DefaultCollection>();
 
-            var validationErrors = (ICollection<ValidationResult>) newUser.Validate(new ValidationContext(newUser));
-            if (validationErrors.Any())
+            // adding default collections for user
+            var defaultCollectionTypes = AutoMapping.Mapper
+                    .Map<IEnumerable<DefaultCollectionType>>(_db.DefaultCollectionTypes.List());
+
+            foreach (var collectionType in defaultCollectionTypes)
             {
-                var validationErrorsException = new MultipleValidationsException("Wrong", validationErrors);
-                throw validationErrorsException;
+                userDefaultCollections.Add(new DefaultCollection() { DefaultCollectionType = collectionType });
             }
 
-            try
-            {
-                var userEntity = AutoMapping.Mapper.Map<DAL.Entities.User>(newUser);
+            newUser.DefaultCollections = userDefaultCollections;
 
-                _db.Users.Add(userEntity);
+            // map
+            var userEntity = AutoMapping.Mapper.Map<DAL.Entities.User>(newUser);
 
-                _db.Save();
+            _db.Users.Add(userEntity);
 
-                newUser = AutoMapping.Mapper.Map<User>(userEntity);
-            }
-            catch (DbUpdateException ex)
-            {
-            }
+            _db.Save();
+
+            // map back
+            newUser = AutoMapping.Mapper.Map<User>(userEntity);
+
+            return newUser;
         }
 
         public void Dispose()
@@ -108,7 +103,7 @@ namespace GegaGamez.BLL.Logic
                 var userByCredentials = AutoMapping.Mapper.Map<User>(userEntityByCredentials);
                 return userByCredentials;
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 throw;
             }

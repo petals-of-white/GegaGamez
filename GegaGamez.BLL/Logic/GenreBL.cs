@@ -25,7 +25,7 @@ namespace GegaGamez.BLL.Logic
             return output;
         }
 
-        public IEnumerable<Genre> ByName(string genreName)
+        public IEnumerable<Genre> FindByName(string genreName)
         {
             IEnumerable<Genre> output;
 
