@@ -11,7 +11,6 @@ namespace GegaGamez.DAL.Entities
         public DefaultCollectionType()
         {
             DefaultCollections = new HashSet<DefaultCollection>();
-            Games = new HashSet<Game>();
         }
 
         [Key]
@@ -25,9 +24,5 @@ namespace GegaGamez.DAL.Entities
 
         [InverseProperty("DefaultCollectionType")]
         public virtual ICollection<DefaultCollection> DefaultCollections { get; set; }
-
-        [ForeignKey("DefaultCollectionId")]
-        [InverseProperty("DefaultCollections")]
-        public virtual ICollection<Game> Games { get; set; }
     }
 }
