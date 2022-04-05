@@ -14,7 +14,7 @@ namespace GegaGamez.DAL.Entities
         {
             Comments = new HashSet<Comment>();
             Ratings = new HashSet<Rating>();
-            DefaultCollections = new HashSet<DefaultCollectionType>();
+            DefaultCollections = new HashSet<DefaultCollection>();
             Genres = new HashSet<Genre>();
             UserCollections = new HashSet<UserCollection>();
         }
@@ -48,7 +48,7 @@ namespace GegaGamez.DAL.Entities
 
         [ForeignKey("GameId")]
         [InverseProperty("Games")]
-        public virtual ICollection<DefaultCollectionType> DefaultCollections { get; set; }
+        public virtual ICollection<DefaultCollection> DefaultCollections { get; set; }
 
         [ForeignKey("GameId")]
         [InverseProperty("Games")]
