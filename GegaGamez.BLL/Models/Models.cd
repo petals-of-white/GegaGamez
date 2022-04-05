@@ -15,7 +15,7 @@
         <Point X="9" Y="6" />
         <Point X="9" Y="5.269" />
         <Point X="10.562" Y="5.269" />
-        <Point X="10.562" Y="3.919" />
+        <Point X="10.562" Y="3.777" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -30,7 +30,7 @@
   <Class Name="GegaGamez.BLL.Models.Country" Collapsed="true">
     <Position X="7" Y="0.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAABAAQAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Country.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -38,9 +38,11 @@
     <Position X="4.25" Y="6" Width="1.75" />
     <AssociationLine Name="Games" Type="GegaGamez.BLL.Models.Game" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="5" Y="6.738" />
-        <Point X="5" Y="9.75" />
-        <Point X="10.25" Y="9.75" />
+        <Point X="5" Y="6.596" />
+        <Point X="5" Y="9.676" />
+        <Point X="7.917" Y="9.676" Type="JumpStart" />
+        <Point X="8.083" Y="9.676" Type="JumpEnd" />
+        <Point X="10.25" Y="9.676" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -57,7 +59,7 @@
   <Class Name="GegaGamez.BLL.Models.DefaultCollectionType" Collapsed="true">
     <Position X="1" Y="7.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\DefaultCollectionType.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -74,7 +76,7 @@
   <Class Name="GegaGamez.BLL.Models.Game">
     <Position X="10.25" Y="8.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAQAoAEAAAAIAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAQAoAEAAAAIAAAAAAIABAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Game.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -87,7 +89,7 @@
   <Class Name="GegaGamez.BLL.Models.Genre" Collapsed="true">
     <Position X="14.5" Y="11.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Genre.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -95,7 +97,7 @@
     <Position X="12.5" Y="6" Width="1.75" />
     <AssociationLine Name="Game" Type="GegaGamez.BLL.Models.Game" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="13.375" Y="6.738" />
+        <Point X="13.375" Y="6.596" />
         <Point X="13.375" Y="7.505" />
         <Point X="12.062" Y="7.505" />
         <Point X="12.062" Y="8.5" />
@@ -106,7 +108,7 @@
         <Point X="13.375" Y="6" />
         <Point X="13.375" Y="5.249" />
         <Point X="11.625" Y="5.249" />
-        <Point X="11.625" Y="3.919" />
+        <Point X="11.625" Y="3.777" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -122,15 +124,17 @@
     <Position X="10.25" Y="1.75" Width="1.75" />
     <AssociationLine Name="DefaultCollections" Type="GegaGamez.BLL.Models.DefaultCollection" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="10.25" Y="2.812" />
-        <Point X="5.188" Y="2.812" />
+        <Point X="10.25" Y="2.743" />
+        <Point X="7.958" Y="2.743" Type="JumpStart" />
+        <Point X="7.792" Y="2.743" Type="JumpEnd" />
+        <Point X="5.188" Y="2.743" />
         <Point X="5.188" Y="6" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="UserCollections" Type="GegaGamez.BLL.Models.UserCollection" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="12" Y="2.812" />
-        <Point X="17" Y="2.812" />
+        <Point X="12" Y="2.743" />
+        <Point X="17" Y="2.743" />
         <Point X="17" Y="6" />
       </Path>
     </AssociationLine>
@@ -150,9 +154,11 @@
     <Position X="16.25" Y="6" Width="1.75" />
     <AssociationLine Name="Games" Type="GegaGamez.BLL.Models.Game" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="17.125" Y="6.738" />
-        <Point X="17.125" Y="9.688" />
-        <Point X="12.5" Y="9.688" />
+        <Point X="17.125" Y="6.596" />
+        <Point X="17.125" Y="9.617" />
+        <Point X="15.333" Y="9.617" Type="JumpStart" />
+        <Point X="15.167" Y="9.617" Type="JumpEnd" />
+        <Point X="12.5" Y="9.617" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
