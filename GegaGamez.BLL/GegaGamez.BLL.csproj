@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GegaGamez.DAL\GegaGamez.DAL.csproj" />
+    <ProjectReference Include="..\GegaGamez.Shared\GegaGamez.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
