@@ -1,0 +1,77 @@
+/* || UTILITIES */
+
+
+
+/* COLORS */
+
+
+.font-primary {
+    color: var(--text-color-primary);
+}
+
+.font-secondary {
+    color: var(--text-color-secondary);
+}
+
+.font-contrast {
+    color: var(--text-color-contrast);
+}
+
+
+.bg-primary {
+    background-color: var(--bg-color-primary);
+}
+
+.bg-secondary {
+    background-color: var(--bg-color-secondary);
+}
+
+.bg-contrast {
+    background-color: var(--bg-color-contrast)
+}
+
+.bg-transparent {
+    background-color: transparent;
+}
+
+/* Borders */
+
+.border-primary {
+    border: 1px solid var(--text-color-primary);
+}
+
+.border-contrast {
+    border: 2px solid var(--text-color-contrast);
+}
+
+.borderless{
+    border:none !important;
+}
+
+/* Rounded*/
+
+.rounded {
+    border-radius: 15px;
+}
+
+.horizontal-flex-container {
+    display: flex;
+    flex-direction: row;
+}
+.vertical-container {
+    display:flex;
+    flex-direction: column;
+}
+
+.circle{
+    border-radius: 50%;
+}
+
+.no-rounding{
+    border-radius: 0px !important;
+}
+
+.hover-shadow:hover {
+    box-shadow: var(--shadow);
+}
+
