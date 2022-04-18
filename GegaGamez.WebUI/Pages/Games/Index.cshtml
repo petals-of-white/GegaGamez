@@ -2,3 +2,83 @@
 @model GegaGamez.WebUI.Pages.Games.IndexModel
 @{
 }
+
+<div class="page-content-header border-primary ">
+    <a class="go-back-arrow" href="#"><i class="fa-solid fa-arrow-left font-primary"></i></a>
+    <h2 class="font-contrast title">Game name</h2>
+</div>
+<article id="about-game" class="flex-container">
+    <img id="game-img" class="img-standard" src="https://i0.wp.com/4pmtech.com/wp-content/uploads/2022/02/bioware-dragon-age-4-mass-effect-.webp?fit=1000%2C667&ssl=1" alt="Game img" />
+
+    <section id="game-text-info" class="text-info-block">
+        <h1>Game name</h1>
+        <span>Середня оцінка / <span class="font-contrast">Своя оцінка</span></span>
+        <span class="font-secondary">
+            <a href="#" class="font-secondary">Developer`s Name</a>, <span>5.99$</span>
+        </span>
+        <span class="font-secondary">
+            Genre Genre Genre Genre
+        </span>
+        <span>
+            Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel.
+            Placerat suscipit, orci nisl iaculis eros, a tincidunt nisi odio eget lorem nulla condimentum tempor mattis ut vitae feugiat augue cras ut metus a risus iaculis scelerisque eu ac ante.
+            Fusce non varius purus aenean nec magna felis fusce vestibulum velit mollis odio sollicitudin lacinia aliquam posuere, sapien elementum lobortis tincidunt, turpis dui ornare nisl, sollicitudin interdum turpis nunc eget.
+        </span>
+    </section>
+    <section class="btn-group">
+        <button type="button" class="btn-contrast rounded">Add to</button>
+        <button type="button" class="btn-contrast rounded">Rate</button>
+    </section>
+</article>
+
+<section id="comments-section">
+    <h3>Comments</h3>
+
+    <button type="button" class="font-primary borderless link-default btn-add-comment">
+        Add comment
+    </button>
+    <form action="/" method="post" class="flex-container form-add-comment">
+        <img class="img-standard circle user-avatar" src="https://i.pinimg.com/474x/18/d7/9f/18d79f1fe38960eef37c2219750f99f7.jpg" alt="Alternate Text" />
+        <textarea class="comment-textarea">sdfsdfs</textarea>
+        <div class="btn-group comment-actions">
+            <button type="submit" class="btn-add-comment btn-contrast btn-icon"><i class="fa-regular fa-paper-plane"></i></button>
+        </div>
+    </form>
+    <article class="flex-container game-comment">
+        <img class="img-standard circle user-avatar" src="https://i.pinimg.com/474x/18/d7/9f/18d79f1fe38960eef37c2219750f99f7.jpg" alt="Alternate Text" />
+
+        <!--<h3>Maxulla007</h3>-->
+
+        <span>
+            Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod,
+            iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet
+            justo nunc tempor, metus vel.
+            <span class="font-secondary">
+                - 21.02.2003
+            </span>
+        </span>
+
+        <div class="btn-group comment-actions">
+            <button class="btn-contrast btn-icon btn-remove-comment"><i class="fa-solid fa-trash"></i></button>
+        </div>
+    </article>
+
+    <article class="flex-container game-comment">
+        <img class="img-standard circle user-avatar" src="https://i.pinimg.com/474x/18/d7/9f/18d79f1fe38960eef37c2219750f99f7.jpg" alt="Alternate Text" />
+
+        <!--<h3>Maxulla007</h3>-->
+
+        <span>
+            Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod,
+            iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet
+            justo nunc tempor, metus vel.
+            <span class="font-secondary">
+                - 21.02.2003
+            </span>
+        </span>
+
+        <div class="btn-group comment-actions">
+            <button class="btn-contrast btn-icon btn-remove-comment"><i class="fa-solid fa-trash"></i></button>
+        </div>
+    </article>
+</section>

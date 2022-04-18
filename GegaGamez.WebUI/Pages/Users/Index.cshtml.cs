@@ -5,11 +5,12 @@ namespace GegaGamez.WebUI.Pages.Users
 {
     public class IndexModel : PageModel
     {
-        public int Id { get; set; }
-        public void OnGet(int id)
+        public List<string> DefaultCollections { get; set; } = new();
+        public List<string> UserCollections { get; set; } = new();
+        public void OnGet()
         {
-            Id = id;
-            Page();
+            // get user
+            // get collections
         }
     }
 }

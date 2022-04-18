@@ -2,3 +2,71 @@
 @model GegaGamez.WebUI.Pages.Games.SearchModel
 @{
 }
+
+<ul id="genre-selector" class="border-primary">
+
+    @foreach(var genre in Model.Genres)
+    {
+        // generate genre link
+    }
+
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Adventure</a></li>
+    <li><a href="#">Casual</a></li>
+    <li><a href="#">Indie</a></li>
+    <li><a href="#">Massively Multiplayer</a></li>
+    <li><a href="#">Racing</a></li>
+    <li><a href="#">RPG</a></li>
+    <li><a href="#">Simulation</a></li>
+    <li><a href="#">Sports</a></li>
+    <li><a href="#">Strategy Action</a></li>
+    <li><a href="#">Something</a></li>
+    <li><a href="#">Something</a></li>
+</ul>
+
+<form id="search-form" class="rounded border-contrast">
+    <input id="searchbox" asp-for="SearchString" class="font-primary borderless search-field" type="search" placeholder="Search..." />
+    <button type="submit" class="search-button font-contrast borderless">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+</form>
+
+<section id="search-results">
+    <h2>Search results:</h2>
+
+    @if(Model.Games.Count == 0)
+    {
+        // draw controller
+    }
+    else
+    {
+        foreach (var game in Model.Games)
+        {
+            // render each game
+        }
+    }
+    <article class="flex-container search-result game-item">
+        <img class="img-standard game-img hover-shadow" src="https://upload.wikimedia.org/wikipedia/ru/thumb/c/c5/MassEffect_Xbox.jpg/261px-MassEffect_Xbox.jpg" alt="Alternate Text" />
+
+        <div class="text-info-block">
+            <h3 class="game-title-small">Mass Effect</h3>
+
+            <span class="rating-small">
+                8/10
+            </span>
+
+            <span class="font-secondary">
+                2006, Developer
+            </span>
+
+            <!--<span class="font-secondary">-->
+            <!--<a>Developer</a>-->
+            <!--Developer
+            </span>-->
+
+            <span class="game-description-small">
+                A small description. This fight will be your last!
+            </span>
+        </div>
+    </article>
+</section>

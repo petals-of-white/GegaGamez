@@ -4,12 +4,63 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - GegaGamez.WebUI</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
+    <link rel="stylesheet" href="~/css/fonts.css" asp-append-version="true" />
+    
+    <link rel="stylesheet" href="~/css/general.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/utilities.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/sitewide.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="~/GegaGamez.WebUI.styles.css" asp-append-version="true" />
+    <script src="https://kit.fontawesome.com/331c1e0eaf.js" crossorigin="anonymous"></script>
+
 </head>
-<body>
-    <header>
+<body class="font-primary bg-primary">
+    <header id="page-header">
+        <nav id="header-links">
+            <a id="header-logo" href="#">
+                <h1>
+                    <span class="font-contrast">Gega</span><span class="font-primary">Gamez</span>
+                </h1>
+            </a>
+
+            <a asp-page="/Users/Index">
+                Profile
+            </a>
+
+            <a href="/Community">
+                Community
+            </a>
+
+            <a href="/Developers">
+                Developers
+            </a>
+
+            <a asp-page="/Login">
+                Login
+            </a>
+
+            <a asp-page="/Register">
+                Register
+            </a>
+
+            <a asp-page="/Logout" class="btn-contrast rounded">
+                Logout
+            </a>
+        </nav>
+    </header>
+
+    <main id="main-container">
+        @RenderBody()
+    </main>
+
+    <footer id="page-footer">
+        Maksym Syvash 2022 (c)
+    </footer>
+
+    <!--<header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">GegaGamez.WebUI</a>
@@ -29,18 +80,13 @@
                 </div>
             </div>
         </nav>
-    </header>
+    </header> 
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - GegaGamez.WebUI - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+    -->
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

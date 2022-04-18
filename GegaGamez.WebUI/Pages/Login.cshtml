@@ -2,3 +2,25 @@
 @model GegaGamez.WebUI.Pages.LoginModel
 @{
 }
+
+<div class="page-content-header border-primary ">
+            <a class="go-back-arrow" href="#"><i class="fa-solid fa-arrow-left font-primary"></i></a>
+            <h2 class="font-contrast title">Login</h2>
+        </div>
+
+        <form action="/" method="post" class="vertical-container auth-form" id="login-form">
+            <div class="vertical-container">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" value="" class="border-primary bg-secondary font-primary" />
+            </div>
+
+            <div class="vertical-container">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" value="" class="border-primary bg-secondary font-primary" />
+            </div>
+
+            <div class="flex-container" id="auth-btn-group">
+                <button id="login" type="submit" class="btn-contrast horizontal-flex-container rounded">Login</button>
+                <a href="#" class="">Forgot passowo?</a>
+            </div>
+        </form>
