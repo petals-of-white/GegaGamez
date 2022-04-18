@@ -6,4 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GegaGamez.BLL\GegaGamez.BLL.csproj" />
+    <ProjectReference Include="..\GegaGamez.Shared\GegaGamez.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
