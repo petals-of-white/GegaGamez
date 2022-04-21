@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B9329C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GegaGamez.Shared", "GegaGamez.Shared\GegaGamez.Shared.csproj", "{4405C190-9D03-4975-BD85-0A8CBE313E3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GegaGamez.WebUI", "GegaGamez.WebUI\GegaGamez.WebUI.csproj", "{77BE7A9A-DD35-4867-B61C-6C98799A6269}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GegaGamez.WebUI", "GegaGamez.WebUI\GegaGamez.WebUI.csproj", "{77BE7A9A-DD35-4867-B61C-6C98799A6269}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
