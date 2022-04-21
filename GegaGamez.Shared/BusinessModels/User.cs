@@ -1,19 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using GegaGamez.Shared.Validation;
 
-namespace GegaGamez.BLL.Models
+namespace GegaGamez.Shared.BusinessModels
 {
     public class User : ValidatableModel
     {
         [Key]
         public int Id { get; set; }
 
-        [StringLength(50)]
+        [StringLength(50, MinimumLength = 6)]
         [Required]
         public string Username { get; set; }
 
-        [StringLength(512)]
+        [StringLength(512, MinimumLength = 6)]
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [StringLength(100)]
@@ -24,11 +25,7 @@ namespace GegaGamez.BLL.Models
 
         public Country? Country { get; set; }
 
-        //public ICollection<Comment> Comments { get; set; }
-
         public ICollection<DefaultCollection> DefaultCollections { get; set; }
-
-        //public ICollection<Rating> Ratings { get; set; }
 
         public virtual ICollection<UserCollection> UserCollections { get; set; }
     }

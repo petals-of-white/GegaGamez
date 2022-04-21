@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using GegaGamez.Shared.Validation;
 
-namespace GegaGamez.BLL.Models
+namespace GegaGamez.Shared.BusinessModels
 {
     public class Game : ValidatableModel
     {
@@ -12,6 +12,7 @@ namespace GegaGamez.BLL.Models
         [Required]
         public string Title { get; set; } = null!;
 
+        [DataType(DataType.Date)]
         public DateTime? ReleaseDate { get; set; }
 
         [StringLength(1000)]
@@ -19,6 +20,7 @@ namespace GegaGamez.BLL.Models
 
         [Required]
         [Range(double.MinValue, double.MaxValue)]
+        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
         [Range(0, 10)]
@@ -27,14 +29,6 @@ namespace GegaGamez.BLL.Models
         [Required]
         public Developer Developer { get; set; } = null!;
 
-        //public ICollection<Comment> Comments { get; set; }
-
-        //public ICollection<Rating> Ratings { get; set; }
-
-        //public ICollection<DefaultCollectionType> DefaultCollections { get; set; }
-
         public ICollection<Genre> Genres { get; set; }
-
-        //public ICollection<UserCollection> UserCollections { get; set; }
     }
 }

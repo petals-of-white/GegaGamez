@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using GegaGamez.Shared.Validation;
 
-namespace GegaGamez.BLL.Models
+namespace GegaGamez.Shared.BusinessModels
 {
-    public class DefaultCollectionType : ValidatableModel
+    public class UserCollection : ValidatableModel
     {
         [Key]
         public int Id { get; set; }
@@ -12,11 +12,9 @@ namespace GegaGamez.BLL.Models
         [Required]
         public string Name { get; set; }
 
-        [StringLength(500)]
+        [StringLength(100)]
         public string? Description { get; set; }
 
-        //public ICollection<DefaultCollection> DefaultCollections { get; set; }
-
-        //public ICollection<Game> Games { get; set; }
+        public ICollection<Game> Games { get; set; }
     }
 }

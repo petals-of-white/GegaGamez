@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using GegaGamez.Shared.Validation;
 
-namespace GegaGamez.BLL.Models
+namespace GegaGamez.Shared.BusinessModels
 {
     public class Genre : ValidatableModel
     {
@@ -12,10 +12,8 @@ namespace GegaGamez.BLL.Models
         [Required]
         public string Name { get; set; } = null!;
 
-        [StringLength(10)]
+        [StringLength(100)]
         [Required]
         public string Description { get; set; }
-
-        //public ICollection<Game> Games { get; set; }
     }
 }
