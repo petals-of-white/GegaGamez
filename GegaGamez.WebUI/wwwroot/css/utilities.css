@@ -75,3 +75,7 @@
     box-shadow: var(--shadow);
 }
 
+.block{
+    display: block !important;
+}
+
