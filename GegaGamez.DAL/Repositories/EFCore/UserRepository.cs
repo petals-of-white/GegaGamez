@@ -16,7 +16,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
         public IEnumerable<User> GetAllByUsername(string username)
         {
             var usersByUsername = (from user in DbSetWithIncludedProperties
-                                   where user.Username.Contains(username, StringComparison.OrdinalIgnoreCase)
+                                   where user.Username.ToLower().Contains(username.ToLower())
                                    select user).ToList();
 
             return usersByUsername;
@@ -25,7 +25,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
         public async Task<IEnumerable<User>> GetAllByUsernameAsync(string username)
         {
             var usersByUsername = await (from user in DbSetWithIncludedProperties
-                                         where user.Username.Contains(username, StringComparison.OrdinalIgnoreCase)
+                                         where user.Username.ToLower().Contains(username.ToLower())
                                          select user).ToListAsync();
 
             return usersByUsername;

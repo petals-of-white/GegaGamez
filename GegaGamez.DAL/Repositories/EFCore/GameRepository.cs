@@ -26,7 +26,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
         public IEnumerable<Game> GetAllByTitle(string title)
         {
             var gamesByTitle = (from game in DbSetWithIncludedProperties
-                                where game.Title.Contains(title, StringComparison.OrdinalIgnoreCase)
+                                where game.Title.ToLower().Contains(title.ToLower())
                                 select game).ToList();
 
             return gamesByTitle;
@@ -35,7 +35,7 @@ namespace GegaGamez.DAL.Repositories.EFCore
         public async Task<IEnumerable<Game>> GetAllByTitleAsync(string title)
         {
             var gamesByTitle = await (from game in DbSetWithIncludedProperties
-                                      where game.Title.Contains(title, StringComparison.OrdinalIgnoreCase)
+                                      where game.Title.ToLower().Contains(title.ToLower())
                                       select game).ToListAsync();
 
             return gamesByTitle;
