@@ -1,31 +1,40 @@
-﻿@page
+﻿@page "{id:int}"
 @model IndexModel
 @{
-	
+    bool logedIn = true;
+    bool authorized = true;
+
+    if (authorized)
+    {
+        ViewData ["profile"] = true;
+    }
 }
 <article id="user-profile">
     <img id="user-avatar-big" class="img-standard circle border-primary" src="images/alice.png" alt="User image" />
     <div id="info-and-buttons-container" class="flex-container">
         <section id="user-text-info" class="text-info-block">
             <h2>
-                @@username
+               @Model.UserProfile.Username
             </h2>
 
             <span class="font-secondary">
-                Country
+                @Model.UserProfile.Country
             </span>
 
             <span>
-                Name: Amadeus
+                @Model.UserProfile.Name
             </span>
 
             <span>
-                About me..... hello this is great
+                @Model.UserProfile.About
             </span>
         </section>
 
         <section id="profile-buttons" class="btn-group">
-            <button type="button" class="btn-contrast rounded">Edit profile</button>
+            @if(logedIn && authorized)
+            {
+                <button onclick="showEditProfileModal()" type="button" class="btn-contrast rounded">Edit profile</button>
+            }
         </section>
     </div>
 
@@ -40,7 +49,7 @@
 
         <div class="collections-container">
             <div class="game-collection-item default-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Planned</span>
                 </a>
@@ -49,7 +58,7 @@
                 </section>
             </div>
             <div class="game-collection-item default-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Playing</span>
                 </a>
@@ -59,7 +68,7 @@
             </div>
 
             <div class="game-collection-item default-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Finished</span>
                 </a>
@@ -69,7 +78,7 @@
             </div>
 
             <div class="game-collection-item default-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Dropped</span>
                 </a>
@@ -89,7 +98,7 @@
         }
         <div class="collections-container">
             <div class="game-collection-item user-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Favorites</span>
                 </a>
@@ -99,7 +108,7 @@
             </div>
 
             <div class="game-collection-item user-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Uwuwu</span>
                 </a>
@@ -109,7 +118,7 @@
             </div>
 
             <div class="game-collection-item user-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Running down to Cuba</span>
                 </a>
@@ -119,7 +128,7 @@
             </div>
 
             <div class="game-collection-item user-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Batman</span>
                 </a>
@@ -129,7 +138,7 @@
             </div>
 
             <div class="game-collection-item user-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Superb</span>
                 </a>
@@ -139,7 +148,7 @@
             </div>
 
             <div class="game-collection-item user-collection-item">
-                <a href="#" class="game-collection-card user-collection-card">
+                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
                     <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
                     <span class="collection-name">Oh as I was going</span>
                 </a>
@@ -150,3 +159,29 @@
         </div>
     </section>
 </article>
+
+<form id="edit-profile-modal" class="popup-interactive bg-secondary border-primary">
+        <h3 class="font-contrast">Something</h3>
+        <section class="main-something">
+            <div class="input-block">
+                <label>Choose your country</label>
+                <select name="name">
+                    <option>Ukraine</option>
+                    <option>Uruguay</option>
+                    <option>Poland</option>
+                    <option>England</option>
+                    <option>Brazil</option>
+                    <option>Scotland</option>
+                </select>
+            </div>
+
+            <div class="input-block">
+                <label>Say a few things about yourself</label>
+                <textarea title="Pepsi" placeholder="I eat people..." name="name"></textarea>
+            </div>
+        </section>
+        <section class="popup-actions">
+            <button type="submit" class="borderless">Do something</button>
+            <button type="button" onclick="hideEditProfileModal()" class="btn-contrast rounded">Cancel</button>
+        </section>
+    </form>

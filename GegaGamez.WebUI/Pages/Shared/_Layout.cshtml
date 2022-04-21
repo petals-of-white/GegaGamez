@@ -1,4 +1,24 @@
-﻿<!DOCTYPE html>
+﻿@{
+    bool loggedIn = false;
+    string NavLinkShouldBeSelected(string link)
+    {
+        var className = string.Empty;
+
+        object? shouldBeSelected;
+
+        
+
+        if (ViewData.TryGetValue(link, out shouldBeSelected) && (bool)shouldBeSelected! is true)
+        {
+            className = "link-current";
+        }
+
+        return className;
+
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -20,35 +40,35 @@
 <body class="font-primary bg-primary">
     <header id="page-header">
         <nav id="header-links">
-            <a id="header-logo" href="#">
+            <a asp-page="/Index" id="header-logo" class="">
                 <h1>
                     <span class="font-contrast">Gega</span><span class="font-primary">Gamez</span>
                 </h1>
             </a>
 
-            <a asp-page="/Users/Index">
-                Profile
-            </a>
+            @if(loggedIn == true)
+            {
+                <a class="@NavLinkShouldBeSelected("profile")" asp-page="/Users/Index" asp-route-id="1003">Profile</a>
+            }
 
-            <a href="/Community">
+            <a class="@NavLinkShouldBeSelected("community")" asp-page="/Users/Search">
                 Community
             </a>
 
-            <a href="/Developers">
+            <a class="@NavLinkShouldBeSelected("developers")" asp-page="/Developers/Search">
                 Developers
             </a>
 
-            <a asp-page="/Login">
-                Login
-            </a>
 
-            <a asp-page="/Register">
-                Register
-            </a>
-
-            <a asp-page="/Logout" class="btn-contrast rounded">
-                Logout
-            </a>
+            @if(loggedIn == true)
+            {
+                <a asp-page="/Logout" class="btn-contrast rounded">Logout</a>
+            }
+            else
+            {
+                <a class="@NavLinkShouldBeSelected("login")" asp-page="/Login">Login</a>
+                <a class="@NavLinkShouldBeSelected("register")" asp-page="/Register">Register</a>
+            }
         </nav>
     </header>
 

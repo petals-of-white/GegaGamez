@@ -1,16 +1,78 @@
 ﻿@page
+@using System.Collections;
 @model GegaGamez.WebUI.Pages.Games.SearchModel
 @{
+    var routeUrl = Url.RouteUrl(ViewContext.RouteData.Values);
+    var qsPath = ViewContext.HttpContext.Request.QueryString.Value;
+    var keepedUrl = $"{routeUrl}{qsPath}";
+        /*
+        * IDictionary<string, string> routeWithGenre(int genreId)
+        {
+        var genres = new HashSet<int>(Model.ByGenre);
+
+            if(genres.Contains(genreId))
+        {
+        genres.Remove(genreId);
+        }
+                         else
+                         {
+                         genres.Add(genreId);
+        }
+
+        var filtersStr = from genre in genres
+        select genre.ToString();
+
+        var queryStr = filtersStr.Select(fs=>$"{nameof(Model.ByGenre)}={fs}").ToArray();
+
+        string genresFilterFullRoute = string.Join('&', queryStr);
+
+
+        IDictionary<string, string> filterRoute = new Dictionary<string, string>()
+        {
+        {nameof(Model.GameTitle), Model.GameTitle},
+        };
+
+            foreach(var genreStr in queryStr)
+            {
+        //filterRoute.Add("...");
+        }
+
+    return filterRoute;
+    }
+    */
+
+    ICollection<int> genreFilters(int genreId)
+    {
+        var genres = new HashSet<int>(Model.ByGenre);
+
+        if(genres.Contains(genreId))
+        {
+            genres.Remove(genreId);
+        }
+        else
+        {
+            genres.Add(genreId);
+        }
+        return genres;
+    }
+
 }
 
 <ul id="genre-selector" class="border-primary">
-
     @foreach(var genre in Model.Genres)
     {
         // generate genre link
+        <li>
+            <!-- if genre is selected, apply link-current style -->
+           @* <a asp-page="/Games/Search" class="@(Model.ByGenre.Contains(genre.Id) ? "link-current" : "")"
+            asp-all-route-data="@routeWithGenre(genre.Id)" asp-route-ByGenre="">@genre.Name</a>*@
+
+           <a href="@Url.Page("/Games/Search", new {ByGenre=genreFilters(genre.Id), GameTitle = Model.GameTitle})"
+                class="@(Model.ByGenre.Contains(genre.Id) ? "link-current" : "")">@genre.Name</a>
+        </li>  
     }
 
-    <li><a href="#">Action</a></li>
+    @*<li><a href="#">Action</a></li>
     <li><a href="#">Adventure</a></li>
     <li><a href="#">Casual</a></li>
     <li><a href="#">Indie</a></li>
@@ -21,11 +83,12 @@
     <li><a href="#">Sports</a></li>
     <li><a href="#">Strategy Action</a></li>
     <li><a href="#">Something</a></li>
-    <li><a href="#">Something</a></li>
+    <li><a href="#">Something</a></li>*@
 </ul>
 
-<form id="search-form" class="rounded border-contrast">
-    <input id="searchbox" asp-for="SearchString" class="font-primary borderless search-field" type="search" placeholder="Search..." />
+<form id="search-form" class="rounded border-contrast" method="get"
+    action="@keepedUrl">
+    <input id="searchbox" asp-for="GameTitle" class="font-primary borderless search-field" type="search" placeholder="Search..." />
     <button type="submit" class="search-button font-contrast borderless">
         <i class="fa-solid fa-magnifying-glass"></i>
     </button>
@@ -37,15 +100,36 @@
     @if(Model.Games.Count == 0)
     {
         // draw controller
+        <i id="beatiful-gamepad" class="fa-solid fa-gamepad"></i>
     }
     else
     {
         foreach (var game in Model.Games)
         {
             // render each game
+
+            <article class="flex-container search-result game-item">
+                <img class="img-standard game-img hover-shadow" src="https://upload.wikimedia.org/wikipedia/ru/thumb/c/c5/MassEffect_Xbox.jpg/261px-MassEffect_Xbox.jpg" alt="Game image" />
+
+                <div class="text-info-block">
+                    <h3 class="game-title-small">@game.Title</h3>
+
+                    <span class="rating-small">
+                        @game.AvgRatingScore / 10
+                    </span>
+
+                    <span class="font-secondary">
+                        @game.ReleaseDate.Value.Year, @game.Developer.Name
+                    </span>
+
+                    <span class="game-description-small">
+                        @game.Description
+                    </span>
+                </div>
+            </article>
         }
     }
-    <article class="flex-container search-result game-item">
+    @*<article class="flex-container search-result game-item">
         <img class="img-standard game-img hover-shadow" src="https://upload.wikimedia.org/wikipedia/ru/thumb/c/c5/MassEffect_Xbox.jpg/261px-MassEffect_Xbox.jpg" alt="Alternate Text" />
 
         <div class="text-info-block">
@@ -68,5 +152,5 @@
                 A small description. This fight will be your last!
             </span>
         </div>
-    </article>
+    </article>*@
 </section>
