@@ -1,8 +1,8 @@
-﻿using GegaGamez.BLL.Models;
+﻿using GegaGamez.Shared.BusinessModels;
 using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 
-namespace GegaGamez.BLL.Logic
+namespace GegaGamez.BLL.LegacyLogic
 {
     public class DeveloperBL : IDisposable
     {
@@ -20,7 +20,15 @@ namespace GegaGamez.BLL.Logic
             var developers = _db.Developers.List();
 
             output = AutoMapping.Mapper.Map<IEnumerable<Developer>>(developers);
+
             return output;
+        }
+
+        public Developer? GetById(int id)
+        {
+            var developer = AutoMapping.Mapper.Map<Developer>(_db.Developers.Get(id));
+
+            return developer;
         }
 
         public IEnumerable<Developer> FindByName(string name)

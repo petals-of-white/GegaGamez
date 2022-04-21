@@ -1,8 +1,8 @@
-﻿using GegaGamez.BLL.Models;
+﻿using GegaGamez.Shared.BusinessModels;
 using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 
-namespace GegaGamez.BLL.Logic
+namespace GegaGamez.BLL.LegacyLogic
 {
     public class GameBL : IDisposable
     {
@@ -15,10 +15,17 @@ namespace GegaGamez.BLL.Logic
 
         public IEnumerable<Game> ListAll()
         {
-            IEnumerable<Game> output;
+            ICollection<Game> output = new List<Game>();
             var games = _db.Games.List();
 
-            output = AutoMapping.Mapper.Map<IEnumerable<Game>>(games);
+            //output = AutoMapping.Mapper.Map<IEnumerable<Game>>(games);
+
+            foreach (var gameEntity in games)
+            {
+                var game = AutoMapping.Mapper.Map<Game>(gameEntity);
+                game.AvgRatingScore = (byte) _db.Ratings.GetAverageGameRatingScore(gameEntity);
+                output.Add(game);
+            }
 
             return output;
         }
@@ -45,11 +52,18 @@ namespace GegaGamez.BLL.Logic
 
         public IEnumerable<Game> FindByTitle(string title)
         {
+            ICollection<Game> output = new List<Game>();
             var gameEntitiesByTitle = _db.Games.GetAllByTitle(title);
 
-            var games = AutoMapping.Mapper.Map<IEnumerable<Game>>(gameEntitiesByTitle);
+            foreach (var gameEntity in gameEntitiesByTitle)
+            {
+                var gameByTitle = AutoMapping.Mapper.Map<Game>(gameEntity);
+                gameByTitle.AvgRatingScore = (byte) _db.Ratings.GetAverageGameRatingScore(gameEntity);
 
-            return games;
+                output.Add(gameByTitle);
+            }
+
+            return output;
         }
 
         public IEnumerable<Game> GetByGenre(Genre genre)

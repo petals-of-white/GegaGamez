@@ -1,8 +1,8 @@
-﻿using GegaGamez.BLL.Models;
+﻿using GegaGamez.Shared.BusinessModels;
 using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 
-namespace GegaGamez.BLL.Logic
+namespace GegaGamez.BLL.LegacyLogic
 {
     public class GenreBL : IDisposable
 
@@ -21,6 +21,17 @@ namespace GegaGamez.BLL.Logic
             var allGenres = _db.Genres.List();
 
             output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(allGenres);
+
+            return output;
+        }
+
+        public IEnumerable<Genre> GetGamesGenres(Game game)
+        {
+            IEnumerable<Genre> output;
+
+            var gameEntity = AutoMapping.Mapper.Map<DAL.Entities.Game>(game);
+
+            output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(_db.Genres.GetGamesGenres(gameEntity));
 
             return output;
         }

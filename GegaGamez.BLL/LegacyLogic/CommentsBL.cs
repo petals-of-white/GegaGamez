@@ -1,8 +1,8 @@
-﻿using GegaGamez.BLL.Models;
+﻿using GegaGamez.Shared.BusinessModels;
 using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 
-namespace GegaGamez.BLL.Logic
+namespace GegaGamez.BLL.LegacyLogic
 {
     public class CommentsBL : IDisposable
     {
