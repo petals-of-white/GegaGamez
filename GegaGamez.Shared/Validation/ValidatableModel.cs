@@ -3,8 +3,7 @@
 namespace GegaGamez.Shared.Validation
 {
     /// <summary>
-    /// An abstract class that repsesents a model that can be validated.
-    /// Uses data annotations by default.
+    /// An abstract class that repsesents a model that can be validated. Uses data annotations by default.
     /// </summary>
     public abstract class ValidatableModel : IValidatableObject
     {

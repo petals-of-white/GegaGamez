@@ -1,8 +1,6 @@
 ﻿using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 using GegaGamez.Shared.BusinessModels;
-using GegaGamez.Shared.Exceptions;
-using GegaGamez.Shared.Validation;
 
 namespace GegaGamez.BLL.Services
 {

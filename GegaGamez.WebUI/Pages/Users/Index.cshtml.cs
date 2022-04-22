@@ -13,9 +13,11 @@ namespace GegaGamez.WebUI.Pages.Users
         {
             _userService = userService;
         }
+
         public List<string> DefaultCollections { get; set; } = new();
         public List<string> UserCollections { get; set; } = new();
         public User? UserProfile { get; set; }
+
         public IActionResult OnGet(int id)
         {
             // get user
@@ -29,7 +31,6 @@ namespace GegaGamez.WebUI.Pages.Users
                 _userService.LoadUsersCollections(UserProfile);
                 return Page();
             }
-                
         }
     }
 }

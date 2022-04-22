@@ -20,7 +20,6 @@ namespace GegaGamez.WebUI.Pages.Games
         public string? GameTitle { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        //[FromQuery(Name = "ByGenre")]
         public HashSet<int> ByGenre { get; set; } = new();
 
         public List<Genre> Genres { get; set; } = new();
@@ -57,7 +56,6 @@ namespace GegaGamez.WebUI.Pages.Games
 
         public void OnPost()
         {
-
         }
     }
 }

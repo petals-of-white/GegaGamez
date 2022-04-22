@@ -13,12 +13,14 @@ namespace GegaGamez.WebUI.Pages.Developers
         {
             _devService = devService;
         }
+
         public Developer Developer { get; set; }
+
         public IActionResult OnGet(int id)
         {
             var dev = _devService.GetById(id);
 
-            if(dev is null)
+            if (dev is null)
             {
                 return NotFound();
             }

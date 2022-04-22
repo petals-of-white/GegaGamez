@@ -8,7 +8,6 @@ namespace GegaGamez.DAL.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<DefaultCollectionType> builder)
         {
-
         }
     }
 }

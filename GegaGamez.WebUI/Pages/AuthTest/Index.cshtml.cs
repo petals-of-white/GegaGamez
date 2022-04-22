@@ -23,7 +23,7 @@ namespace GegaGamez.WebUI.Pages.AuthTest
         public string Password { get; set; }
 
         public IActionResult OnGet()
-       {
+        {
             return OnPost();
         }
 

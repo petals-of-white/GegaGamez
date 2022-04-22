@@ -47,7 +47,6 @@ namespace GegaGamez.WebUI.Pages
 
                     return RedirectToPage("/Games/Search");
                 }
-
                 else
                 {
                     return Page();

@@ -76,13 +76,13 @@ select[multiple] {
     padding-right: 0;
     /*
    * Safari will not reveal an option
-   * unless the select height has room to 
+   * unless the select height has room to
    * show all of it
-   * Firefox and Chrome allow showing 
+   * Firefox and Chrome allow showing
    * a partial option
    */
     height: 6rem;
-    /* 
+    /*
    * Experimental - styling of selected options
    * in the multiselect
    * Not supported crossbrowser

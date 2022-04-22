@@ -7,7 +7,6 @@
     --bg-color-primary: black;
     --bg-color-secondary: #404040;
     --bg-color-contrast: red;
-
     --border-primary: 1px solid var(--text-color-primary);
 }
 
@@ -34,8 +33,6 @@ h1, h2, h3, h4, h5, h6 {
 img {
     border: var(--border-primary);
 }
-
-
 
 /* Classes*/
 
@@ -141,7 +138,6 @@ img {
     /*margin-right: auto;*/
 }
 
-
 #search-form {
     display: flex;
     justify-content: center;
@@ -173,9 +169,9 @@ img {
     flex-direction: row;
 }
 
-.game-item:hover {
-    box-shadow: 0 0 20px 1px var(--text-color-primary);
-}
+    .game-item:hover {
+        box-shadow: 0 0 20px 1px var(--text-color-primary);
+    }
 
 .game-img-small {
     height: 100%;
@@ -230,17 +226,14 @@ img {
     background-color: var(--bg-color-primary);
     border: 1px solid var(--text-color-primary);
     text-align: center;
-
 }
 
-.text-info-small
-{
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-start;
+.text-info-small {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     width: 500px;
 }
-
 
 #user-collections-section {
     display: flex;
@@ -252,17 +245,14 @@ img {
         width: 100%;
     }
 
-
 #comments-section {
     height: 700px;
 }
 
-
-#page-footer
-{
+#page-footer {
     display: flex;
     text-align: center;
     height: 150px;
-    align-items:center;
+    align-items: center;
     justify-content: center;
 }
