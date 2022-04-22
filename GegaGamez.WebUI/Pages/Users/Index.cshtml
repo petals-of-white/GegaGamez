@@ -1,8 +1,11 @@
 ﻿@page "{id:int}"
 @model IndexModel
 @{
-    bool logedIn = true;
-    bool authorized = true;
+    AuthDisplayHelper authHelper = new(User);
+
+    bool logedIn = authHelper.IsAuthenticated;
+
+    bool authorized = authHelper.IsAuthorized(Model.UserProfile!.Id);
 
     if (authorized)
     {
@@ -10,7 +13,7 @@
     }
 }
 <article id="user-profile">
-    <img id="user-avatar-big" class="img-standard circle border-primary" src="images/alice.png" alt="User image" />
+    <img id="user-avatar-big" class="img-standard circle border-primary" src="/img/avatar.png" alt="User image" />
     <div id="info-and-buttons-container" class="flex-container">
         <section id="user-text-info" class="text-info-block">
             <h2>

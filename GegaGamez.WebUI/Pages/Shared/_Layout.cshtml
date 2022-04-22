@@ -1,12 +1,17 @@
 ﻿@{
-    bool loggedIn = false;
+    
+    AuthDisplayHelper authHelper = new(User);
+
+
+    bool loggedIn = authHelper.IsAuthenticated;
+
+    int? userId = authHelper.UserId;
+
     string NavLinkShouldBeSelected(string link)
     {
         var className = string.Empty;
 
         object? shouldBeSelected;
-
-        
 
         if (ViewData.TryGetValue(link, out shouldBeSelected) && (bool)shouldBeSelected! is true)
         {
@@ -48,7 +53,7 @@
 
             @if(loggedIn == true)
             {
-                <a class="@NavLinkShouldBeSelected("profile")" asp-page="/Users/Index" asp-route-id="1003">Profile</a>
+                <a class="@NavLinkShouldBeSelected("profile")" asp-page="/Users/Index" asp-route-id="@userId">Profile</a>
             }
 
             <a class="@NavLinkShouldBeSelected("community")" asp-page="/Users/Search">

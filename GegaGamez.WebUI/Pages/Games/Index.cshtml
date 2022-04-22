@@ -1,7 +1,11 @@
 ﻿@page "{id:int}"
 @model GegaGamez.WebUI.Pages.Games.IndexModel
 @{
-    bool logedIn = false;
+    AuthDisplayHelper authHelper = new(User);
+
+    bool logedIn = authHelper.IsAuthenticated;
+
+    int? userId = authHelper.UserId;
 }
 
 <div class="page-content-header border-primary ">
@@ -9,19 +13,18 @@
     <h2 class="font-contrast title">@Model.Game.Title</h2>
 </div>
 <article id="about-game" class="flex-container">
-    <img id="game-img" class="img-standard" src="https://i0.wp.com/4pmtech.com/wp-content/uploads/2022/02/bioware-dragon-age-4-mass-effect-.webp?fit=1000%2C667&ssl=1" alt="Game img" />
+    <img id="game-img" class="img-standard" src="/img/game.png" alt="Game img" />
 
     <section id="game-text-info" class="text-info-block">
         <h1>@Model.Game.Title</h1>
         
-        <span>@Model.Game.AvgRatingScore / <span class="font-contrast">Своя оцінка</span></span>
+        <span>@Model.Game.AvgRatingScore / <span class="font-contrast">My rate</span></span>
         
         <span class="font-secondary">
             <a href="#" class="font-secondary">@Model.Game.Developer.Name</a>, <span>@Model.Game.Price</span>
         </span>
 
         <span class="font-secondary">
-            Genre Genre Genre Genre
             @foreach(var genre in Model.Game.Genres)
             {
                 <span>@genre.Name</span>
@@ -37,7 +40,7 @@
         @if(logedIn == true)
         {
            <button type="button" class="btn-contrast rounded">Add to</button>
-            <button type="button" class="btn-contrast rounded">Rate</button> 
+           <button type="button" class="btn-contrast rounded">Rate</button> 
         }
     </section>
 </article>
@@ -51,7 +54,7 @@
             Add comment
         </button>
         <form action="/" method="post" class="flex-container form-add-comment">
-            <img class="img-standard circle user-avatar" src="https://i.pinimg.com/474x/18/d7/9f/18d79f1fe38960eef37c2219750f99f7.jpg" alt="Alternate Text" />
+            <img class="img-standard circle user-avatar" src="/img/avatar.png" alt="Alternate Text" />
             <textarea class="comment-textarea">sdfsdfs</textarea>
             <div class="btn-group comment-actions">
                 <button type="submit" class="btn-add-comment btn-contrast btn-icon"><i class="fa-regular fa-paper-plane"></i></button>
@@ -61,127 +64,29 @@
     @foreach(var comment in Model.Comments)
     {
         // generate comments
+
+        <article class="flex-container game-comment">
+            <img class="img-standard circle user-avatar" src="/img/avatar.png" alt="Alternate Text" />
+
+        <!--<h3>Username</h3>-->
+
+            <span>
+                @comment.Text
+                <span class="font-secondary">
+                    - Date
+                </span>
+            </span>
+
+            <div class="btn-group comment-actions">
+                
+                @if(comment.User.Id == userId){
+                    <button type="button" onclick="showDeleteCommentModal(@comment.Id)" class="btn-contrast btn-icon btn-remove-comment"><i class="fa-solid fa-trash"></i></button>
+                }
+            </div>
+        </article>
     }
-    <article class="flex-container game-comment">
-        <img class="img-standard circle user-avatar" src="https://i.pinimg.com/474x/18/d7/9f/18d79f1fe38960eef37c2219750f99f7.jpg" alt="Alternate Text" />
-
-        <!--<h3>Maxulla007</h3>-->
-
-        <span>
-            Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod,
-            iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet
-            justo nunc tempor, metus vel.
-            <span class="font-secondary">
-                - 21.02.2003
-            </span>
-        </span>
-
-        <div class="btn-group comment-actions">
-            <button type="button" onclick="showDeleteCommentModal(1)" class="btn-contrast btn-icon btn-remove-comment"><i class="fa-solid fa-trash"></i></button>
-        </div>
-    </article>
-
-    <article class="flex-container game-comment">
-        <img class="img-standard circle user-avatar" src="https://i.pinimg.com/474x/18/d7/9f/18d79f1fe38960eef37c2219750f99f7.jpg" alt="Alternate Text" />
-
-        <!--<h3>Maxulla007</h3>-->
-
-        <span>
-            Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod,
-            iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet
-            justo nunc tempor, metus vel.
-            <span class="font-secondary">
-                - 21.02.2003
-            </span>
-        </span>
-
-        <div class="btn-group comment-actions">
-            <!-- Generate comment id on the backend-->
-            <button type="button" onclick="showDeleteCommentModal(1)" class="btn-contrast btn-icon btn-remove-comment"><i class="fa-solid fa-trash"></i></button>
-        </div>
-    </article>
+  
 </section>
-
-@*<div class="page-content-header border-primary ">
-    <a class="go-back-arrow" href="#"><i class="fa-solid fa-arrow-left font-primary"></i></a>
-    <h2 class="font-contrast title">Game name</h2>
-</div>
-<article id="about-game" class="flex-container">
-    <img id="game-img" class="img-standard" src="https://i0.wp.com/4pmtech.com/wp-content/uploads/2022/02/bioware-dragon-age-4-mass-effect-.webp?fit=1000%2C667&ssl=1" alt="Game img" />
-
-    <section id="game-text-info" class="text-info-block">
-        <h1>Game name</h1>
-        <span>Середня оцінка / <span class="font-contrast">Своя оцінка</span></span>
-        <span class="font-secondary">
-            <a href="#" class="font-secondary">Developer`s Name</a>, <span>5.99$</span>
-        </span>
-        <span class="font-secondary">
-            Genre Genre Genre Genre
-        </span>
-        <span>
-            Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel.
-            Placerat suscipit, orci nisl iaculis eros, a tincidunt nisi odio eget lorem nulla condimentum tempor mattis ut vitae feugiat augue cras ut metus a risus iaculis scelerisque eu ac ante.
-            Fusce non varius purus aenean nec magna felis fusce vestibulum velit mollis odio sollicitudin lacinia aliquam posuere, sapien elementum lobortis tincidunt, turpis dui ornare nisl, sollicitudin interdum turpis nunc eget.
-        </span>
-    </section>
-    <section class="btn-group">
-        <button type="button" class="btn-contrast rounded">Add to</button>
-        <button type="button" class="btn-contrast rounded">Rate</button>
-    </section>
-</article>
-
-<section id="comments-section">
-    <h3>Comments</h3>
-
-    <button type="button" class="font-primary borderless link-default btn-add-comment">
-        Add comment
-    </button>
-    <form action="/" method="post" class="flex-container form-add-comment">
-        <img class="img-standard circle user-avatar" src="https://i.pinimg.com/474x/18/d7/9f/18d79f1fe38960eef37c2219750f99f7.jpg" alt="Alternate Text" />
-        <textarea class="comment-textarea">sdfsdfs</textarea>
-        <div class="btn-group comment-actions">
-            <button type="submit" class="btn-add-comment btn-contrast btn-icon"><i class="fa-regular fa-paper-plane"></i></button>
-        </div>
-    </form>
-    <article class="flex-container game-comment">
-        <img class="img-standard circle user-avatar" src="https://i.pinimg.com/474x/18/d7/9f/18d79f1fe38960eef37c2219750f99f7.jpg" alt="Alternate Text" />
-
-        <!--<h3>Maxulla007</h3>-->
-
-        <span>
-            Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod,
-            iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet
-            justo nunc tempor, metus vel.
-            <span class="font-secondary">
-                - 21.02.2003
-            </span>
-        </span>
-
-        <div class="btn-group comment-actions">
-            <button type="button" onclick="showDeleteCommentModal(1)" class="btn-contrast btn-icon btn-remove-comment"><i class="fa-solid fa-trash"></i></button>
-        </div>
-    </article>
-
-    <article class="flex-container game-comment">
-        <img class="img-standard circle user-avatar" src="https://i.pinimg.com/474x/18/d7/9f/18d79f1fe38960eef37c2219750f99f7.jpg" alt="Alternate Text" />
-
-        <!--<h3>Maxulla007</h3>-->
-
-        <span>
-            Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod,
-            iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet
-            justo nunc tempor, metus vel.
-            <span class="font-secondary">
-                - 21.02.2003
-            </span>
-        </span>
-
-        <div class="btn-group comment-actions">
-            <!-- Generate comment id on the backend-->
-            <button type="button" onclick="showDeleteCommentModal(1)" class="btn-contrast btn-icon btn-remove-comment"><i class="fa-solid fa-trash"></i></button>
-        </div>
-    </article>
-</section>*@
 
 <form method="post" id="delete-comment-modal" class="popup-interactive bg-secondary border-primary">
     <h3 class="font-contrast">Delete this comment?</h3>

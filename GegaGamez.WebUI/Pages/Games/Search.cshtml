@@ -5,41 +5,6 @@
     var routeUrl = Url.RouteUrl(ViewContext.RouteData.Values);
     var qsPath = ViewContext.HttpContext.Request.QueryString.Value;
     var keepedUrl = $"{routeUrl}{qsPath}";
-        /*
-        * IDictionary<string, string> routeWithGenre(int genreId)
-        {
-        var genres = new HashSet<int>(Model.ByGenre);
-
-            if(genres.Contains(genreId))
-        {
-        genres.Remove(genreId);
-        }
-                         else
-                         {
-                         genres.Add(genreId);
-        }
-
-        var filtersStr = from genre in genres
-        select genre.ToString();
-
-        var queryStr = filtersStr.Select(fs=>$"{nameof(Model.ByGenre)}={fs}").ToArray();
-
-        string genresFilterFullRoute = string.Join('&', queryStr);
-
-
-        IDictionary<string, string> filterRoute = new Dictionary<string, string>()
-        {
-        {nameof(Model.GameTitle), Model.GameTitle},
-        };
-
-            foreach(var genreStr in queryStr)
-            {
-        //filterRoute.Add("...");
-        }
-
-    return filterRoute;
-    }
-    */
 
     ICollection<int> genreFilters(int genreId)
     {
@@ -109,7 +74,11 @@
             // render each game
 
             <article class="flex-container search-result game-item">
-                <img class="img-standard game-img hover-shadow" src="https://upload.wikimedia.org/wikipedia/ru/thumb/c/c5/MassEffect_Xbox.jpg/261px-MassEffect_Xbox.jpg" alt="Game image" />
+                <a asp-page="/Games/Index" asp-route-id="@game.Id">
+                    <img class="img-standard game-img hover-shadow" 
+                    src="/img/game.png"
+                    alt="Game avatar" />
+                </a>
 
                 <div class="text-info-block">
                     <h3 class="game-title-small">@game.Title</h3>
@@ -129,28 +98,4 @@
             </article>
         }
     }
-    @*<article class="flex-container search-result game-item">
-        <img class="img-standard game-img hover-shadow" src="https://upload.wikimedia.org/wikipedia/ru/thumb/c/c5/MassEffect_Xbox.jpg/261px-MassEffect_Xbox.jpg" alt="Alternate Text" />
-
-        <div class="text-info-block">
-            <h3 class="game-title-small">Mass Effect</h3>
-
-            <span class="rating-small">
-                8/10
-            </span>
-
-            <span class="font-secondary">
-                2006, Developer
-            </span>
-
-            <!--<span class="font-secondary">-->
-            <!--<a>Developer</a>-->
-            <!--Developer
-            </span>-->
-
-            <span class="game-description-small">
-                A small description. This fight will be your last!
-            </span>
-        </div>
-    </article>*@
 </section>

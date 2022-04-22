@@ -15,6 +15,7 @@ namespace GegaGamez.WebUI.Pages.Games
         }
 
         public Game Game { get; set; }
+
         public List<Comment> Comments { get; set; } = new();
 
         public IActionResult OnGet(int id)
@@ -25,7 +26,9 @@ namespace GegaGamez.WebUI.Pages.Games
                 return NotFound();
             else
             {
+                _gameService.LoadGameGenres(requestedGame);
                 Game = requestedGame;
+
                 return Page();
             }
         }

@@ -1,4 +1,8 @@
+using System.Text;
 using GegaGamez.BLL.Services;
+using GegaGamez.WebUI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +19,47 @@ builder.Services.AddRazorPages();
 //builder.Services.AddScoped(service => new UserService(connectionString));
 //builder.Services.AddScoped(service => new DeveloperBL(connectionString));
 
+// services
 builder.Services.AddScoped(service => new UserService(connectionString));
+builder.Services.AddScoped(service => new UserAuthService(connectionString));
 builder.Services.AddScoped(service => new GameService(connectionString));
 builder.Services.AddScoped(service => new GameCollectionService(connectionString));
 builder.Services.AddScoped(service => new GenreService(connectionString));
 builder.Services.AddScoped(service => new DeveloperService(connectionString));
+
+// auth manager
+string key = builder.Configuration.GetSection("SecurityKey").Value;
+var userService = builder.Services.AddScoped<IJwtAuthenticationManager>(service =>
+{
+    return new JwtAuthenticationManager(service.GetService<UserAuthService>()!, key);
+});
+
+// auth
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+    o.RequireHttpsMetadata = false;
+    o.SaveToken = true;
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+    o.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            context.Token = context.Request.Cookies ["access_token"];
+            return Task.CompletedTask;
+        }
+    };
+}
+);
 
 var app = builder.Build();
 

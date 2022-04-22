@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GegaGamez.BLL\GegaGamez.BLL.csproj" />
     <ProjectReference Include="..\GegaGamez.Shared\GegaGamez.Shared.csproj" />
   </ItemGroup>
