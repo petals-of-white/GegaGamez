@@ -1,0 +1,85 @@
+/* || GLOBAL VARIABLES */
+
+:root {
+    --bg-color-contrast: red;
+    --bg-color-primary: black;
+    --bg-color-secondary: #404040;
+    --border-contrast: 2px solid var(--text-color-contrast);
+    --border-primary: 1px solid var(--text-color-primary);
+    --border-radius: 15px;
+    --shadow: 0 0 20px 3px var(--text-color-secondary);
+    --text-color-contrast: red;
+    --text-color-primary: white;
+    --text-color-secondary: #808080;
+    --img-size-standard: 170px;
+    --img-size-big: 200px;
+}
+
+/* || GENERAL STYLES */
+
+body {
+    padding: 10px 10px 10px 10px;
+    /*background-color: var(--bg-color-primary);*/
+}
+
+    body > * {
+        margin-right: auto;
+        margin-left: auto;
+        width: 1000px;
+    }
+
+* {
+    font-family: "Mariupol";
+}
+
+button {
+    font-size: 1rem;
+    background-color: transparent;
+    padding: unset;
+}
+
+/* || LINKS */
+a {
+    text-decoration: none;
+    color: var(--text-color-primary);
+}
+
+    a:visited {
+        color: var(--text-color-primary);
+    }
+
+    a:hover {
+        color: var(--text-color-contrast);
+    }
+
+/* || HEADINGS */
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0
+}
+
+/* || IMAGES */
+
+img {
+    width: 150px;
+    height: 150px;
+}
+
+/* || INPUTS*/
+
+/*input[type=text] {*/
+/*background-color: transparent;*/
+/*}
+
+    input[type=text]:focus-visible {
+        outline: none;
+    }
+
+    input[type=text]::placeholder {
+        color: var(--text-color-primary);
+    }*/
+
+textarea {
+    resize: none;
+}

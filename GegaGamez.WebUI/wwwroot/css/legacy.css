@@ -1,0 +1,258 @@
+/*Generic tags*/
+
+:root {
+    --text-color-primary: white;
+    --text-color-secondary: #404040;
+    --text-color-contrast: red;
+    --bg-color-primary: black;
+    --bg-color-secondary: #404040;
+    --bg-color-contrast: red;
+    --border-primary: 1px solid var(--text-color-primary);
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-color-primary);
+}
+
+body {
+    padding: 10px 10px 10px 10px;
+    background-color: var(--bg-color-primary);
+    font-family: "Times New Roman";
+}
+
+a:visited {
+    color: var(--text-color-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0
+}
+
+img {
+    border: var(--border-primary);
+}
+
+/* Classes*/
+
+.btn-contrast {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    border-radius: 30px;
+    text-align: center;
+    border: none;
+    padding: 0.4em 1.3em;
+    background-color: var(--bg-color-contrast);
+    color: var(--text-color-primary);
+    appearance: button;
+}
+
+    .btn-contrast:active {
+        /*padding: 0.35em 1.2em;*/
+        padding: 0.35em 1.2em;
+    }
+
+.font-primary {
+    color: var(--text-color-primary);
+}
+
+.font-secondary {
+    color: #404040;
+}
+
+.font-contrast {
+    color: red;
+}
+
+.bg-primary {
+    background-color: black;
+}
+
+.bg-secondary {
+    background-color: gray;
+}
+
+.bg-contrast {
+    background-color: red;
+}
+
+.collection-preview {
+    height: inherit;
+    width: inherit;
+    position: absolute;
+}
+
+.game-comment {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    height: 200px;
+    border: var(--border-primary);
+    justify-content: space-evenly;
+}
+
+#page-header {
+    height: 35px;
+}
+
+#header-links {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+#header-logo {
+    margin-right: 45%;
+    white-space: nowrap;
+}
+
+#genre-selector {
+    /*height: 100px;*/
+    padding: 10px 10px;
+    overflow-x: auto;
+    border: 2px solid var(--text-color-primary);
+    list-style: disc;
+    white-space: nowrap;
+    /*display: flex;*/
+    /*justify-content:space-evenly;*/
+    /*align-items:flex-start;*/
+}
+
+    #genre-selector > li {
+        margin: 0 10px;
+        display: inline-block;
+        /*list-style-type:disc;*/
+        /*margin: 40px auto;*/
+    }
+
+#header-links > a {
+    /*display: inline-block;*/
+    white-space: nowrap;
+    /*margin-right: auto;*/
+}
+
+#search-form {
+    display: flex;
+    justify-content: center;
+    height: 35px;
+    margin-bottom: 20px
+}
+
+#searchbox {
+    color: var(--text-color-primary);
+    border-radius: 20px;
+    background-color: transparent;
+    border: 1px solid var(--text-color-contrast);
+    text-align: center;
+    width: 45%;
+}
+
+    #searchbox::placeholder {
+        color: var(--text-color-contrast);
+    }
+
+.game-item {
+    height: 110px;
+    display: flex;
+    align-content: stretch;
+    justify-content: space-between;
+    margin-top: 15px;
+    border: 1px solid var(--text-color-primary);
+    align-items: center;
+    flex-direction: row;
+}
+
+    .game-item:hover {
+        box-shadow: 0 0 20px 1px var(--text-color-primary);
+    }
+
+.game-img-small {
+    height: 100%;
+}
+
+/*#user-avatar-big {
+    margin-right: 15px;
+    margin-bottom: 15px;
+    height: 200px;
+    border: 1px solid var(--text-color-primary);
+    width: 150px;
+    float: left;
+}*/
+
+.img-big {
+    margin-right: 15px;
+    margin-bottom: 15px;
+    height: 200px;
+    border: 1px solid var(--text-color-primary);
+    width: 150px;
+    float: left;
+}
+
+.user-avatar-small {
+    height: 100%;
+}
+
+.detailed-info {
+    min-height: 200px;
+    margin-bottom: 20px;
+}
+
+    .detailed-info > * {
+        margin-bottom: 10px;
+    }
+
+.game-collection-card {
+    margin-right: 15px;
+    margin-top: 15px;
+    width: 170px;
+    height: 170px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-color-secondary);
+}
+
+.collection-name {
+    display: block;
+    width: 100%;
+    vertical-align: middle;
+    background-color: var(--bg-color-primary);
+    border: 1px solid var(--text-color-primary);
+    text-align: center;
+}
+
+.text-info-small {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 500px;
+}
+
+#user-collections-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+}
+
+    #user-collections-section > *:first-child {
+        width: 100%;
+    }
+
+#comments-section {
+    height: 700px;
+}
+
+#page-footer {
+    display: flex;
+    text-align: center;
+    height: 150px;
+    align-items: center;
+    justify-content: center;
+}

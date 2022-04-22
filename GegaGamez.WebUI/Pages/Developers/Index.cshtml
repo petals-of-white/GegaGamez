@@ -1,0 +1,27 @@
+﻿@page "{id:int}"
+@model GegaGamez.WebUI.Pages.Developers.IndexModel
+@{
+    ViewData ["developers"] = true;
+}
+
+<div class="page-content-header border-primary ">
+    <a class="go-back-arrow" href="#"><i class="fa-solid fa-arrow-left font-primary"></i></a>
+    <h2 class="font-contrast title">@Model.Developer.Name</h2>
+</div>
+
+<article id="about-developer" class="flex-container">
+    <img id="dev-img" class="img-standard" src="/img/developer.png" alt="Game img" />
+
+    <section id="dev-text-info" class="text-info-block">
+        <h1>@Model.Developer.Name</h1>
+        
+        <span>Number of games: </span>
+        
+        <span class="font-secondary">
+            @{
+                string endDate = Model.Developer.EndDate is null ? "present" : Model.Developer.EndDate.Value.Year.ToString();
+            }
+            @Model.Developer.BeginDate.Year - @endDate
+        </span>
+    </section>
+</article>

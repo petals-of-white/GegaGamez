@@ -1,0 +1,122 @@
+﻿@{
+    
+    AuthDisplayHelper authHelper = new(User);
+
+
+    bool loggedIn = authHelper.IsAuthenticated;
+
+    int? userId = authHelper.UserId;
+
+    string NavLinkShouldBeSelected(string link)
+    {
+        var className = string.Empty;
+
+        object? shouldBeSelected;
+
+        if (ViewData.TryGetValue(link, out shouldBeSelected) && (bool)shouldBeSelected! is true)
+        {
+            className = "link-current";
+        }
+
+        return className;
+
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GegaGamez.WebUI</title>
+
+    <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
+    <link rel="stylesheet" href="~/css/fonts.css" asp-append-version="true" />
+    
+    <link rel="stylesheet" href="~/css/general.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/utilities.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/sitewide.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/GegaGamez.WebUI.styles.css" asp-append-version="true" />
+    <script src="https://kit.fontawesome.com/331c1e0eaf.js" crossorigin="anonymous"></script>
+
+</head>
+<body class="font-primary bg-primary">
+    <header id="page-header">
+        <nav id="header-links">
+            <a asp-page="/Index" id="header-logo" class="">
+                <h1>
+                    <span class="font-contrast">Gega</span><span class="font-primary">Gamez</span>
+                </h1>
+            </a>
+
+            @if(loggedIn == true)
+            {
+                <a class="@NavLinkShouldBeSelected("profile")" asp-page="/Users/Index" asp-route-id="@userId">Profile</a>
+            }
+
+            <a class="@NavLinkShouldBeSelected("community")" asp-page="/Users/Search">
+                Community
+            </a>
+
+            <a class="@NavLinkShouldBeSelected("developers")" asp-page="/Developers/Search">
+                Developers
+            </a>
+
+
+            @if(loggedIn == true)
+            {
+                <a asp-page="/Logout" class="btn-contrast rounded">Logout</a>
+            }
+            else
+            {
+                <a class="@NavLinkShouldBeSelected("login")" asp-page="/Login">Login</a>
+                <a class="@NavLinkShouldBeSelected("register")" asp-page="/Register">Register</a>
+            }
+        </nav>
+    </header>
+
+    <main id="main-container">
+        @RenderBody()
+    </main>
+
+    <footer id="page-footer">
+        Maksym Syvash 2022 (c)
+    </footer>
+
+    <!--<header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">GegaGamez.WebUI</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header> 
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

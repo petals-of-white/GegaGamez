@@ -1,0 +1,98 @@
+﻿@page "{id:int}"
+@model GegaGamez.WebUI.Pages.Games.IndexModel
+@{
+    AuthDisplayHelper authHelper = new(User);
+
+    bool logedIn = authHelper.IsAuthenticated;
+
+    int? userId = authHelper.UserId;
+}
+
+<div class="page-content-header border-primary ">
+    <a class="go-back-arrow" href="#"><i class="fa-solid fa-arrow-left font-primary"></i></a>
+    <h2 class="font-contrast title">@Model.Game.Title</h2>
+</div>
+<article id="about-game" class="flex-container">
+    <img id="game-img" class="img-standard" src="/img/game.png" alt="Game img" />
+
+    <section id="game-text-info" class="text-info-block">
+        <h1>@Model.Game.Title</h1>
+        
+        <span>@Model.Game.AvgRatingScore / <span class="font-contrast">My rate</span></span>
+        
+        <span class="font-secondary">
+            <a href="#" class="font-secondary">@Model.Game.Developer.Name</a>, <span>@Model.Game.Price</span>
+        </span>
+
+        <span class="font-secondary">
+            @foreach(var genre in Model.Game.Genres)
+            {
+                <span>@genre.Name</span>
+            }
+        </span>
+
+        <span>
+            @Model.Game.Description
+        </span>
+    </section>
+
+    <section class="btn-group">
+        @if(logedIn == true)
+        {
+           <button type="button" class="btn-contrast rounded">Add to</button>
+           <button type="button" class="btn-contrast rounded">Rate</button> 
+        }
+    </section>
+</article>
+
+<section id="comments-section">
+    <h3>Comments</h3>
+
+    @if(logedIn == true)
+    {
+        <button type="button" class="font-primary borderless link-default btn-add-comment">
+            Add comment
+        </button>
+        <form action="/" method="post" class="flex-container form-add-comment">
+            <img class="img-standard circle user-avatar" src="/img/avatar.png" alt="Alternate Text" />
+            <textarea class="comment-textarea">sdfsdfs</textarea>
+            <div class="btn-group comment-actions">
+                <button type="submit" class="btn-add-comment btn-contrast btn-icon"><i class="fa-regular fa-paper-plane"></i></button>
+            </div>
+        </form>
+    }
+    @foreach(var comment in Model.Comments)
+    {
+        // generate comments
+
+        <article class="flex-container game-comment">
+            <img class="img-standard circle user-avatar" src="/img/avatar.png" alt="Alternate Text" />
+
+        <!--<h3>Username</h3>-->
+
+            <span>
+                @comment.Text
+                <span class="font-secondary">
+                    - Date
+                </span>
+            </span>
+
+            <div class="btn-group comment-actions">
+                
+                @if(comment.User.Id == userId){
+                    <button type="button" onclick="showDeleteCommentModal(@comment.Id)" class="btn-contrast btn-icon btn-remove-comment"><i class="fa-solid fa-trash"></i></button>
+                }
+            </div>
+        </article>
+    }
+  
+</section>
+
+<form method="post" id="delete-comment-modal" class="popup-interactive bg-secondary border-primary">
+    <h3 class="font-contrast">Delete this comment?</h3>
+    <input type="number" name="id" value="54" readonly />
+    <section class="popup-actions">
+        <button type="submit" class="borderless">Do something</button>
+        <button type="button" onclick="hideDeleteCommentModal()" class="btn-contrast rounded">Cancel</button>
+    </section>
+</form>

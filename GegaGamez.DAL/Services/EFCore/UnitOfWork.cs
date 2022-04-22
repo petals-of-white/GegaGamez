@@ -48,30 +48,6 @@ namespace GegaGamez.DAL.Services.EFCore
             _users = new UserRepository(dbContext);
         }
 
-        //public UnitOfWork(IConfiguration configuration, ConnectionStringData connectionStringData)
-        //{
-        //    string connectionString = configuration.GetConnectionString(connectionStringData.SqlConnectionName);
-
-        // var optionsBuilder = new DbContextOptionsBuilder<GegaGamezContext>();
-
-        // AddDbProvider(optionsBuilder, connectionString);
-
-        // GegaGamezContext dbContext = new(optionsBuilder.Options);
-
-        // _dbContext = dbContext;
-
-        //    _comments = new CommentRepository(dbContext);
-        //    _countries = new CountryRepository(dbContext);
-        //    _defaultCollections = new DefaultCollectionRepository(dbContext);
-        //    _defaultCollectionTypes = new DefaultCollectionTypeRepository(dbContext);
-        //    _developers = new DeveloperRepository(dbContext);
-        //    _games = new GameRepository(dbContext);
-        //    _genres = new GenreRepository(dbContext);
-        //    _ratings = new RatingRepository(dbContext);
-        //    _userCollections = new UserCollectionRepository(dbContext);
-        //    _users = new UserRepository(dbContext);
-        //}
-
         public ICommentRepository Comments => _comments;
 
         public ICountryRepository Countries => _countries;

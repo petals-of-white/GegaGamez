@@ -1,0 +1,36 @@
+﻿@page
+@model GegaGamez.WebUI.Pages.Users.SearchModel
+@{
+    ViewData ["community"] = true;
+}
+
+
+<form id="search-form" class="rounded border-contrast">
+    <input id="searchbox" asp-for="UsernameSearchString" class="font-primary borderless search-field" type="search" placeholder="Search for a user" />
+    <button type="submit" class="search-button font-contrast borderless">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+</form>
+
+<section id="search-results">
+    <h2>Users search result:</h2>
+
+    @foreach (var user in Model.Users)
+    {
+        // render each user
+
+        <article class="flex-container search-result user-item">
+            <a asp-page="/Users/Index" asp-route-id="@user.Id"> 
+                <img class="img-standard game-img hover-shadow" src="/img/avatar.png" alt="Avatar user" />
+            </a>
+
+            <div class="text-info-block">
+                <h3 class="game-title-small">@user.Username</h3>
+
+                <span class="game-description-small">
+                    @user.Country.Name
+                </span>
+            </div>
+        </article>
+    }
+</section>

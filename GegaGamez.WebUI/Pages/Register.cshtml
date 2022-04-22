@@ -1,0 +1,31 @@
+﻿@page
+@model GegaGamez.WebUI.Pages.RegisterModel
+@{
+    ViewData ["register"] = true;
+}
+
+<div class="page-content-header border-primary ">
+        <a class="go-back-arrow" href="#"><i class="fa-solid fa-arrow-left font-primary"></i></a>
+        <h2 class="font-contrast title">Register</h2>
+</div>
+<form method="post" class="vertical-container auth-form" id="register-form">
+
+    <div class="vertical-container">
+        <label asp-for="Username"></label>
+        <input id="username" asp-for="Username" class="border-primary bg-secondary font-primary" />
+    </div>
+
+    <div class="vertical-container">
+        <label asp-for="Password"></label>
+        <input id="password" asp-for="Password" class="border-primary bg-secondary font-primary" />
+    </div>
+
+    <div class="vertical-container">
+        <label asp-for="ConfirmPassword">Confirm Password</label>
+        <input id="confirm-password" asp-for="ConfirmPassword" class="border-primary bg-secondary font-primary" />
+    </div>
+
+    <div class="btn-group">
+        <button id="register" type="submit" class="btn-contrast rounded">Register</button>
+    </div>
+</form>
