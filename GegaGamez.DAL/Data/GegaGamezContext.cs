@@ -6,7 +6,7 @@ namespace GegaGamez.DAL.Data
 {
     public partial class GegaGamezContext : DbContext
     {
-        private partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
