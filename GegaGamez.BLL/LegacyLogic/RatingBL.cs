@@ -1,7 +1,9 @@
 ﻿using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Exceptions;
+using GegaGamez.Shared.Services;
 using GegaGamez.Shared.Validation;
 
 namespace GegaGamez.BLL.LegacyLogic
@@ -26,7 +28,7 @@ namespace GegaGamez.BLL.LegacyLogic
                 throw;
             }
 
-            var ratingEntity = AutoMapping.Mapper.Map<DAL.Entities.Rating>(rating);
+            var ratingEntity = AutoMapping.Mapper.Map<Shared.Entities.Rating>(rating);
 
             // check if user rating for a game already exists
             bool ratingExist = _db.Ratings.GetAll(
@@ -48,7 +50,7 @@ namespace GegaGamez.BLL.LegacyLogic
 
         public void Unrate(Rating rating)
         {
-            var ratingEntity = AutoMapping.Mapper.Map<DAL.Entities.Rating>(rating);
+            var ratingEntity = AutoMapping.Mapper.Map<Shared.Entities.Rating>(rating);
 
             _db.Ratings.Remove(ratingEntity);
 

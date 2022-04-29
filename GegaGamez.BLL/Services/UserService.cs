@@ -1,7 +1,9 @@
 ﻿using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Exceptions;
+using GegaGamez.Shared.Services;
 using GegaGamez.Shared.Validation;
 
 namespace GegaGamez.BLL.Services
@@ -42,11 +44,11 @@ namespace GegaGamez.BLL.Services
         {
             user.DefaultCollections = AutoMapping.Mapper.Map<IEnumerable<DefaultCollection>>
                 (_db.DefaultCollections
-                .GetByUser(AutoMapping.Mapper.Map<DAL.Entities.User>(user))).ToList();
+                .GetByUser(AutoMapping.Mapper.Map<Shared.Entities.User>(user))).ToList();
 
             user.UserCollections = AutoMapping.Mapper.Map<IEnumerable<UserCollection>>
                 (_db.UserCollections
-                .GetAllByUser(AutoMapping.Mapper.Map<DAL.Entities.User>(user))).ToList();
+                .GetAllByUser(AutoMapping.Mapper.Map<Shared.Entities.User>(user))).ToList();
         }
 
         /// <summary>
@@ -64,7 +66,7 @@ namespace GegaGamez.BLL.Services
                 throw;
             }
 
-            var ratingEntity = AutoMapping.Mapper.Map<DAL.Entities.Rating>(rating);
+            var ratingEntity = AutoMapping.Mapper.Map<Shared.Entities.Rating>(rating);
 
             // check if user rating for a game already exists
             bool ratingExist = _db.Ratings.GetAll(
@@ -95,7 +97,7 @@ namespace GegaGamez.BLL.Services
                 throw;
             }
 
-            var ratingEntity = AutoMapping.Mapper.Map<DAL.Entities.Rating>(rating);
+            var ratingEntity = AutoMapping.Mapper.Map<Shared.Entities.Rating>(rating);
 
             if (_db.Ratings.Get(rating.Id) is not null)
             {
@@ -117,7 +119,7 @@ namespace GegaGamez.BLL.Services
                 throw;
             }
 
-            var collectionEntity = AutoMapping.Mapper.Map<DAL.Entities.UserCollection>(newCollection);
+            var collectionEntity = AutoMapping.Mapper.Map<Shared.Entities.UserCollection>(newCollection);
 
             _db.UserCollections.Add(collectionEntity);
 
@@ -126,7 +128,7 @@ namespace GegaGamez.BLL.Services
 
         public void AddGameToCollection(UserCollection userCollection, Game game)
         {
-            var gameEntity = AutoMapping.Mapper.Map<DAL.Entities.Game>(game);
+            var gameEntity = AutoMapping.Mapper.Map<Shared.Entities.Game>(game);
 
             var userCollectionEntity = _db.UserCollections.Get(userCollection.Id);
 
@@ -138,7 +140,7 @@ namespace GegaGamez.BLL.Services
 
         public void AddGameToCollection(DefaultCollection defaultCollection, Game game)
         {
-            var gameEntity = AutoMapping.Mapper.Map<DAL.Entities.Game>(game);
+            var gameEntity = AutoMapping.Mapper.Map<Shared.Entities.Game>(game);
 
             var defaultCollectionEntity = _db.DefaultCollections.Get(defaultCollection.Id);
 

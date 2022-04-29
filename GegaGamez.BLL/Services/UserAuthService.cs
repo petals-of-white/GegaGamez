@@ -2,7 +2,9 @@
 using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Exceptions;
+using GegaGamez.Shared.Services;
 using GegaGamez.Shared.Validation;
 
 namespace GegaGamez.BLL.Services
@@ -104,7 +106,7 @@ namespace GegaGamez.BLL.Services
             newUser.DefaultCollections = userDefaultCollections;
 
             // map
-            var userEntity = AutoMapping.Mapper.Map<DAL.Entities.User>(newUser);
+            var userEntity = AutoMapping.Mapper.Map<Shared.Entities.User>(newUser);
 
             _db.Users.Add(userEntity);
 

@@ -11,13 +11,7 @@ string connectionString = builder.Configuration.GetConnectionString("Default");
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-//builder.Services.AddScoped(service => new GameService(connectionString));
-//builder.Services.AddScoped(service => new CollectionsBL(connectionString));
-//builder.Services.AddScoped(service => new CommentsBL(connectionString));
-//builder.Services.AddScoped(service => new GenreBL(connectionString));
-//builder.Services.AddScoped(service => new RatingBL(connectionString));
-//builder.Services.AddScoped(service => new UserService(connectionString));
-//builder.Services.AddScoped(service => new DeveloperBL(connectionString));
+
 
 // services
 builder.Services.AddScoped(service => new UserService(connectionString));

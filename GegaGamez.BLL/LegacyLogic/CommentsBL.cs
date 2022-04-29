@@ -1,6 +1,8 @@
 ﻿using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.LegacyLogic
 {
@@ -15,7 +17,7 @@ namespace GegaGamez.BLL.LegacyLogic
 
         public IEnumerable<Comment> GetCommentsByGame(Game game)
         {
-            var gameEntity = AutoMapping.Mapper.Map<DAL.Entities.Game>(game);
+            var gameEntity = AutoMapping.Mapper.Map<Shared.Entities.Game>(game);
 
             var comments = _db.Comments.GetGameComments(gameEntity);
 
@@ -24,7 +26,7 @@ namespace GegaGamez.BLL.LegacyLogic
 
         public void AddComment(Comment comment)
         {
-            var commentEntity = AutoMapping.Mapper.Map<DAL.Entities.Comment>(comment);
+            var commentEntity = AutoMapping.Mapper.Map<Shared.Entities.Comment>(comment);
 
             _db.Comments.Add(commentEntity);
 
@@ -33,7 +35,7 @@ namespace GegaGamez.BLL.LegacyLogic
 
         public void RemoveComment(Comment comment)
         {
-            var commentEntity = AutoMapping.Mapper.Map<DAL.Entities.Comment>(comment);
+            var commentEntity = AutoMapping.Mapper.Map<Shared.Entities.Comment>(comment);
 
             _db.Comments.Remove(commentEntity);
 

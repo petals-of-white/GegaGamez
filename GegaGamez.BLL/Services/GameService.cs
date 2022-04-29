@@ -2,6 +2,8 @@
 using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.Services
 {
@@ -65,7 +67,7 @@ namespace GegaGamez.BLL.Services
         public IEnumerable<Game> GetByGenre(Genre genre)
         {
             IEnumerable<Game> output;
-            var gamesByGenre = _db.Games.GetByGenre(AutoMapping.Mapper.Map<DAL.Entities.Genre>(genre));
+            var gamesByGenre = _db.Games.GetByGenre(AutoMapping.Mapper.Map<Shared.Entities.Genre>(genre));
 
             output = AutoMapping.Mapper.Map<IEnumerable<Game>>(gamesByGenre);
 
@@ -82,13 +84,13 @@ namespace GegaGamez.BLL.Services
 
         public void LoadGameGenres(Game game)
         {
-            var genres = _db.Genres.GetGamesGenres(AutoMapping.Mapper.Map<DAL.Entities.Game>(game));
+            var genres = _db.Genres.GetGamesGenres(AutoMapping.Mapper.Map<Shared.Entities.Game>(game));
             game.Genres = AutoMapping.Mapper.Map<IEnumerable<Genre>>(genres).ToList();
         }
 
         public IEnumerable<Game> Find(string? byTitle, params Genre [] byGenre)
         {
-            Expression<Func<DAL.Entities.Game, bool>> filter;
+            Expression<Func<Shared.Entities.Game, bool>> filter;
 
             IEnumerable<Game> filteredGames;
 

@@ -1,6 +1,8 @@
 ﻿using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.LegacyLogic
 {
@@ -69,7 +71,7 @@ namespace GegaGamez.BLL.LegacyLogic
         public IEnumerable<Game> GetByGenre(Genre genre)
         {
             IEnumerable<Game> output;
-            var gamesByGenre = _db.Games.GetByGenre(AutoMapping.Mapper.Map<DAL.Entities.Genre>(genre));
+            var gamesByGenre = _db.Games.GetByGenre(AutoMapping.Mapper.Map<Shared.Entities.Genre>(genre));
 
             output = AutoMapping.Mapper.Map<IEnumerable<Game>>(gamesByGenre);
 

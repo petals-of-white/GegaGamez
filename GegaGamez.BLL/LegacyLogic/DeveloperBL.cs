@@ -1,6 +1,7 @@
 ﻿using GegaGamez.DAL.Services;
 using GegaGamez.DAL.Services.EFCore;
 using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.LegacyLogic
 {
