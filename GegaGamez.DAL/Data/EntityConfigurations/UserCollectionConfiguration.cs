@@ -8,11 +8,20 @@ internal class UserCollectionConfiguration : IEntityTypeConfiguration<UserCollec
 {
     public void Configure(EntityTypeBuilder<UserCollection> builder)
     {
+        builder.ToTable("UserCollection");
+
+        builder.HasIndex(e => new { e.UserId, e.Name }, "NIX_UserCollection_UserId_Name")
+            .IsUnique();
+
+        builder.Property(e => e.Description).HasMaxLength(100);
+
+        builder.Property(e => e.Name).HasMaxLength(50);
+
         builder.HasOne(d => d.User)
-                .WithMany(p => p.UserCollections)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserCollection_User");
+            .WithMany(p => p.UserCollections)
+            .HasForeignKey(d => d.UserId)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK_UserCollection_User");
 
         builder.HasMany(d => d.Games)
             .WithMany(p => p.UserCollections)

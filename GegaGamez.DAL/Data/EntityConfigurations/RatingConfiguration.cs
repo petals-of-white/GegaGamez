@@ -10,6 +10,12 @@ internal class RatingConfiguration : IEntityTypeConfiguration<Rating>
     {
         builder.HasKey(e => new { e.UserId, e.RatingScore, e.GameId });
 
+        builder.ToTable("Rating");
+
+        builder.HasIndex(e => e.GameId, "NIX_Rating_GameId");
+
+        builder.HasIndex(e => e.RatingScore, "NIX_Rating_RatingScore");
+
         builder.HasOne(d => d.Game)
             .WithMany(p => p.Ratings)
             .HasForeignKey(d => d.GameId)
