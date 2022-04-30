@@ -1,14 +1,16 @@
-﻿namespace GegaGamez.Shared.Entities;
-
-public class DefaultCollectionType
+﻿namespace GegaGamez.Shared.Entities
 {
-    public DefaultCollectionType()
+    public partial class DefaultCollectionType
     {
-        DefaultCollections = new HashSet<DefaultCollection>();
-    }
+        public DefaultCollectionType()
+        {
+            DefaultCollections = new HashSet<DefaultCollection>();
+        }
 
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public string? Description { get; set; }
-    public ICollection<DefaultCollection> DefaultCollections { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public string? Description { get; set; }
+
+        public virtual ICollection<DefaultCollection> DefaultCollections { get; set; }
+    }
 }

@@ -1,15 +1,18 @@
-﻿namespace GegaGamez.Shared.Entities;
-
-public class Developer
+﻿namespace GegaGamez.Shared.Entities
 {
-    public Developer()
+    public partial class Developer
     {
-        Games = new HashSet<Game>();
-    }
+        public Developer()
+        {
+            Games = new HashSet<Game>();
+        }
 
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public DateTime BeginDate { get; set; }
-    public DateTime? EndDate { get; set; }
-    public ICollection<Game> Games { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public DateTime BeginDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string Description { get; set; } = null!;
+
+        public virtual ICollection<Game> Games { get; set; }
+    }
 }
