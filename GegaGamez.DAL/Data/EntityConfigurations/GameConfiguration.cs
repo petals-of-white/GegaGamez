@@ -1,33 +1,32 @@
-﻿using GegaGamez.DAL.Entities;
+﻿using GegaGamez.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GegaGamez.DAL.Data.EntityConfigurations
+namespace GegaGamez.DAL.Data.EntityConfigurations;
+
+internal class GameConfiguration : IEntityTypeConfiguration<Game>
 {
-    internal class GameConfiguration : IEntityTypeConfiguration<Game>
+    public void Configure(EntityTypeBuilder<Game> builder)
     {
-        public void Configure(EntityTypeBuilder<Game> builder)
-        {
-            builder.HasOne(d => d.Developer)
-                    .WithMany(p => p.Games)
-                    .HasForeignKey(d => d.DeveloperId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Game_Developer");
-
-            builder.HasMany(d => d.Genres)
+        builder.HasOne(d => d.Developer)
                 .WithMany(p => p.Games)
-                .UsingEntity<Dictionary<string, object>>(
-                    "GamesGenre",
-                    l => l.HasOne<Genre>().WithMany().HasForeignKey("GenreId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Games_Genres_GenreID"),
-                    r => r.HasOne<Game>().WithMany().HasForeignKey("GameId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Games_Genres_GameId"),
-                    j =>
-                    {
-                        j.HasKey("GameId", "GenreId");
+                .HasForeignKey(d => d.DeveloperId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Game_Developer");
 
-                        j.ToTable("Games_Genres");
+        builder.HasMany(d => d.Genres)
+            .WithMany(p => p.Games)
+            .UsingEntity<Dictionary<string, object>>(
+                "GamesGenre",
+                l => l.HasOne<Genre>().WithMany().HasForeignKey("GenreId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Games_Genres_GenreID"),
+                r => r.HasOne<Game>().WithMany().HasForeignKey("GameId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Games_Genres_GameId"),
+                j =>
+                {
+                    j.HasKey("GameId", "GenreId");
 
-                        j.HasIndex(new [] { "GenreId" }, "NIX_Games_Genres_GenreId");
-                    });
-        }
+                    j.ToTable("Games_Genres");
+
+                    j.HasIndex(new [] { "GenreId" }, "NIX_Games_Genres_GenreId");
+                });
     }
 }

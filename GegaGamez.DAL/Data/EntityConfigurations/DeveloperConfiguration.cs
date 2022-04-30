@@ -1,13 +1,12 @@
-﻿using GegaGamez.DAL.Entities;
+﻿using GegaGamez.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GegaGamez.DAL.Data.EntityConfigurations
+namespace GegaGamez.DAL.Data.EntityConfigurations;
+
+internal class DeveloperConfiguration : IEntityTypeConfiguration<Developer>
 {
-    internal class DeveloperConfiguration : IEntityTypeConfiguration<Developer>
+    public void Configure(EntityTypeBuilder<Developer> builder)
     {
-        public void Configure(EntityTypeBuilder<Developer> builder)
-        {
-        }
     }
 }

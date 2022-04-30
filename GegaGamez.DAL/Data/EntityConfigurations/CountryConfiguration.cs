@@ -1,18 +1,17 @@
-﻿using GegaGamez.DAL.Entities;
+﻿using GegaGamez.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GegaGamez.DAL.Data.EntityConfigurations
+namespace GegaGamez.DAL.Data.EntityConfigurations;
+
+internal class CountryConfiguration : IEntityTypeConfiguration<Country>
 {
-    internal class CountryConfiguration : IEntityTypeConfiguration<Country>
+    public void Configure(EntityTypeBuilder<Country> builder)
     {
-        public void Configure(EntityTypeBuilder<Country> builder)
-        {
-            builder.Property(e => e.Id).ValueGeneratedNever();
+        builder.Property(e => e.Id).ValueGeneratedNever();
 
-            builder.Property(e => e.ThreeCharCode).IsFixedLength();
+        builder.Property(e => e.ThreeCharCode).IsFixedLength();
 
-            builder.Property(e => e.TwoCharCode).IsFixedLength();
-        }
+        builder.Property(e => e.TwoCharCode).IsFixedLength();
     }
 }
