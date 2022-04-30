@@ -7,9 +7,9 @@ public class DeveloperService : IDisposable
 {
     private readonly IUnitOfWork _db;
 
-    public DeveloperService(string connectionString)
+    public DeveloperService(IUnitOfWork db)
     {
-        _db = new UnitOfWork(connectionString);
+        _db = db;
     }
 
     public IEnumerable<Developer> GetAll()

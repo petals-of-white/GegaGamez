@@ -8,9 +8,9 @@ public class GameService : IDisposable
 {
     private readonly IUnitOfWork _db;
 
-    public GameService(string connectionString)
+    public GameService(IUnitOfWork db)
     {
-        _db = new UnitOfWork(connectionString);
+        _db = db;
     }
 
     public IEnumerable<Game> GetAll()

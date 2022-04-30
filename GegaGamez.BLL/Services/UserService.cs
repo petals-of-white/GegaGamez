@@ -9,9 +9,9 @@ public class UserService : IDisposable
 {
     private readonly IUnitOfWork _db;
 
-    public UserService(string connectionString)
+    public UserService(IUnitOfWork db)
     {
-        _db = new UnitOfWork(connectionString);
+        _db = db;
     }
 
     public User? GetById(int id)

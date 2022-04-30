@@ -7,9 +7,9 @@ public class GenreService : IDisposable
 {
     private readonly IUnitOfWork _db;
 
-    public GenreService(string connectionString)
+    public GenreService(IUnitOfWork db)
     {
-        _db = new UnitOfWork(connectionString);
+        _db = db;
     }
 
     public IEnumerable<Genre> GetAll()

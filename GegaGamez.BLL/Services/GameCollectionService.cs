@@ -7,9 +7,9 @@ public class GameCollectionService : IDisposable
 {
     private readonly IUnitOfWork _db;
 
-    public GameCollectionService(string connectionString)
+    public GameCollectionService(IUnitOfWork db)
     {
-        _db = new UnitOfWork(connectionString);
+        _db = db;
     }
 
     public void LoadCollectionGames(UserCollection userCollection)

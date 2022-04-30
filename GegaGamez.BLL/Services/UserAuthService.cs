@@ -10,9 +10,9 @@ public class UserAuthService
 {
     private readonly IUnitOfWork _db;
 
-    public UserAuthService(string connectionString)
+    public UserAuthService(IUnitOfWork db)
     {
-        _db = new UnitOfWork(connectionString);
+        _db = db;
     }
 
     /// <summary>
