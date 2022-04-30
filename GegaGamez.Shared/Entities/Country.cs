@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.Shared.Entities
 {
-    public class Country
+    public partial class Country
     {
         public Country()
         {
@@ -11,6 +11,7 @@
         public string Name { get; set; } = null!;
         public string TwoCharCode { get; set; } = null!;
         public string ThreeCharCode { get; set; } = null!;
-        public ICollection<User> Users { get; set; }
+
+        public virtual ICollection<User> Users { get; set; }
     }
 }

@@ -8,11 +8,16 @@ internal class DefaultCollectionConfiguration : IEntityTypeConfiguration<Default
 {
     public void Configure(EntityTypeBuilder<DefaultCollection> builder)
     {
+        builder.ToTable("DefaultCollection");
+
+        builder.HasIndex(e => new { e.UserId, e.DefaultCollectionTypeId }, "NIX_DefaultCollection_UserId_DefaultCollectionTypeId")
+            .IsUnique();
+
         builder.HasOne(d => d.DefaultCollectionType)
-                .WithMany(p => p.DefaultCollections)
-                .HasForeignKey(d => d.DefaultCollectionTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_DefaultCollection_DefaultCollectionType");
+            .WithMany(p => p.DefaultCollections)
+            .HasForeignKey(d => d.DefaultCollectionTypeId)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK_DefaultCollection_DefaultCollectionType");
 
         builder.HasOne(d => d.User)
             .WithMany(p => p.DefaultCollections)
