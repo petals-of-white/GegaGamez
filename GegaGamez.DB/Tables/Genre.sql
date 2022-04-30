@@ -2,7 +2,7 @@
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [Name] NVARCHAR(50) NOT NULL, 
-    [Description] NVARCHAR(10) NOT NULL
+    [Description] NVARCHAR(100) NOT NULL
 )
 
 GO

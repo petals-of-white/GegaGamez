@@ -3,9 +3,8 @@
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [Name] NVARCHAR(100) NOT NULL, 
     [BeginDate] DATE NOT NULL, 
-    --[IsActive] BIT NOT NULL DEFAULT 1, 
     [EndDate] DATE NULL, 
-    CONSTRAINT [CK_Developer_IsActive] CHECK (1 = 1)
+    [Description] NVARCHAR(500) NOT NULL 
 )
 
 GO

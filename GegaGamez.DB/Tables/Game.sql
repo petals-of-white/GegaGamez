@@ -5,7 +5,6 @@
     [ReleaseDate] DATE NOT NULL, 
     [Description] NVARCHAR(1000) NOT NULL, 
     [DeveloperId] INT NOT NULL, 
-    [Price] MONEY NOT NULL, 
     CONSTRAINT [FK_Game_Developer] FOREIGN KEY (DeveloperId) REFERENCES [Developer]([Id])
 )
 
