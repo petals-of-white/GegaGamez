@@ -1,5 +1,4 @@
 ﻿using GegaGamez.BLL;
-using GegaGamez.Shared.BusinessModels;
 
 namespace GegaGamez.WebUI
 {
