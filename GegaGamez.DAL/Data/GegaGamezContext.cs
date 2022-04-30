@@ -1,5 +1,5 @@
 ﻿using GegaGamez.DAL.Data.EntityConfigurations;
-using GegaGamez.DAL.Entities;
+using GegaGamez.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.DAL.Data

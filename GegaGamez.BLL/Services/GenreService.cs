@@ -1,46 +1,43 @@
-﻿using GegaGamez.DAL.Services.EFCore;
-using GegaGamez.Shared.BusinessModels;
-using GegaGamez.Shared.DataAccess;
-using GegaGamez.Shared.Services;
+﻿using GegaGamez.Shared.DataAccess;
+using GegaGamez.Shared.Entities;
 
-namespace GegaGamez.BLL.Services
+namespace GegaGamez.BLL.Services;
+
+public class GenreService : IDisposable
 {
-    public class GenreService : IDisposable
+    private readonly IUnitOfWork _db;
+
+    public GenreService(string connectionString)
     {
-        private readonly IUnitOfWork _db;
+        _db = new UnitOfWork(connectionString);
+    }
 
-        public GenreService(string connectionString)
-        {
-            _db = new UnitOfWork(connectionString);
-        }
+    public IEnumerable<Genre> GetAll()
+    {
+        IEnumerable<Genre> output;
 
-        public IEnumerable<Genre> GetAll()
-        {
-            IEnumerable<Genre> output;
+        var allGenres = _db.Genres.List();
 
-            var allGenres = _db.Genres.List();
+        output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(allGenres);
 
-            output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(allGenres);
+        return output;
+    }
 
-            return output;
-        }
+    public IEnumerable<Genre> FindByName(string genreName)
+    {
+        throw new NotImplementedException();
 
-        public IEnumerable<Genre> FindByName(string genreName)
-        {
-            throw new NotImplementedException();
+        //IEnumerable<Genre> output;
 
-            //IEnumerable<Genre> output;
+        //var genresByName = _db.Genres.GetAllByName(genreName);
 
-            //var genresByName = _db.Genres.GetAllByName(genreName);
+        //output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(genresByName);
 
-            //output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(genresByName);
+        //return output;
+    }
 
-            //return output;
-        }
-
-        public void Dispose()
-        {
-            _db.Dispose();
-        }
+    public void Dispose()
+    {
+        _db.Dispose();
     }
 }
