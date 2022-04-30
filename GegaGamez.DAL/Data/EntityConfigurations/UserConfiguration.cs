@@ -1,17 +1,16 @@
-﻿using GegaGamez.DAL.Entities;
+﻿using GegaGamez.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GegaGamez.DAL.Data.EntityConfigurations
+namespace GegaGamez.DAL.Data.EntityConfigurations;
+
+internal class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    internal class UserConfiguration : IEntityTypeConfiguration<User>
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder.HasOne(d => d.Country)
-                .WithMany(p => p.Users)
-                .HasForeignKey(d => d.CountryId)
-                .HasConstraintName("FK_User_Country");
-        }
+        builder.HasOne(d => d.Country)
+            .WithMany(p => p.Users)
+            .HasForeignKey(d => d.CountryId)
+            .HasConstraintName("FK_User_Country");
     }
 }

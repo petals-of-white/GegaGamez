@@ -1,39 +1,37 @@
-﻿using GegaGamez.DAL.Services;
-using GegaGamez.DAL.Services.EFCore;
-using GegaGamez.Shared.BusinessModels;
+﻿using GegaGamez.Shared.DataAccess;
+using GegaGamez.Shared.Entities;
 
-namespace GegaGamez.BLL.Services
+namespace GegaGamez.BLL.Services;
+
+public class GameCollectionService : IDisposable
 {
-    public class GameCollectionService : IDisposable
+    private readonly IUnitOfWork _db;
+
+    public GameCollectionService(IUnitOfWork db)
     {
-        private readonly IUnitOfWork _db;
+        _db = db;
+    }
 
-        public GameCollectionService(string connectionString)
-        {
-            _db = new UnitOfWork(connectionString);
-        }
+    public void LoadCollectionGames(UserCollection userCollection)
+    {
+        var games = _db.Games.GetAll(
+            g => g.UserCollections.Select(uc => uc.Id).Contains(userCollection.Id)
+            );
 
-        public void LoadCollectionGames(UserCollection userCollection)
-        {
-            var games = _db.Games.GetAll(
-                g => g.UserCollections.Select(uc => uc.Id).Contains(userCollection.Id)
-                );
+        userCollection.Games = AutoMapping.Mapper.Map<IEnumerable<Game>>(games).ToList();
+    }
 
-            userCollection.Games = AutoMapping.Mapper.Map<IEnumerable<Game>>(games).ToList();
-        }
+    public void LoadCollectionGames(DefaultCollection defaultCollection)
+    {
+        var games = _db.Games.GetAll(
+            g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id)
+            );
 
-        public void LoadCollectionGames(DefaultCollection defaultCollection)
-        {
-            var games = _db.Games.GetAll(
-                g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id)
-                );
+        defaultCollection.Games = AutoMapping.Mapper.Map<IEnumerable<Game>>(games).ToList();
+    }
 
-            defaultCollection.Games = AutoMapping.Mapper.Map<IEnumerable<Game>>(games).ToList();
-        }
-
-        public void Dispose()
-        {
-            _db.Dispose();
-        }
+    public void Dispose()
+    {
+        _db.Dispose();
     }
 }

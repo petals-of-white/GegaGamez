@@ -1,48 +1,46 @@
-﻿using GegaGamez.DAL.Services;
-using GegaGamez.DAL.Services.EFCore;
-using GegaGamez.Shared.BusinessModels;
+﻿using GegaGamez.Shared.DataAccess;
+using GegaGamez.Shared.Entities;
 
-namespace GegaGamez.BLL.LegacyLogic
+namespace GegaGamez.BLL.LegacyLogic;
+
+public class CommentsBL : IDisposable
 {
-    public class CommentsBL : IDisposable
+    private readonly IUnitOfWork _db;
+
+    public CommentsBL(string connectionString)
     {
-        private readonly IUnitOfWork _db;
+        _db = new UnitOfWork(connectionString);
+    }
 
-        public CommentsBL(string connectionString)
-        {
-            _db = new UnitOfWork(connectionString);
-        }
+    public IEnumerable<Comment> GetCommentsByGame(Game game)
+    {
+        var gameEntity = AutoMapping.Mapper.Map<Shared.Entities.Game>(game);
 
-        public IEnumerable<Comment> GetCommentsByGame(Game game)
-        {
-            var gameEntity = AutoMapping.Mapper.Map<DAL.Entities.Game>(game);
+        var comments = _db.Comments.GetGameComments(gameEntity);
 
-            var comments = _db.Comments.GetGameComments(gameEntity);
+        return AutoMapping.Mapper.Map<IEnumerable<Comment>>(comments);
+    }
 
-            return AutoMapping.Mapper.Map<IEnumerable<Comment>>(comments);
-        }
+    public void AddComment(Comment comment)
+    {
+        var commentEntity = AutoMapping.Mapper.Map<Shared.Entities.Comment>(comment);
 
-        public void AddComment(Comment comment)
-        {
-            var commentEntity = AutoMapping.Mapper.Map<DAL.Entities.Comment>(comment);
+        _db.Comments.Add(commentEntity);
 
-            _db.Comments.Add(commentEntity);
+        _db.Save();
+    }
 
-            _db.Save();
-        }
+    public void RemoveComment(Comment comment)
+    {
+        var commentEntity = AutoMapping.Mapper.Map<Shared.Entities.Comment>(comment);
 
-        public void RemoveComment(Comment comment)
-        {
-            var commentEntity = AutoMapping.Mapper.Map<DAL.Entities.Comment>(comment);
+        _db.Comments.Remove(commentEntity);
 
-            _db.Comments.Remove(commentEntity);
+        _db.Save();
+    }
 
-            _db.Save();
-        }
-
-        public void Dispose()
-        {
-            _db.Dispose();
-        }
+    public void Dispose()
+    {
+        _db.Dispose();
     }
 }
