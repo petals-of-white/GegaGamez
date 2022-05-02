@@ -1,12 +1,13 @@
-﻿using GegaGamez.BLL.Enums;
+﻿using GegaGamez.Shared;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Enums;
 using GegaGamez.Shared.Exceptions;
-using GegaGamez.Shared.Validation;
+using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.Services;
 
-public class UserAuthService
+public class UserAuthService : IUserAuthService, IDisposable
 {
     private readonly IUnitOfWork _db;
 
@@ -29,8 +30,9 @@ public class UserAuthService
 
         try
         {
-            var userEntityByCredentials = _db.Users.GetByCredentials(username, password);
-            var userByCredentials = AutoMapping.Mapper.Map<User>(userEntityByCredentials);
+            //var userEntityByCredentials = _db.Users.GetByCredentials(username, password);
+            //var userByCredentials = AutoMapping.Mapper.Map<User>(userEntityByCredentials);
+            var userByCredentials = _db.Users.GetByCredentials(username, password);
 
             authStatus = AuthStatus.Success;
             user = userByCredentials;
@@ -80,20 +82,22 @@ public class UserAuthService
     {
         UserAuthResult authResult;
 
-        try
-        {
-            ValidationManager.Validate(newUser);
-        }
-        catch (MultipleValidationsException)
-        {
-            throw;
-        }
+        //try
+        //{
+        //    ValidationManager.Validate(newUser);
+        //}
+        //catch (MultipleValidationsException)
+        //{
+        //    throw;
+        //}
 
         ICollection<DefaultCollection> userDefaultCollections = new HashSet<DefaultCollection>();
 
         // adding default collections for user
-        var defaultCollectionTypes = AutoMapping.Mapper
-                .Map<IEnumerable<DefaultCollectionType>>(_db.DefaultCollectionTypes.List());
+        //var defaultCollectionTypes = AutoMapping.Mapper
+        //        .Map<IEnumerable<DefaultCollectionType>>(_db.DefaultCollectionTypes.List());
+
+        var defaultCollectionTypes = _db.DefaultCollectionTypes.List();
 
         foreach (var collectionType in defaultCollectionTypes)
         {
@@ -103,17 +107,22 @@ public class UserAuthService
         newUser.DefaultCollections = userDefaultCollections;
 
         // map
-        var userEntity = AutoMapping.Mapper.Map<Shared.Entities.User>(newUser);
+        //var userEntity = AutoMapping.Mapper.Map<Shared.Entities.User>(newUser);
 
-        _db.Users.Add(userEntity);
+        _db.Users.Add(newUser);
 
         _db.Save();
 
         // map back
-        newUser = AutoMapping.Mapper.Map<User>(userEntity);
+        //newUser = AutoMapping.Mapper.Map<User>(userEntity);
 
         authResult = new UserAuthResult(newUser, AuthStatus.Success);
 
         return authResult;
+    }
+
+    public void Dispose()
+    {
+        _db.Dispose();
     }
 }

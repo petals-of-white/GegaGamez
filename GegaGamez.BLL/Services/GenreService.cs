@@ -1,9 +1,10 @@
 ﻿using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.Services;
 
-public class GenreService : IDisposable
+public class GenreService : IDisposable, IGenreService
 {
     private readonly IUnitOfWork _db;
 
@@ -14,13 +15,13 @@ public class GenreService : IDisposable
 
     public IEnumerable<Genre> GetAll()
     {
-        IEnumerable<Genre> output;
+        //IEnumerable<Genre> output;
 
         var allGenres = _db.Genres.List();
 
-        output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(allGenres);
+        //output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(allGenres);
 
-        return output;
+        return allGenres;
     }
 
     public IEnumerable<Genre> FindByName(string genreName)
