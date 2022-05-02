@@ -1,20 +1,21 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using GegaGamez.BLL;
 using GegaGamez.BLL.Services;
-using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared;
+using GegaGamez.Shared.Services;
+using GegaGamez.WebUI.Models.Display;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GegaGamez.WebUI
 {
     internal class JwtAuthenticationManager : IJwtAuthenticationManager
     {
-        private readonly UserAuthService _userAuthService;
+        private readonly IUserAuthService _userAuthService;
 
         private readonly string _key;
 
-        public JwtAuthenticationManager(UserAuthService userAuthService, string key)
+        public JwtAuthenticationManager(IUserAuthService userAuthService, string key)
         {
             _key = key;
             _userAuthService = userAuthService;
@@ -62,7 +63,7 @@ namespace GegaGamez.WebUI
             return tokenHandler.WriteToken(token);
         }
 
-        public ICollection<Claim> GetClaims(User user)
+        public ICollection<Claim> GetClaims(UserModel user)
         {
             var claims = new Claim []
             {
@@ -80,7 +81,7 @@ namespace GegaGamez.WebUI
         /// <param name="user"></param>
         /// <param name="RememberMe"></param>
         /// <returns></returns>
-        public (string cookieName, string tokenValue, CookieOptions cookieOptions) SignInUser(User user, bool RememberMe = true)
+        public (string cookieName, string tokenValue, CookieOptions cookieOptions) SignInUser(UserModel user, bool RememberMe = true)
         {
             var claims = GetClaims(user);
             var token = GenerateToken(claims);
@@ -107,5 +108,7 @@ namespace GegaGamez.WebUI
             UserAuthResult newUser = _userAuthService.CreateNewUser(username, password);
             return newUser;
         }
+
+
     }
 }

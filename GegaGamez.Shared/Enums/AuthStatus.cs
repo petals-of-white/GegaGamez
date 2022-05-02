@@ -1,4 +1,4 @@
-﻿namespace GegaGamez.BLL.Enums
+﻿namespace GegaGamez.Shared.Enums
 {
     public enum AuthStatus
     {

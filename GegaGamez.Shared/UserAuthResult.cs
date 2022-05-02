@@ -1,11 +1,11 @@
-﻿using GegaGamez.BLL.Enums;
-using GegaGamez.Shared.Entities;
+﻿using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Enums;
 
-namespace GegaGamez.BLL;
+namespace GegaGamez.Shared;
 
 public class UserAuthResult
 {
-    internal UserAuthResult(User? user, AuthStatus status)
+    public UserAuthResult(User? user, AuthStatus status)
     {
         Status = status;
         User = user;
