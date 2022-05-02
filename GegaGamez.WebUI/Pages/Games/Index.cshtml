@@ -18,14 +18,14 @@
     <section id="game-text-info" class="text-info-block">
         <h1>@Model.Game.Title</h1>
         
-        <span>@Model.Game.AvgRatingScore / <span class="font-contrast">My rate</span></span>
+        <span>@Model.Game.AvgRatingScore / <span class="font-contrast">My rating - @Model.UserRatingForGame?.RatingScore</span></span>
         
         <span class="font-secondary">
-            <a href="#" class="font-secondary">@Model.Game.Developer.Name</a>, <span>@Model.Game.Price</span>
+            <a href="#" class="font-secondary">@Model.Game.Developer.Name</a>, <span>Price</span>
         </span>
 
         <span class="font-secondary">
-            @foreach(var genre in Model.Game.Genres)
+            @foreach(var genre in Model.GameGenres)
             {
                 <span>@genre.Name</span>
             }
@@ -53,9 +53,13 @@
         <button type="button" class="font-primary borderless link-default btn-add-comment">
             Add comment
         </button>
-        <form action="/" method="post" class="flex-container form-add-comment">
+        <form asp-page-handler="Comment" method="post" class="flex-container form-add-comment">
             <img class="img-standard circle user-avatar" src="/img/avatar.png" alt="Alternate Text" />
-            <textarea class="comment-textarea">sdfsdfs</textarea>
+            <input asp-for="NewComment.UserId" value="@userId" hidden/>
+            <input asp-for="NewComment.GameId" value="@Model.Game.Id" hidden />
+
+            <textarea asp-for="NewComment.Text" class="comment-textarea" placeholder="Enter your comment here..."></textarea>
+
             <div class="btn-group comment-actions">
                 <button type="submit" class="btn-add-comment btn-contrast btn-icon"><i class="fa-regular fa-paper-plane"></i></button>
             </div>
@@ -66,7 +70,9 @@
         // generate comments
 
         <article class="flex-container game-comment">
-            <img class="img-standard circle user-avatar" src="/img/avatar.png" alt="Alternate Text" />
+			<a asp-page="/Users/Index" asp-route-id="@comment.User.Id">            
+                <img class="img-standard circle user-avatar" src="/img/avatar.png" alt="Alternate Text" />
+            </a>
 
         <!--<h3>Username</h3>-->
 
@@ -90,9 +96,10 @@
 
 <form method="post" id="delete-comment-modal" class="popup-interactive bg-secondary border-primary">
     <h3 class="font-contrast">Delete this comment?</h3>
-    <input type="number" name="id" value="54" readonly />
+    <input type="number" name="id" value="@Model.Game.Id" readonly />
     <section class="popup-actions">
         <button type="submit" class="borderless">Do something</button>
         <button type="button" onclick="hideDeleteCommentModal()" class="btn-contrast rounded">Cancel</button>
     </section>
 </form>
+

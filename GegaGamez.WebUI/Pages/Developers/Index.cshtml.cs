@@ -1,34 +1,36 @@
-using GegaGamez.BLL.Services;
-using GegaGamez.Shared.BusinessModels;
+using AutoMapper;
+using GegaGamez.Shared.Services;
+using GegaGamez.WebUI.Models.Display;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace GegaGamez.WebUI.Pages.Developers
+namespace GegaGamez.WebUI.Pages.Developers;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly IMapper _mapper;
+    private IDeveloperService _devService;
+
+    public IndexModel(IDeveloperService devService, IMapper mapper)
     {
-        private DeveloperService _devService;
+        _devService = devService;
+        _mapper = mapper;
+    }
 
-        public IndexModel(DeveloperService devService)
+    public DeveloperModel Developer { get; set; }
+
+    public IActionResult OnGet(int id)
+    {
+        var dev = _devService.GetById(id);
+
+        if (dev is null)
         {
-            _devService = devService;
+            return NotFound();
         }
-
-        public Developer Developer { get; set; }
-
-        public IActionResult OnGet(int id)
+        else
         {
-            var dev = _devService.GetById(id);
-
-            if (dev is null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                Developer = dev;
-                return Page();
-            }
+            Developer = _mapper.Map<DeveloperModel>(dev);
+            return Page();
         }
     }
 }

@@ -1,55 +1,35 @@
-using System.ComponentModel.DataAnnotations;
-using GegaGamez.BLL.Enums;
+using AutoMapper;
+using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Services;
+using GegaGamez.WebUI.Models.Auth;
+using GegaGamez.WebUI.Models.Display;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GegaGamez.WebUI.Pages
 {
-    [BindProperties]
     public class RegisterModel : PageModel
     {
+        private readonly IUserService _userService;
         private readonly IJwtAuthenticationManager _authManager;
+        private readonly IMapper _mapper;
 
-        public RegisterModel(IJwtAuthenticationManager authManager)
+        public RegisterModel(IUserService userService, IJwtAuthenticationManager authManager, IMapper mapper)
         {
+            _userService = userService;
             _authManager = authManager;
+            _mapper = mapper;
         }
 
-        [Required]
-        [StringLength(50, MinimumLength = 6)]
-        public string Username { get; set; }
+        [BindProperty]
+        public RegisterUserModel RegisterForm { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        [StringLength(50, MinimumLength = 6)]
-        public string Password { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        [StringLength(50, MinimumLength = 6)]
-        [Compare("Password", ErrorMessage = "Please verify your password")]
-        public string ConfirmPassword { get; set; }
-
-        public void OnGet()
+        public IActionResult OnGet()
         {
-        }
-
-        public IActionResult OnPost()
-        {
-            if (ModelState.IsValid)
+            if (User?.Identity?.IsAuthenticated == true)
             {
-                var newUserResult = _authManager.RegisterUser(Username, Password);
-
-                if (newUserResult.Status == AuthStatus.Success)
                 {
-                    var cookie = _authManager.SignInUser(newUserResult.User!);
-                    HttpContext.Response.Cookies.Append(cookie.cookieName, cookie.tokenValue, cookie.cookieOptions);
-
-                    return RedirectToPage("/Games/Search");
-                }
-                else
-                {
-                    return Page();
+                    return BadRequest();
                 }
             }
             else
@@ -57,5 +37,63 @@ namespace GegaGamez.WebUI.Pages
                 return Page();
             }
         }
+
+        public IActionResult OnPost()
+        {
+            if (ModelState.IsValid)
+            {
+                User user = _mapper.Map<User>(RegisterForm);
+
+                try
+                {
+                    _userService.Create(user);
+                }
+                catch (Exception ex)
+                {
+                    // log...
+                    ViewData ["Error"] = ex.Message;
+                    return Page();
+                }
+
+                UserModel rightUser = _mapper.Map<UserModel>(user);
+
+                var cookieResult = _authManager.SignInUser(rightUser);
+
+                HttpContext.Response.Cookies
+                    .Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
+
+                return RedirectToPage("/Games/Search");
+            }
+            else
+                return RedirectToPage("/Register");
+        }
+
+        //public IActionResult OnPost()
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _userService.Create()
+        //        }
+        //        _userService
+        //        var newUserResult = _authManager.RegisterUser(Username, Password);
+
+        // if (newUserResult.Status == AuthStatus.Success) { var user =
+        // _mapper.Map<UserModel>(newUserResult.User); var cookie = _authManager.SignInUser(user);
+        // HttpContext.Response.Cookies.Append(cookie.cookieName, cookie.tokenValue, cookie.cookieOptions);
+
+        //            return RedirectToPage("/Games/Search");
+        //        }
+        //        else
+        //        {
+        //            return Page();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return Page();
+        //    }
+        //}
     }
 }

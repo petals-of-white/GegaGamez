@@ -21,7 +21,7 @@
             </h2>
 
             <span class="font-secondary">
-                @Model.UserProfile.Country
+                @Model.UserProfile.Country?.Name
             </span>
 
             <span>
@@ -44,147 +44,67 @@
     <section id="default-collections-section" class="">
         <h2>Default Collections</h2>
 
-
-        @foreach(var defaultCollection in Model.DefaultCollections)
-        {
-            // rendeer collection
-        }
-
         <div class="collections-container">
-            <div class="game-collection-item default-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">Planned</span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
-            <div class="game-collection-item default-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">Playing</span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
 
-            <div class="game-collection-item default-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">Finished</span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
+            @foreach(var defaultCollection in Model.DefaultCollections)
+            {
+                // render collection
+                <div class="game-collection-item default-collection-item">
+                    <a href="/Users/@(Model.UserProfile.Id)/@(defaultCollection.Type.Name)" class="game-collection-card user-collection-card">
+                        <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
+                        <span class="collection-name">@defaultCollection.Type.Name</span>
+                    </a>
+                    <section class="game-collection-actions">
+                        <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
+                    </section>
+                </div>
+            }
 
-            <div class="game-collection-item default-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">Dropped</span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
         </div>
     </section>
 
     <section id="user-collections-section">
         <h2>Custom Collections</h2>
 
-        @foreach(var userCollection in Model.UserCollections)
-        {
-            // rendeer collections
-        }
         <div class="collections-container">
-            <div class="game-collection-item user-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">Favorites</span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
 
-            <div class="game-collection-item user-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">The best</span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
+            @foreach(var userCollection in Model.UserCollections)
+            {
+                // render collections
+                <div class="game-collection-item user-collection-item">
+                    <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
+                        <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
+                        <span class="collection-name">@userCollection.Name</span>
+                    </a>
 
-            <div class="game-collection-item user-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">Running </span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
-
-            <div class="game-collection-item user-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">Batman</span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
-
-            <div class="game-collection-item user-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">Superb</span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
-
-            <div class="game-collection-item user-collection-item">
-                <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                    <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
-                    <span class="collection-name">Hoho</span>
-                </a>
-                <section class="game-collection-actions">
-                    <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
-                </section>
-            </div>
+                    <section class="game-collection-actions">
+                        <button type="button" class="btn-contrast btn-icon btn-remove-collection"><i class="fa-solid fa-trash"></i></button>
+                    </section>
+                </div>
+            }
+         
         </div>
     </section>
 </article>
 
-<form id="edit-profile-modal" class="popup-interactive bg-secondary border-primary">
+<form asp-page-handler="UpdateProfile" method="post" id="edit-profile-modal" class="popup-interactive bg-secondary border-primary">
+        <input hidden asp-for=UpdateModel.Id value=@Model.UserProfile.Id />
         <h3 class="font-contrast">Something</h3>
         <section class="main-something">
             <div class="input-block">
                 <label>Choose your country</label>
-                <select name="name">
-                    <option>Ukraine</option>
-                    <option>Uruguay</option>
-                    <option>Poland</option>
-                    <option>England</option>
-                    <option>Brazil</option>
-                    <option>Scotland</option>
+                <select asp-items=@Model.Countries asp-for=UpdateModel.CountryId>
+
                 </select>
             </div>
 
             <div class="input-block">
                 <label>Say a few things about yourself</label>
-                <textarea title="Pepsi" placeholder="Hello" name="name"></textarea>
+                <textarea asp-for=UpdateModel.About title="About" placeholder="About yourself"></textarea>
             </div>
         </section>
         <section class="popup-actions">
-            <button type="submit" class="borderless">Do something</button>
+            <button type="submit" class="borderless">Update profile</button>
             <button type="button" onclick="hideEditProfileModal()" class="btn-contrast rounded">Cancel</button>
         </section>
     </form>

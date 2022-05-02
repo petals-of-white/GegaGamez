@@ -1,61 +1,67 @@
-using GegaGamez.BLL.Services;
-using GegaGamez.Shared.BusinessModels;
+using AutoMapper;
+using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Services;
+using GegaGamez.WebUI.Models.Display;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace GegaGamez.WebUI.Pages.Games
+namespace GegaGamez.WebUI.Pages.Games;
+
+public class SearchModel : PageModel
 {
-    public class SearchModel : PageModel
+    private readonly IGameService _gameService;
+    private readonly IGenreService _genreService;
+    private readonly IMapper _mapper;
+
+    public SearchModel(IGameService gameService, IGenreService genreService, IMapper mapper)
     {
-        private readonly GameService _gameService;
-        private readonly GenreService _genreService;
+        _gameService = gameService;
+        _genreService = genreService;
+        _mapper = mapper;
+    }
 
-        public SearchModel(GameService gameService, GenreService genreService)
+    [BindProperty(SupportsGet = true)]
+    public string? GameTitle { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public HashSet<int> ByGenre { get; set; } = new();
+
+    public List<GenreModel> Genres { get; set; } = new();
+    public List<GameModel> Games { get; set; } = new();
+
+    public void OnGet()
+    {
+        // Get all the genres
+        var genres = _genreService.GetAll().ToList();
+        Genres = _mapper.Map<List<GenreModel>>(genres);
+
+        // display all the games if no search string
+        IEnumerable<Game> games;
+        if (string.IsNullOrWhiteSpace(GameTitle))
         {
-            _gameService = gameService;
-            _genreService = genreService;
+            games = _gameService.GetAll();
+        }
+        else
+        {
+            //games = _gameService.FindByTitle(GameTitle);
+            games = _gameService.Find(GameTitle);
         }
 
-        [BindProperty(SupportsGet = true)]
-        public string? GameTitle { get; set; }
-
-        [BindProperty(SupportsGet = true)]
-        public HashSet<int> ByGenre { get; set; } = new();
-
-        public List<Genre> Genres { get; set; } = new();
-        public List<Game> Games { get; set; } = new();
-
-        public void OnGet()
+        // fill genres for each game
+        foreach (var game in games)
         {
-            // Get all the genres
-            Genres = _genreService.GetAll().ToList();
-
-            //Games = string.IsNullOrEmpty(GameTitle) ? Games : _games.FindByTitle(GameTitle).ToList();
-
-            // display all the games if no search string
-            if (string.IsNullOrWhiteSpace(GameTitle))
-            {
-                Games = _gameService.GetAll().ToList();
-            }
-            else
-            {
-                Games = _gameService.FindByTitle(GameTitle).ToList();
-            }
-
-            // fill genres for each game
-            foreach (var game in Games)
-            {
-                _gameService.LoadGameGenres(game);
-            }
-
-            // filter games by genre
-            Games = (from game in Games
-                     where game.Genres.Select(genre => genre.Id).ToHashSet().IsSupersetOf(ByGenre)
-                     select game).ToList();
+            _gameService.LoadGameGenres(game);
         }
 
-        public void OnPost()
-        {
-        }
+        // filter games by genre
+        games = (from game in games
+                 where game.Genres.Select(genre => genre.Id).ToHashSet().IsSupersetOf(ByGenre)
+                 select game);
+
+        Games = _mapper.Map<List<GameModel>>(games.ToList());
+    }
+
+    public void OnPost()
+    {
     }
 }
