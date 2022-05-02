@@ -3,6 +3,7 @@ using GegaGamez.Shared.Entities;
 
 namespace GegaGamez.BLL
 {
+    /*
     internal static class AutoMapping
     {
         public static readonly Mapper Mapper;
@@ -26,4 +27,5 @@ namespace GegaGamez.BLL
             Mapper = new Mapper(mapConfig);
         }
     }
+    */
 }
