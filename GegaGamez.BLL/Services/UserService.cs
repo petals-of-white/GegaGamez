@@ -1,6 +1,5 @@
 ﻿using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
-using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.Services;
@@ -206,6 +205,35 @@ public class UserService : IDisposable, IUserService
         _db.Save();
 
         return actualUser;
+    }
+
+    public User? GetByUsername(string username) =>
+        _db.Users.GetAll(u => u.Username == username).SingleOrDefault();
+
+    public void Create(User newUser)
+    {
+        // adding default collections for user
+        ICollection<DefaultCollection> userDefaultCollections = new HashSet<DefaultCollection>();
+
+        var defaultCollectionTypes = _db.DefaultCollectionTypes.List();
+
+        foreach (var collectionType in defaultCollectionTypes)
+        {
+            userDefaultCollections.Add(new DefaultCollection() { DefaultCollectionType = collectionType });
+        }
+
+        newUser.DefaultCollections = userDefaultCollections;
+
+        try
+        {
+            _db.Users.Add(newUser);
+            _db.Save();
+        }
+        catch (Exception ex)
+        {
+            // log ?
+            throw;
+        }
     }
 
     public void Dispose()

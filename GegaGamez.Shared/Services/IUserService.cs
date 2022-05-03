@@ -4,6 +4,8 @@ namespace GegaGamez.Shared.Services;
 
 public interface IUserService
 {
+    void Create(User newUser);
+
     void AddComment(Comment comment);
 
     void AddGameToCollection(DefaultCollection defaultCollection, Game game);
@@ -19,6 +21,8 @@ public interface IUserService
     IEnumerable<User> GetAll();
 
     User? GetById(int id);
+
+    User? GetByUsername(string username);
 
     Rating? GetRatingForGame(User user, Game game);
 
