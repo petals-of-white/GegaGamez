@@ -11,7 +11,7 @@ public interface IGameService : IDisposable
 {
     IEnumerable<Game> Find(string? byTitle, params Genre [] byGenre);
 
-    IEnumerable<Game> GetAll();
+    IEnumerable<Game> FindAll();
 
     Game? GetById(int id);
 

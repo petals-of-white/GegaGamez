@@ -13,20 +13,13 @@ public class GameCollectionService : IDisposable, IGameCollectionService
         _db = db;
     }
 
-    public UserCollection? GetUserCollectionById(int id)
-    {
-        return _db.UserCollections.Get(id);
-    }
+    public UserCollection? GetUserCollectionById(int id) => _db.UserCollections.Get(id);
 
-    public IEnumerable<DefaultCollectionType> GetDefaultCollectionTypes()
-    {
-        var dc = _db.DefaultCollectionTypes.List();
-        return dc;
-    }
+    public IEnumerable<DefaultCollectionType> GetDefaultCollectionTypes() => _db.DefaultCollectionTypes.AsEnumerable();
 
     public void LoadCollectionGames(UserCollection userCollection)
     {
-        var games = _db.Games.GetAll(
+        var games = _db.Games.FindAll(
             g => g.UserCollections.Select(uc => uc.Id).Contains(userCollection.Id)
             );
 
@@ -35,7 +28,7 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
     public void LoadCollectionGames(DefaultCollection defaultCollection)
     {
-        var games = _db.Games.GetAll(
+        var games = _db.Games.FindAll(
             g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id)
             );
 

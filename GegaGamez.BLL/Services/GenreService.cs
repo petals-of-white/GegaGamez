@@ -13,28 +13,11 @@ public class GenreService : IDisposable, IGenreService
         _db = db;
     }
 
-    public IEnumerable<Genre> GetAll()
-    {
-        //IEnumerable<Genre> output;
-
-        var allGenres = _db.Genres.List();
-
-        //output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(allGenres);
-
-        return allGenres;
-    }
+    public IEnumerable<Genre> GetAll() => _db.Genres.AsEnumerable();
 
     public IEnumerable<Genre> FindByName(string genreName)
     {
         throw new NotImplementedException();
-
-        //IEnumerable<Genre> output;
-
-        //var genresByName = _db.Genres.GetAllByName(genreName);
-
-        //output = AutoMapping.Mapper.Map<IEnumerable<Genre>>(genresByName);
-
-        //return output;
     }
 
     public void Dispose()

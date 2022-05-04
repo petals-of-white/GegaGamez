@@ -24,14 +24,14 @@ public class UserService : IDisposable, IUserService
 
     public IEnumerable<User> GetAll()
     {
-        var allUsers = _db.Users.List();
+        var allUsers = _db.Users.AsEnumerable();
         //return AutoMapping.Mapper.Map<IEnumerable<User>>(allUsers);
         return allUsers;
     }
 
     public IEnumerable<User> FindByUsername(string username)
     {
-        var usersByUsername = _db.Users.GetAllByUsername(username);
+        var usersByUsername = _db.Users.FindAll(u => u.Username.ToLower().Contains(username.ToLower()));
 
         //var usersByUsername = AutoMapping.Mapper.Map<IEnumerable<User>>(usersEntitiesByUsername);
 
@@ -40,9 +40,9 @@ public class UserService : IDisposable, IUserService
 
     public void LoadUsersCollections(User user)
     {
-        user.DefaultCollections = _db.DefaultCollections.GetByUser(user).ToList();
+        user.DefaultCollections = _db.DefaultCollections.FindAll(dc => dc.User.Id == user.Id).ToList();
 
-        user.UserCollections = _db.UserCollections.GetAllByUser(user).ToList();
+        user.UserCollections = _db.UserCollections.FindAll(uc => uc.User.Id == user.Id).ToList();
     }
 
     public void AddComment(Comment comment)
@@ -69,7 +69,7 @@ public class UserService : IDisposable, IUserService
         //var ratingEntity = AutoMapping.Mapper.Map<Shared.Entities.Rating>(rating);
 
         // check if user rating for a game already exists
-        bool ratingExist = _db.Ratings.GetAll(
+        bool ratingExist = _db.Ratings.FindAll(
             r => r.UserId == rating.UserId
             && r.GameId == rating.GameId)
             .Count() == 1;
@@ -96,8 +96,8 @@ public class UserService : IDisposable, IUserService
         //{
         //    throw;
         //}
-
-        if (_db.Ratings.GetUserRatingForAGame(rating.User, rating.Game) is not null)
+        var ratingForGame = _db.Ratings.FindAll(r => r.UserId == rating.UserId && r.GameId == rating.GameId).SingleOrDefault();
+        if (ratingForGame is not null)
         {
             _db.Ratings.Remove(rating);
         }
@@ -107,16 +107,6 @@ public class UserService : IDisposable, IUserService
 
     public void CreateUserCollection(UserCollection newCollection)
     {
-        //try
-        //{
-        //    ValidationManager.Validate(newCollection);
-        //}
-        //catch (MultipleValidationsException)
-        //{
-        //    // logging?
-        //    throw;
-        //}
-
         _db.UserCollections.Add(newCollection);
 
         _db.Save();
@@ -126,7 +116,6 @@ public class UserService : IDisposable, IUserService
     {
         var collection = _db.UserCollections.Get(userCollection.Id);
 
-        // !!! Something's not right here... Need to check where this is a good idea
         collection?.Games.Add(game);
 
         _db.Save();
@@ -136,7 +125,6 @@ public class UserService : IDisposable, IUserService
     {
         var collection = _db.DefaultCollections.Get(defaultCollection.Id);
 
-        // !!! Something's not right here... Need to check where this is a good idea
         collection?.Games.Add(game);
 
         _db.Save();
@@ -186,7 +174,7 @@ public class UserService : IDisposable, IUserService
 
     public Rating? GetRatingForGame(User user, Game game)
     {
-        var rating = _db.Ratings.GetAll(r => r.UserId == user.Id && r.GameId == game.Id)
+        var rating = _db.Ratings.FindAll(r => r.UserId == user.Id && r.GameId == game.Id)
             .SingleOrDefault();
 
         return rating;
@@ -208,14 +196,14 @@ public class UserService : IDisposable, IUserService
     }
 
     public User? GetByUsername(string username) =>
-        _db.Users.GetAll(u => u.Username == username).SingleOrDefault();
+        _db.Users.FindAll(u => u.Username == username).SingleOrDefault();
 
     public void Create(User newUser)
     {
         // adding default collections for user
         ICollection<DefaultCollection> userDefaultCollections = new HashSet<DefaultCollection>();
 
-        var defaultCollectionTypes = _db.DefaultCollectionTypes.List();
+        var defaultCollectionTypes = _db.DefaultCollectionTypes.AsEnumerable();
 
         foreach (var collectionType in defaultCollectionTypes)
         {

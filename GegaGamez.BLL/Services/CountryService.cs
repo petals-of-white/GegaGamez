@@ -13,5 +13,5 @@ public class CountryService : ICountryService
         _db = db;
     }
 
-    public IEnumerable<Country> AllCountries() => _db.Countries.List();
+    public IEnumerable<Country> FindAll() => _db.Countries.AsEnumerable();
 }
