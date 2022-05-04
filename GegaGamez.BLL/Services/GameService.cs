@@ -1,10 +1,11 @@
 ﻿using System.Linq.Expressions;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.Services;
 
-public class GameService : IDisposable
+public class GameService : IDisposable, IGameService
 {
     private readonly IUnitOfWork _db;
 
@@ -15,79 +16,86 @@ public class GameService : IDisposable
 
     public IEnumerable<Game> GetAll()
     {
-        ICollection<Game> output = new List<Game>();
-        var games = _db.Games.List();
+        //ICollection<Game> output = new List<Game>();
 
         //output = AutoMapping.Mapper.Map<IEnumerable<Game>>(games);
 
+        /*
         foreach (var gameEntity in games)
         {
-            var game = AutoMapping.Mapper.Map<Game>(gameEntity);
+            //var game = AutoMapping.Mapper.Map<Game>(gameEntity);
             game.AvgRatingScore = (byte) _db.Ratings.GetAverageGameRatingScore(gameEntity);
             output.Add(game);
         }
-
-        return output;
+        */
+        var games = _db.Games.List();
+        return games;
     }
 
     public Game? GetById(int id)
     {
-        var gameEntity = _db.Games.Get(id);
+        //var gameEntity = _db.Games.Get(id);
 
-        var game = AutoMapping.Mapper.Map<Game>(gameEntity);
+        //var game = AutoMapping.Mapper.Map<Game>(gameEntity);
 
         // do the avg for score !!!
-        if (gameEntity is not null)
-        {
-            game.AvgRatingScore = (byte) _db.Ratings.GetAverageGameRatingScore(gameEntity);
-        }
+        //if (gameEntity is not null)
+        //{
+        //    game.AvgRatingScore = (byte) _db.Ratings.GetAverageGameRatingScore(gameEntity);
+        //}
 
+        var game = _db.Games.Get(id);
         return game;
     }
 
     public IEnumerable<Game> FindByTitle(string title)
     {
-        ICollection<Game> output = new List<Game>();
+        //ICollection<Game> output = new List<Game>();
         var gameEntitiesByTitle = _db.Games.GetAllByTitle(title);
 
+        /*
         foreach (var gameEntity in gameEntitiesByTitle)
         {
-            var gameByTitle = AutoMapping.Mapper.Map<Game>(gameEntity);
-            gameByTitle.AvgRatingScore = (byte) _db.Ratings.GetAverageGameRatingScore(gameEntity);
+            //var gameByTitle = AutoMapping.Mapper.Map<Game>(gameEntity);
+            //gameEntity.AvgRatingScore = (byte) _db.Ratings.GetAverageGameRatingScore(gameEntity);
 
-            output.Add(gameByTitle);
+            //output.Add(gameByTitle);
         }
+        */
 
-        return output;
+        return gameEntitiesByTitle;
     }
 
     public IEnumerable<Game> GetByGenre(Genre genre)
     {
-        IEnumerable<Game> output;
-        var gamesByGenre = _db.Games.GetByGenre(AutoMapping.Mapper.Map<Shared.Entities.Genre>(genre));
+        //IEnumerable<Game> output;
+        //var gamesByGenre = _db.Games.GetByGenre(AutoMapping.Mapper.Map<Shared.Entities.Genre>(genre));
+        var gamesByGenre = _db.Games.GetByGenre(genre);
+        //output = AutoMapping.Mapper.Map<IEnumerable<Game>>(gamesByGenre);
 
-        output = AutoMapping.Mapper.Map<IEnumerable<Game>>(gamesByGenre);
-
-        return output;
+        return gamesByGenre;
     }
 
-    public IEnumerable<Comment> LoadGameComments(Game game)
+    public void LoadGameComments(Game game)
     {
-        IEnumerable<Comment> comments = AutoMapping.Mapper
-            .Map<IEnumerable<Comment>>(_db.Comments.GetAll(c => c.GameId == game.Id));
-
-        return comments;
+        //IEnumerable<Comment> comments = AutoMapping.Mapper
+        //.Map<IEnumerable<Comment>>(_db.Comments.GetAll(c => c.GameId == game.Id));
+        var comments = _db.Comments.GetAll(c => c.GameId == game.Id);
+        game.Comments = comments as ICollection<Comment>;
     }
 
     public void LoadGameGenres(Game game)
     {
-        var genres = _db.Genres.GetGamesGenres(AutoMapping.Mapper.Map<Shared.Entities.Game>(game));
-        game.Genres = AutoMapping.Mapper.Map<IEnumerable<Genre>>(genres).ToList();
+        //var genres = _db.Genres.GetGamesGenres(AutoMapping.Mapper.Map<Shared.Entities.Game>(game));
+        //game.Genres = AutoMapping.Mapper.Map<IEnumerable<Genre>>(genres).ToList();
+
+        var genres = _db.Genres.GetGamesGenres(game);
+        game.Genres = genres as ICollection<Genre>;
     }
 
     public IEnumerable<Game> Find(string? byTitle, params Genre [] byGenre)
     {
-        Expression<Func<Shared.Entities.Game, bool>> filter;
+        Expression<Func<Game, bool>> filter;
 
         IEnumerable<Game> filteredGames;
 
@@ -109,13 +117,9 @@ public class GameService : IDisposable
             filter =
                 g => g.Genres.Select(genre => genre.Id).ToHashSet().IsSupersetOf(genresIds)
                 && g.Title.ToLower().Contains(byTitle.ToLower());
-            /*
-            filteredGames = AutoMapping.Mapper
-                    .Map<IEnumerable<Game>>(_db.Games.GetAllByTitle(filter));
-            */
         }
-        filteredGames = AutoMapping.Mapper
-            .Map<IEnumerable<Game>>(_db.Games.GetAll(filter));
+
+        filteredGames = _db.Games.GetAll(filter);
 
         return filteredGames;
     }

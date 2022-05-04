@@ -1,34 +1,39 @@
+using AutoMapper;
 using GegaGamez.BLL.Services;
-using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared.Services;
+using GegaGamez.WebUI.Models.Display;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace GegaGamez.WebUI.Pages.Developers
+namespace GegaGamez.WebUI.Pages.Developers;
+
+public class SearchModel : PageModel
 {
-    public class SearchModel : PageModel
+    private readonly IMapper _mapper;
+    private IDeveloperService _devService;
+
+    public SearchModel(IDeveloperService devService, IMapper mapper)
     {
-        private DeveloperService _devService;
+        _devService = devService;
+        this._mapper = mapper;
+    }
 
-        public SearchModel(DeveloperService devService)
+    [BindProperty(SupportsGet = true)]
+    public string DevSearchName { get; set; }
+
+    public List<DeveloperModel> Developers { get; set; }
+
+    public void OnGet()
+    {
+        if (string.IsNullOrWhiteSpace(DevSearchName))
         {
-            _devService = devService;
+            var devs = _devService.GetAll();
+            Developers = _mapper.Map<List<DeveloperModel>>(devs.ToList());
         }
-
-        [BindProperty(SupportsGet = true)]
-        public string DevSearchName { get; set; }
-
-        public List<Developer> Developers { get; set; }
-
-        public void OnGet()
+        else
         {
-            if (string.IsNullOrWhiteSpace(DevSearchName))
-            {
-                Developers = _devService.GetAll().ToList();
-            }
-            else
-            {
-                Developers = _devService.FindByName(DevSearchName).ToList();
-            }
+            var devs = _devService.Find(DevSearchName);
+            Developers = _mapper.Map<List<DeveloperModel>>(devs.ToList());
         }
     }
 }

@@ -1,34 +1,46 @@
 using System.Text;
-using GegaGamez.BLL.Services;
+using FluentValidation.AspNetCore;
+using GegaGamez.BLL;
 using GegaGamez.WebUI;
+using GegaGamez.WebUI.MappingProfiles;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// connectino string
-string connectionString = builder.Configuration.GetConnectionString("Default");
-
-// Add services to the container.
+// Razor pages
 builder.Services.AddRazorPages();
 
+// Validation
+builder.Services.AddFluentValidation(
+    fv =>
+    {
+        // Validate collections of models
+        fv.ImplicitlyValidateRootCollectionElements = true;
 
-// services
-builder.Services.AddScoped(service => new UserService(connectionString));
-builder.Services.AddScoped(service => new UserAuthService(connectionString));
-builder.Services.AddScoped(service => new GameService(connectionString));
-builder.Services.AddScoped(service => new GameCollectionService(connectionString));
-builder.Services.AddScoped(service => new GenreService(connectionString));
-builder.Services.AddScoped(service => new DeveloperService(connectionString));
+        // Validate properties that have registered validators
+        fv.ImplicitlyValidateChildProperties = true;
+        fv.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
+    });
 
-// auth manager
+// Add mapping profiles
+builder.Services.AddAutoMapper(typeof(MainProfile));
+
+// Add DB
+var connectionString = builder.Configuration.GetConnectionString("GegaGamezDev");
+builder.Services.AddGegaGamezDB(connectionString);
+
+// Services (interfaces?)
+builder.Services.AddGegaGamezServices();
+
+// Auth manager
 string key = builder.Configuration.GetSection("SecurityKey").Value;
 var userService = builder.Services.AddScoped<IJwtAuthenticationManager>(service =>
 {
-    return new JwtAuthenticationManager(service.GetService<UserAuthService>()!, key);
+    return new JwtAuthenticationManager(key);
 });
 
-// auth
+// Auth
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

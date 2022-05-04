@@ -36,19 +36,6 @@
                 class="@(Model.ByGenre.Contains(genre.Id) ? "link-current" : "")">@genre.Name</a>
         </li>  
     }
-
-    @*<li><a href="#">Action</a></li>
-    <li><a href="#">Adventure</a></li>
-    <li><a href="#">Casual</a></li>
-    <li><a href="#">Indie</a></li>
-    <li><a href="#">Massively Multiplayer</a></li>
-    <li><a href="#">Racing</a></li>
-    <li><a href="#">RPG</a></li>
-    <li><a href="#">Simulation</a></li>
-    <li><a href="#">Sports</a></li>
-    <li><a href="#">Strategy Action</a></li>
-    <li><a href="#">Something</a></li>
-    <li><a href="#">Something</a></li>*@
 </ul>
 
 <form id="search-form" class="rounded border-contrast" method="get"
@@ -84,11 +71,11 @@
                     <h3 class="game-title-small">@game.Title</h3>
 
                     <span class="rating-small">
-                        @game.AvgRatingScore / 10
+                        Average score / 10
                     </span>
 
                     <span class="font-secondary">
-                        @game.ReleaseDate.Value.Year, @game.Developer.Name
+                        @game.ReleaseDate.Year, @game.Developer.Name
                     </span>
 
                     <span class="game-description-small">

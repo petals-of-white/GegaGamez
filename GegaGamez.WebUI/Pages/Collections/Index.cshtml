@@ -1,8 +1,17 @@
 ﻿@page
 @model GegaGamez.WebUI.Pages.Collections.IndexModel
 @{
-    bool logedIn = true;
-    bool authorized = true;
+    AuthDisplayHelper authHelper = new(User);
+
+    bool logedIn = authHelper.IsAuthenticated;
+
+    //bool authorized = authHelper.IsAuthorized(Model.UserProfile!.Id);
+    bool authorized = false;
+
+    //if (authorized)
+    //{
+    //    //ViewData ["profile"] = true;
+    //}
 }
 <section id="collection-full-info">
     <header id="collection-header" class="border-primary">

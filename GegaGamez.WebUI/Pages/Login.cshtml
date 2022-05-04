@@ -2,7 +2,6 @@
 @model GegaGamez.WebUI.Pages.LoginModel
 @{
     ViewData ["login"] = true;
-
 }
 
 <div class="page-content-header border-primary ">
@@ -12,17 +11,17 @@
 
 <form method="post" class="vertical-container auth-form" id="login-form">
     <div class="vertical-container">
-        <label for="username">Username</label>
-        <input id="username" asp-for="Username" class="border-primary bg-secondary font-primary" />
+        <label asp-for="LoginForm.Username"></label>
+        <input asp-for="LoginForm.Username" class="border-primary bg-secondary font-primary" />
     </div>
 
     <div class="vertical-container">
-        <label for="password">Password</label>
-        <input id="password" asp-for="Password" class="border-primary bg-secondary font-primary" />
+        <label asp-for="LoginForm.Password"></label>
+        <input type="password" asp-for="LoginForm.Password" class="border-primary bg-secondary font-primary" />
     </div>
 
     <div class="flex-container" id="auth-btn-group">
-        <button id="login" type="submit" class="btn-contrast horizontal-flex-container rounded">Login</button>
-        <a href="#" class="">Forgot password?</a>
+        <button type="submit" class="btn-contrast horizontal-flex-container rounded">Login</button>
+        <a href="#">Forgot password?</a>
     </div>
 </form>

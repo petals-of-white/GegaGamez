@@ -1,24 +1,28 @@
-using System.ComponentModel.DataAnnotations;
-using GegaGamez.BLL.Enums;
+using AutoMapper;
+using GegaGamez.Shared.Services;
+using GegaGamez.WebUI.Models.Auth;
+using GegaGamez.WebUI.Models.Display;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GegaGamez.WebUI.Pages
 {
-    [BindProperties]
     public class LoginModel : PageModel
     {
-        private readonly IJwtAuthenticationManager _authManager;
+        private readonly IMapper _mapper;
 
-        public LoginModel(IJwtAuthenticationManager authenticationManager)
+        private readonly IJwtAuthenticationManager _authManager;
+        private readonly IUserService _userService;
+
+        public LoginModel(IUserService userService, IJwtAuthenticationManager authManager, IMapper mapper)
         {
-            _authManager = authenticationManager;
+            _authManager = authManager;
+            _userService = userService;
+            _mapper = mapper;
         }
 
-        public string Username { get; set; }
-
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        [BindProperty]
+        public LoginUserModel LoginForm { get; set; }
 
         public IActionResult OnGet()
         {
@@ -36,30 +40,31 @@ namespace GegaGamez.WebUI.Pages
 
         public IActionResult OnPost()
         {
-            var authResult = _authManager.AuthenticateUser(Username, Password);
-
-            if (authResult.Status == AuthStatus.Success)
+            if (ModelState.IsValid)
             {
-                var cookie = _authManager.SignInUser(authResult.User!);
-                HttpContext.Response.Cookies.Append(cookie.cookieName, cookie.tokenValue, cookie.cookieOptions);
+                var user = _userService.GetByUsername(LoginForm.Username);
 
-                return RedirectToPage("/Games/Search");
+                if (user is null)
+                    return RedirectToPage("/Login");
+                else
+                {
+                    if (user.Password != LoginForm.Password)
+                        return RedirectToPage("/Login");
+                    else
+                    {
+                        UserModel rightUser = _mapper.Map<UserModel>(user);
+
+                        var cookieResult = _authManager.SignInUser(rightUser);
+
+                        HttpContext.Response.Cookies
+                            .Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
+
+                        return RedirectToPage("/Games/Search");
+                    }
+                }
             }
             else
-            {
-                return Page();
-            }
-            //string? token = _authenticationManager.Authenticate(Username, Password);
-
-            //if(token is null)
-            //{
-            //    return Unauthorized();
-            //}
-
-            //else
-            //{
-            //    return Page();
-            //}
+                return RedirectToPage("/Login");
         }
     }
 }

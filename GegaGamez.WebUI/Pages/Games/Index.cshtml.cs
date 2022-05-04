@@ -1,36 +1,84 @@
+using AutoMapper;
 using GegaGamez.BLL.Services;
-using GegaGamez.Shared.BusinessModels;
+using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Services;
+using GegaGamez.WebUI.Models.Display;
+using GegaGamez.WebUI.Models.ModifyModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace GegaGamez.WebUI.Pages.Games
+namespace GegaGamez.WebUI.Pages.Games;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly IGameService _gameService;
+    private readonly IUserService _userService;
+    private readonly IMapper _mapper;
+
+    public IndexModel(IGameService games, IUserService userService, IMapper mapper)
     {
-        private readonly GameService _gameService;
+        _gameService = games;
+        _userService = userService;
+        _mapper = mapper;
 
-        public IndexModel(GameService games)
+        //NewComment = new() { Game = new GameModel { }, User = new UserModel { }, Text = String.Empty };
+    }
+
+    public GameModel Game { get; set; }
+    public RatingModel UserRatingForGame { get; set; }
+    public List<GenreModel> GameGenres { get; set; }
+
+    public List<CommentModel> Comments { get; set; } = new();
+
+    [BindProperty]
+    public NewCommentModel NewComment { get; set; }
+    public IActionResult OnGet(int id)
+    {
+        var requestedGame = _gameService.GetById(id);
+
+        if (requestedGame is null)
+            return NotFound();
+        else
         {
-            _gameService = games;
-        }
+            _gameService.LoadGameGenres(requestedGame);
+            _gameService.LoadGameComments(requestedGame);
 
-        public Game Game { get; set; }
+            Game = _mapper.Map<GameModel>(requestedGame);
+            GameGenres = _mapper.Map<List<GenreModel>>(requestedGame.Genres.ToList());
+            Comments = _mapper.Map<List<CommentModel>>(requestedGame.Comments.ToList());
 
-        public List<Comment> Comments { get; set; } = new();
+            AuthDisplayHelper authHelper = new(User);
 
-        public IActionResult OnGet(int id)
-        {
-            var requestedGame = _gameService.GetById(id);
+            int? userId = authHelper.UserId;
 
-            if (requestedGame is null)
-                return NotFound();
-            else
+            if (userId is not null)
             {
-                _gameService.LoadGameGenres(requestedGame);
-                Game = requestedGame;
 
-                return Page();
+                UserRatingForGame = _mapper.Map<RatingModel>(_userService.GetRatingForGame(
+                    new User { Id = userId.Value },
+                    requestedGame));
             }
+
+
+            return Page();
+        }
+    }
+
+    public IActionResult OnPostComment()
+    {
+        if (HttpContext.User.Identity?.IsAuthenticated == false)
+        {
+            return RedirectToPage("/");
+        }
+        else
+        {
+            if (ModelState.IsValid)
+            {
+                Comment newComment = _mapper.Map<Comment>(NewComment);
+                _userService.AddComment(newComment);
+            }
+
+            return OnGet(NewComment.GameId);
         }
     }
 }

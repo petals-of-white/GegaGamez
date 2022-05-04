@@ -45,7 +45,6 @@
     height: inherit;
     position: absolute;
     width: inherit;
-    filter: blur(4px);
     /*background-image: url("https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909");*/
 }
 
@@ -132,7 +131,7 @@
 .game-comment, .form-add-comment {
     align-items: center;
     height: auto;
-    justify-content: space-evenly;
+    justify-content: space-between;
     width: 65%;
     margin-top: 15px;
 }

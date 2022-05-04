@@ -11,18 +11,18 @@
 <form method="post" class="vertical-container auth-form" id="register-form">
 
     <div class="vertical-container">
-        <label asp-for="Username"></label>
-        <input id="username" asp-for="Username" class="border-primary bg-secondary font-primary" />
+        <label asp-for="RegisterForm.Username"></label>
+        <input asp-for="RegisterForm.Username" class="border-primary bg-secondary font-primary" />
     </div>
 
     <div class="vertical-container">
-        <label asp-for="Password"></label>
-        <input id="password" asp-for="Password" class="border-primary bg-secondary font-primary" />
+        <label asp-for="RegisterForm.Password"></label>
+        <input type="password" asp-for="RegisterForm.Password" class="border-primary bg-secondary font-primary" />
     </div>
 
     <div class="vertical-container">
-        <label asp-for="ConfirmPassword">Confirm Password</label>
-        <input id="confirm-password" asp-for="ConfirmPassword" class="border-primary bg-secondary font-primary" />
+        <label asp-for="RegisterForm.ConfirmPassword">Confirm Password</label>
+        <input type="password" asp-for="RegisterForm.ConfirmPassword" class="border-primary bg-secondary font-primary" />
     </div>
 
     <div class="btn-group">
