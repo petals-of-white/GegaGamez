@@ -4,12 +4,12 @@ namespace GegaGamez.Shared.DataAccess.Repositories
 {
     public interface IDeveloperRepository : IRepository<Developer>
     {
-        IEnumerable<Developer> GetActiveDevelopers();
+        //IEnumerable<Developer> GetActiveDevelopers();
 
-        Task<IEnumerable<Developer>> GetActiveDevelopersAsync();
+        //Task<IEnumerable<Developer>> GetActiveDevelopersAsync();
 
-        IEnumerable<Developer> GetAllByName(string name);
+        //IEnumerable<Developer> GetAllByName(string name);
 
-        Task<IEnumerable<Developer>> GetAllByNameAsync(string name);
+        //Task<IEnumerable<Developer>> GetAllByNameAsync(string name);
     }
 }
