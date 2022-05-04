@@ -6,7 +6,7 @@ namespace GegaGamez.Shared.Services
     {
         IEnumerable<Developer> Find(string byName = "");
 
-        IEnumerable<Developer> GetAll();
+        IEnumerable<Developer> FindAll();
 
         Developer? GetById(int id);
 

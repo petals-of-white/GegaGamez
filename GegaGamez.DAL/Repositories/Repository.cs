@@ -35,6 +35,13 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 
     public Task AddRangeAsync(IEnumerable<TEntity> entities) => _dbSet.AddRangeAsync(entities);
 
+    public virtual async Task<IEnumerable<TEntity>> AsEnumerableAsync()
+    {
+        var list = await DbSetWithIncludedProperties.ToListAsync();
+
+        return list;
+    }
+
     public int Count() => _dbSet.Count();
 
     public int CountAll(Expression<Func<TEntity, bool>> predicate) => _dbSet.Count(predicate);
@@ -56,13 +63,13 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     /// </summary>
     /// <param name="predicate"></param>
     /// <returns></returns>
-    public virtual IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate) => DbSetWithIncludedProperties.Where(predicate).ToList();
+    public virtual IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> predicate) => DbSetWithIncludedProperties.Where(predicate).ToList();
 
     /// <summary>
     /// </summary>
     /// <param name="predicate"></param>
     /// <returns></returns>
-    public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
+    public virtual async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate)
     {
         var list = await DbSetWithIncludedProperties.Where(predicate).ToListAsync();
 
@@ -76,16 +83,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     /// <returns></returns>
     public virtual Task<TEntity?> GetAsync(int id) => _dbSet.FindAsync(id).AsTask();
 
-    public virtual IEnumerable<TEntity> List() => DbSetWithIncludedProperties.ToList();
-
-    public virtual async Task<IEnumerable<TEntity>> ListAsync()
-    {
-        var list = await DbSetWithIncludedProperties.ToListAsync();
-
-        return list;
-    }
-
-    public void Remove(TEntity entity) => _dbSet.Remove(entity);
+    public virtual IEnumerable<TEntity> AsEnumerable() => DbSetWithIncludedProperties.ToList();
 
     public void Remove(int id)
     {
@@ -102,7 +100,9 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         }
     }
 
-    public void RemoveAll(Expression<Func<TEntity, bool>> predicate) => RemoveRange(GetAll(predicate));
+    public void Remove(TEntity entity) => _dbSet.Remove(entity);
+
+    public void RemoveAll(Expression<Func<TEntity, bool>> predicate) => RemoveRange(FindAll(predicate));
 
     public void RemoveRange(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
 }

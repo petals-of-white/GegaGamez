@@ -27,7 +27,7 @@ public class SearchModel : PageModel
     {
         if (string.IsNullOrWhiteSpace(DevSearchName))
         {
-            var devs = _devService.GetAll();
+            var devs = _devService.FindAll();
             Developers = _mapper.Map<List<DeveloperModel>>(devs.ToList());
         }
         else

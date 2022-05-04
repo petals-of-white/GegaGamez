@@ -13,39 +13,20 @@ public class DeveloperService : IDisposable, IDeveloperService
         _db = db;
     }
 
-    public IEnumerable<Developer> GetAll()
-    {
-        //IEnumerable<Developer> output;
+    public IEnumerable<Developer> FindAll() => _db.Developers.AsEnumerable();
 
-        var developers = _db.Developers.List();
-
-        //output = AutoMapping.Mapper.Map<IEnumerable<Developer>>(developers);
-
-        return developers;
-    }
-
-    public Developer? GetById(int id)
-    {
-        var developer = _db.Developers.Get(id);
-        //var developer = AutoMapping.Mapper.Map<Developer>(_db.Developers.Get(id));
-        return developer;
-    }
+    public Developer? GetById(int id) => _db.Developers.Get(id);
 
     public IEnumerable<Developer> Find(string name)
     {
-        //IEnumerable<Developer> output;
-
-        var developersByName = _db.Developers.GetAllByName(name);
-        //output = AutoMapping.Mapper.Map<IEnumerable<Developer>>(developersByName);
+        var developersByName = _db.Developers.FindAll(d => d.Name.ToLower().Contains(name.ToLower()));
         return developersByName;
     }
 
-    // Load developer's games
     public void LoadGames(Developer developer)
     {
-        var games = _db.Games.GetAll(g => g.DeveloperId == developer.Id);
-        //developer.Games = AutoMapping.Mapper.Map<IEnumerable<Game>>(games).ToList();
-        developer.Games = games as ICollection<Game>;
+        var games = _db.Games.FindAll(g => g.DeveloperId == developer.Id).ToList();
+        developer.Games = games;
     }
 
     public void Dispose()

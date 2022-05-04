@@ -19,6 +19,6 @@ namespace GegaGamez.Shared.DataAccess
 
         int Save();
 
-        Task<int> SaveChangesAsync();
+        Task<int> SaveAsync();
     }
 }

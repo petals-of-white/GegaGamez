@@ -74,15 +74,9 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         _dbContext.Dispose();
     }
 
-    public int Save()
-    {
-        return _dbContext.SaveChanges();
-    }
+    public int Save() => _dbContext.SaveChanges();
 
-    public Task<int> SaveChangesAsync()
-    {
-        throw new NotImplementedException();
-    }
+    public Task<int> SaveAsync() => _dbContext.SaveChangesAsync();
 
     public void Update<TEntity>(TEntity entityToUpdate) where TEntity : class
     {

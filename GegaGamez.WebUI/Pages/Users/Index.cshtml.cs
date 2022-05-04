@@ -48,7 +48,7 @@ public class IndexModel : PageModel
             DefaultCollections = _mapper.Map<List<DefaultCollectionModel>>(user.DefaultCollections.ToList());
 
             //load countries
-            var countries = _countryService.AllCountries();
+            var countries = _countryService.FindAll();
 
             Countries = (from country in countries
                          select new SelectListItem(country.Name, country.Id.ToString(), false, false)).ToArray();

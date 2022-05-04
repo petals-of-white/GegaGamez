@@ -39,7 +39,7 @@ public class SearchModel : PageModel
         IEnumerable<Game> games;
         if (string.IsNullOrWhiteSpace(GameTitle))
         {
-            games = _gameService.GetAll();
+            games = _gameService.FindAll();
         }
         else
         {
