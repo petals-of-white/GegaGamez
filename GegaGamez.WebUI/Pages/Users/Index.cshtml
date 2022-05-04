@@ -51,7 +51,7 @@
                 // render collection
                 <div class="game-collection-item default-collection-item">
                     <a href="/Users/@(Model.UserProfile.Id)/@(defaultCollection.Type.Name)" class="game-collection-card user-collection-card">
-                        <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
+                        <img class="collection-preview" src="/img/game.png" alt="Last game adde to collection" />
                         <span class="collection-name">@defaultCollection.Type.Name</span>
                     </a>
                     <section class="game-collection-actions">
@@ -73,7 +73,7 @@
                 // render collections
                 <div class="game-collection-item user-collection-item">
                     <a asp-page="/Collections/Index" class="game-collection-card user-collection-card">
-                        <img class="collection-preview" src="https://static.wikia.nocookie.net/the-antijimi/images/d/d6/Naked_Snake.png/revision/latest?cb=20200316155909" alt="Last game adde to collection" />
+                        <img class="collection-preview" src="/img/game.png" alt="Last game adde to collection" />
                         <span class="collection-name">@userCollection.Name</span>
                     </a>
 
