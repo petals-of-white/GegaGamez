@@ -35,7 +35,7 @@ public class SearchModel : PageModel
         }
         else
         {
-            var users = _userService.FindByUsername(UsernameSearchString);
+            var users = _userService.Find(UsernameSearchString);
             Users = _mapper.Map<List<UserModel>>(users.ToList());
         }
     }

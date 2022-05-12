@@ -1,6 +1,7 @@
 using AutoMapper;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
+using GegaGamez.WebUI.Auth;
 using GegaGamez.WebUI.Models.Auth;
 using GegaGamez.WebUI.Models.Display;
 using Microsoft.AspNetCore.Mvc;
