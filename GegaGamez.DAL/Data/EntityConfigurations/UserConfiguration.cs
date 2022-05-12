@@ -25,5 +25,30 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             .WithMany(p => p.Users)
             .HasForeignKey(d => d.CountryId)
             .HasConstraintName("FK_User_Country");
+
+        builder.HasMany(u => u.Roles)
+            .WithMany(r => r.Users)
+            .UsingEntity<UserRole>(
+                "UserRole",
+
+                right => right
+                    .HasOne<Role>()
+                    .WithMany()
+                    .HasForeignKey(u => u.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserRole_Role"),
+
+                left => left
+                    .HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey(u => u.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserRole_User"),
+
+                join => join
+                    .ToTable("UserRole")
+                    .HasKey(join => new { join.UserId, join.RoleId })
+                    .HasName("PK_UserRole")
+            );
     }
 }
