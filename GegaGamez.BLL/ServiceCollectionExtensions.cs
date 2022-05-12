@@ -1,7 +1,10 @@
 ﻿using GegaGamez.BLL.Services;
 using GegaGamez.DAL;
+using GegaGamez.DAL.Data;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GegaGamez.BLL
@@ -9,14 +12,21 @@ namespace GegaGamez.BLL
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds EFCore UnitOfWork (SQL Server)
+        /// Adds EFCore IUnitOfWork
         /// </summary>
         /// <param name="services"></param>
         /// <param name="connectionString"></param>
         /// <returns></returns>
-        public static IServiceCollection AddGegaGamezDB(this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddGegaGamezDB(this IServiceCollection services, IConfiguration config)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProv => new UnitOfWork(connectionString));
+            var connectionString = config.GetConnectionString("GegaGamezDev");
+
+            // EFCore SqlServer
+            services.AddSqlServer<GegaGamezContext>(connectionString);
+
+            // UoW implementation
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             return services;
         }
 
@@ -33,7 +43,8 @@ namespace GegaGamez.BLL
                 .AddTransient<IGameCollectionService, GameCollectionService>()
                 .AddTransient<IGenreService, GenreService>()
                 .AddTransient<IDeveloperService, DeveloperService>()
-                .AddTransient<ICountryService, CountryService>();
+                .AddTransient<ICountryService, CountryService>()
+                .AddTransient<ICommentService, CommentService>();
 
             return services;
         }

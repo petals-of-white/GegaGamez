@@ -32,7 +32,7 @@ public class SearchModel : PageModel
     public void OnGet()
     {
         // Get all the genres
-        var genres = _genreService.GetAll().ToList();
+        var genres = _genreService.FindAll().ToList();
         Genres = _mapper.Map<List<GenreModel>>(genres);
 
         // display all the games if no search string

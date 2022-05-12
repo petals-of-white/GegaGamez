@@ -13,5 +13,9 @@ namespace GegaGamez.Shared.Services
         void LoadCollectionGames(DefaultCollection defaultCollection);
 
         void LoadCollectionGames(UserCollection userCollection);
+
+        void CreateUserCollection(UserCollection newCollection);
+
+        void DeleteCollection(UserCollection userCollection);
     }
 }

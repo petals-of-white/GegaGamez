@@ -8,7 +8,7 @@ namespace GegaGamez.DAL;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
-    private readonly GegaGamezContext _dbContext;
+    private readonly DbContext _dbContext;
 
     private readonly ICommentRepository _comments;
     private readonly ICountryRepository _countries;
@@ -21,10 +21,32 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private readonly IUserCollectionRepository _userCollections;
     private readonly IUserRepository _users;
 
+    [Obsolete]
+    /// <summary>
+    /// This methods is bad, don't use it
+    /// </summary>
+    /// <param name="optionsBuilder"></param>
+    /// <param name="connectionString"></param>
     private void AddDbProvider(DbContextOptionsBuilder<GegaGamezContext> optionsBuilder, string connectionString)
     {
-        //use another provider if neccessary
         optionsBuilder.UseSqlServer(connectionString);
+    }
+
+    public UnitOfWork(GegaGamezContext dbContext)
+    {
+
+        _dbContext = dbContext;
+
+        _comments = new CommentRepository(dbContext);
+        _countries = new CountryRepository(dbContext);
+        _defaultCollections = new DefaultCollectionRepository(dbContext);
+        _defaultCollectionTypes = new DefaultCollectionTypeRepository(dbContext);
+        _developers = new DeveloperRepository(dbContext);
+        _games = new GameRepository(dbContext);
+        _genres = new GenreRepository(dbContext);
+        _ratings = new RatingRepository(dbContext);
+        _userCollections = new UserCollectionRepository(dbContext);
+        _users = new UserRepository(dbContext);
     }
 
     public UnitOfWork(string connectionString)

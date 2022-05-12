@@ -1,90 +1,91 @@
-using System.Text;
 using FluentValidation.AspNetCore;
 using GegaGamez.BLL;
 using GegaGamez.WebUI;
 using GegaGamez.WebUI.MappingProfiles;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+var builderConfig = builder.Configuration;
 
 // Razor pages
 builder.Services.AddRazorPages();
 
+// controllers
+builder.Services.AddControllers()
+    .AddJsonOptions(opt=>opt.JsonSerializerOptions.AddDateOnlyConverters());
+
+
 // Validation
-builder.Services.AddFluentValidation(
-    fv =>
-    {
-        // Validate collections of models
-        fv.ImplicitlyValidateRootCollectionElements = true;
+builder.Services
+    .AddFluentValidation(
+                        fv =>
+                        {
+                            // Validate collections of models
+                            fv.ImplicitlyValidateRootCollectionElements = true;
 
-        // Validate properties that have registered validators
-        fv.ImplicitlyValidateChildProperties = true;
-        fv.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
-    });
-
-// Add mapping profiles
-builder.Services.AddAutoMapper(typeof(MainProfile));
+                            // Validate properties that have registered validators
+                            fv.ImplicitlyValidateChildProperties = true;
+                            fv.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
+                        })
+    // Mapping profiles
+    .AddAutoMapper(typeof(MainProfile));
 
 // Add DB
-var connectionString = builder.Configuration.GetConnectionString("GegaGamezDev");
-builder.Services.AddGegaGamezDB(connectionString);
+builder.Services.AddGegaGamezDB(builderConfig);
 
-// Services (interfaces?)
+// Add services
 builder.Services.AddGegaGamezServices();
 
-// Auth manager
-string key = builder.Configuration.GetSection("SecurityKey").Value;
-var userService = builder.Services.AddScoped<IJwtAuthenticationManager>(service =>
-{
-    return new JwtAuthenticationManager(key);
-});
+// Auth Auth manager
+string securityKey = builder.Configuration.GetSection("SecurityKey").Value;
+builder.Services.AddJwtAuthentication(securityKey);
 
-// Auth
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(o =>
-{
-    o.RequireHttpsMetadata = false;
-    o.SaveToken = true;
-    o.TokenValidationParameters = new TokenValidationParameters
+// API
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(c =>
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-    };
-    o.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = context =>
-        {
-            context.Token = context.Request.Cookies ["access_token"];
-            return Task.CompletedTask;
-        }
-    };
-}
-);
+        c.SwaggerDoc("v1",
+            new OpenApiInfo
+            {
+                Title = "Todo API",
+                Description = "Keep track of your tasks",
+                Version = "v1"
+            });
+    }
+    );
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    //API
+    app.UseSwagger()
+        .UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GegaGamez v1"));
+}
+
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+else
 {
     app.UseExceptionHandler("/Error");
+
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication()
+    .UseAuthorization();
+
+app.MapDefaultControllerRoute();
 
 app.MapRazorPages();
+
+//app.MapGet("/", () => "HelloWorld");
 
 app.Run();

@@ -29,11 +29,9 @@ public class UserService : IDisposable, IUserService
         return allUsers;
     }
 
-    public IEnumerable<User> FindByUsername(string username)
+    public IEnumerable<User> Find(string username)
     {
         var usersByUsername = _db.Users.FindAll(u => u.Username.ToLower().Contains(username.ToLower()));
-
-        //var usersByUsername = AutoMapping.Mapper.Map<IEnumerable<User>>(usersEntitiesByUsername);
 
         return usersByUsername;
     }
@@ -57,18 +55,6 @@ public class UserService : IDisposable, IUserService
     /// <exception cref="MultipleValidationsException"></exception>
     public void RateGame(Rating rating)
     {
-        //try
-        //{
-        //    ValidationManager.Validate(rating);
-        //}
-        //catch (MultipleValidationsException)
-        //{
-        //    throw;
-        //}
-
-        //var ratingEntity = AutoMapping.Mapper.Map<Shared.Entities.Rating>(rating);
-
-        // check if user rating for a game already exists
         bool ratingExist = _db.Ratings.FindAll(
             r => r.UserId == rating.UserId
             && r.GameId == rating.GameId)
@@ -217,7 +203,7 @@ public class UserService : IDisposable, IUserService
             _db.Users.Add(newUser);
             _db.Save();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // log ?
             throw;

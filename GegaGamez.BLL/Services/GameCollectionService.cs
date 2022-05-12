@@ -38,4 +38,16 @@ public class GameCollectionService : IDisposable, IGameCollectionService
     public DefaultCollection? GetDefaultCollectionById(int id) => _db.DefaultCollections.Get(id);
 
     public void Dispose() => _db.Dispose();
+
+    public void CreateUserCollection(UserCollection newCollection)
+    {
+        _db.UserCollections.Add(newCollection);
+        _db.Save();
+    }
+
+    public void DeleteCollection(UserCollection userCollection)
+    {
+        _db.UserCollections.Remove(userCollection);
+        _db.Save();
+    }
 }
