@@ -4,7 +4,7 @@ using System.Text;
 using GegaGamez.WebUI.Models.Display;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GegaGamez.WebUI
+namespace GegaGamez.WebUI.Auth
 {
     internal class JwtAuthenticationManager : IJwtAuthenticationManager
     {
