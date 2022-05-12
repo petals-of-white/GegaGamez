@@ -38,7 +38,7 @@ builder.Services.AddGegaGamezServices();
 
 // Auth Auth manager
 string securityKey = builder.Configuration.GetSection("SecurityKey").Value;
-builder.Services.AddJwtAuthentication(securityKey);
+builder.Services.AddGegaGamezSecurity(securityKey);
 
 // API
 builder.Services.AddEndpointsApiExplorer();

@@ -9,8 +9,8 @@ namespace GegaGamez.WebUI.Auth
     internal class JwtAuthenticationManager : IJwtAuthenticationManager
     {
         private readonly string _key;
-
         public const string CookieName = "jwt";
+
 
         private string GenerateToken(ICollection<Claim> userClaims)
         {
@@ -35,33 +35,38 @@ namespace GegaGamez.WebUI.Auth
 
         private ICollection<Claim> GetClaims(UserModel user)
         {
-            var claims = new Claim []
+            var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Username)
             };
 
+            var roles = new List<string>();
+
+            roles.ForEach(r => claims.Add(new Claim(ClaimTypes.Role, r)));
             return claims;
         }
 
-        public JwtAuthenticationManager(string key)
-        {
-            _key = key;
-        }
+        
 
-        /// <summary>
-        /// Returns a cookie with a JWT token
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="RememberMe"></param>
-        /// <returns></returns>
-        public (string cookieName, string tokenValue, CookieOptions cookieOptions) SignInUser(UserModel user, bool RememberMe = true)
-        {
-            var claims = GetClaims(user);
-            var token = GenerateToken(claims);
-            var cookieOptions = new CookieOptions { HttpOnly = true };
-
-            return (JwtAuthenticationManager.CookieName, token, cookieOptions);
-        }
+    public JwtAuthenticationManager(string key)
+    {
+        _key = key;
     }
+
+    /// <summary>
+    /// Returns a cookie with a JWT token
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="RememberMe"></param>
+    /// <returns></returns>
+    public (string cookieName, string tokenValue, CookieOptions cookieOptions) SignInUser(UserModel user, bool RememberMe = true)
+    {
+        var claims = GetClaims(user);
+        var token = GenerateToken(claims);
+        var cookieOptions = new CookieOptions { HttpOnly = true };
+
+        return (CookieName, token, cookieOptions);
+    }
+}
 }

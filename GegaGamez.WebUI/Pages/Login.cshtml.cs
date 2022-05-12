@@ -1,8 +1,11 @@
+using System.Security.Claims;
 using AutoMapper;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Auth;
 using GegaGamez.WebUI.Models.Auth;
 using GegaGamez.WebUI.Models.Display;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -11,11 +14,12 @@ namespace GegaGamez.WebUI.Pages
     public class LoginModel : PageModel
     {
         private readonly IMapper _mapper;
-
-        private readonly IJwtAuthenticationManager _authManager;
+        private readonly IAuthManager _authManager;
         private readonly IUserService _userService;
 
-        public LoginModel(IUserService userService, IJwtAuthenticationManager authManager, IMapper mapper)
+        //private readonly IJwtAuthenticationManager _authManager;
+
+        public LoginModel(IUserService userService, IAuthManager authManager, IMapper mapper)
         {
             _authManager = authManager;
             _userService = userService;
@@ -39,7 +43,7 @@ namespace GegaGamez.WebUI.Pages
             }
         }
 
-        public IActionResult OnPost()
+        public async  Task<IActionResult> OnPost()
         {
             if (ModelState.IsValid)
             {
@@ -55,11 +59,18 @@ namespace GegaGamez.WebUI.Pages
                     {
                         UserModel rightUser = _mapper.Map<UserModel>(user);
 
-                        var cookieResult = _authManager.SignInUser(rightUser);
+                        (var principal, var properties) = _authManager.CreatePrincipalWithAuthProperties(user);
 
-                        HttpContext.Response.Cookies
-                            .Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
+                        await HttpContext.SignInAsync(principal, properties);
+                        //var signInResult = SignIn(principal, properties, CookieAuthenticationDefaults.AuthenticationScheme);
 
+                        //var cookieResult = _authManager.SignInUser(rightUser);
+
+                        //HttpContext.Response.Cookies
+                        //    .Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
+
+                        //return signInResult;
+                        
                         return RedirectToPage("/Games/Search");
                     }
                 }
