@@ -16,7 +16,7 @@ public interface IUserService
 
     void DeleteCollection(UserCollection userCollection);
 
-    IEnumerable<User> FindByUsername(string username);
+    IEnumerable<User> Find(string username);
 
     IEnumerable<User> GetAll();
 
