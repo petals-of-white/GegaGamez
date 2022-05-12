@@ -41,19 +41,19 @@ public class GameService : IDisposable, IGameService
         if (string.IsNullOrWhiteSpace(byTitle))
         {
             if (byGenre is null || byGenre.Length == 0)
-            {
                 filter = g => true;
-            }
             else
-            {
-                filter = g => g.Genres.Select(genre => genre.Id).ToHashSet().IsSupersetOf(genresIds);
-            }
+                filter = g => g.Genres.Select(genre => genre.Id).All(id => genresIds.Contains(id));
         }
         else
         {
-            filter =
-                g => g.Genres.Select(genre => genre.Id).ToHashSet().IsSupersetOf(genresIds)
-                && g.Title.ToLower().Contains(byTitle.ToLower());
+            if (byGenre is null || byGenre.Length == 0)
+                filter = g => g.Title.ToLower().Contains(byTitle.ToLower());
+            else
+            {
+                filter = g => g.Title.ToLower().Contains(byTitle.ToLower())
+                    && g.Genres.Select(genre => genre.Id).All(id => genresIds.Contains(id));
+            }
         }
 
         filteredGames = _db.Games.FindAll(filter);

@@ -13,7 +13,9 @@ public class GenreService : IDisposable, IGenreService
         _db = db;
     }
 
-    public IEnumerable<Genre> GetAll() => _db.Genres.AsEnumerable();
+    public Genre? GetById(int id) => _db.Genres.Get(id);
+       
+    public IEnumerable<Genre> FindAll() => _db.Genres.AsEnumerable();
 
     public IEnumerable<Genre> FindByName(string genreName)
     {

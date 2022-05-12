@@ -13,5 +13,7 @@ public class CountryService : ICountryService
         _db = db;
     }
 
+    public Country? GetById(int id) => _db.Countries.Get(id);
+
     public IEnumerable<Country> FindAll() => _db.Countries.AsEnumerable();
 }
