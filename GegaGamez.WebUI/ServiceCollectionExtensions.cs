@@ -40,7 +40,7 @@ namespace GegaGamez.WebUI
                              {
                                  OnMessageReceived = context =>
                                  {
-                                     context.Token = context.Request.Cookies ["jwt"];
+                                     context.Token = context.Request.Cookies [JwtAuthenticationManager.CookieName];
                                      return Task.CompletedTask;
                                  }
                              };

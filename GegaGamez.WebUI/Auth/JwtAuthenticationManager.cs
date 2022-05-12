@@ -10,6 +10,8 @@ namespace GegaGamez.WebUI.Auth
     {
         private readonly string _key;
 
+        public const string CookieName = "jwt";
+
         private string GenerateToken(ICollection<Claim> userClaims)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -59,7 +61,7 @@ namespace GegaGamez.WebUI.Auth
             var token = GenerateToken(claims);
             var cookieOptions = new CookieOptions { HttpOnly = true };
 
-            return ("access_token", token, cookieOptions);
+            return (JwtAuthenticationManager.CookieName, token, cookieOptions);
         }
     }
 }
