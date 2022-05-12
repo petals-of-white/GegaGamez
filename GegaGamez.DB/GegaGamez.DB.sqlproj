@@ -80,5 +80,10 @@
     <Build Include="Tables\Rating.sql" />
     <Build Include="Tables\Comment.sql" />
     <Build Include="Tables\DefaultCollection.sql" />
+    <Build Include="Tables\Role.sql" />
+    <Build Include="Tables\UserRole.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="GegaGamez.DB.refactorlog" />
   </ItemGroup>
 </Project>
