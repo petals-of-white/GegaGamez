@@ -27,15 +27,26 @@ internal class DefaultCollectionConfiguration : IEntityTypeConfiguration<Default
 
         builder.HasMany(d => d.Games)
             .WithMany(p => p.DefaultCollections)
-            .UsingEntity<Dictionary<string, object>>(
-                "GamesInDefaultCollection",
-                l => l.HasOne<Game>().WithMany().HasForeignKey("GameId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_GamesInDefaultCollections_Game"),
-                r => r.HasOne<DefaultCollection>().WithMany().HasForeignKey("DefaultCollectionId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_GamesInDefaultCollections_DefaultCollection"),
-                j =>
-                {
-                    j.HasKey("DefaultCollectionId", "GameId").HasName("PK__tmp_ms_x__F961CBB3A30D57A3");
+            .UsingEntity<DefaultCollectionGame>(
+                "DefaultCollectionGame",
 
-                    j.ToTable("GamesInDefaultCollections");
-                });
+                left => left
+                    .HasOne<Game>()
+                    .WithMany()
+                    .HasForeignKey(join => join.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GamesInDefaultCollections_Game"),
+
+                right => right
+                    .HasOne<DefaultCollection>()
+                    .WithMany()
+                    .HasForeignKey(join => join.DefaultCollectionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GamesInDefaultCollections_DefaultCollection"),
+
+                join => join
+                    .ToTable("GamesInDefaultCollections")
+                    .HasKey(s => new { s.DefaultCollectionId, s.GameId }).HasName("PK__tmp_ms_x__F961CBB3A30D57A3")
+                );
     }
 }
