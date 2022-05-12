@@ -21,19 +21,31 @@ internal class UserCollectionConfiguration : IEntityTypeConfiguration<UserCollec
             .WithMany(p => p.UserCollections)
             .HasForeignKey(d => d.UserId)
             .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName("FK_UserCollection_User");
+            .HasConstraintName("FK_UserComzllection_User");
 
         builder.HasMany(d => d.Games)
             .WithMany(p => p.UserCollections)
-            .UsingEntity<Dictionary<string, object>>(
-                "GamesInUserCollection",
-                l => l.HasOne<Game>().WithMany().HasForeignKey("GameId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_GamesInUserCollections_Game"),
-                r => r.HasOne<UserCollection>().WithMany().HasForeignKey("UserCollectionId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_GamesInUserCollections_Collection"),
-                j =>
-                {
-                    j.HasKey("UserCollectionId", "GameId").HasName("PK__tmp_ms_x__E3149A325890C568");
+            .UsingEntity<UserCollectionGame>(
+                "UserCollectionGame",
 
-                    j.ToTable("GamesInUserCollections");
-                });
+                left => left
+                    .HasOne<Game>()
+                    .WithMany()
+                    .HasForeignKey(join => join.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GamesInUserCollections_Game"),
+
+                right => right
+                    .HasOne<UserCollection>()
+                    .WithMany()
+                    .HasForeignKey(join => join.UserCollectionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GamesInUserCollections_Collection"),
+
+                join => join
+                    .ToTable("GamesInUserCollections")
+                    .HasKey(join => new { join.UserCollectionId, join.GameId })
+                    .HasName("PK__tmp_ms_x__E3149A325890C568")
+            );
     }
 }

@@ -30,17 +30,30 @@ internal class GameConfiguration : IEntityTypeConfiguration<Game>
 
         builder.HasMany(d => d.Genres)
             .WithMany(p => p.Games)
-            .UsingEntity<Dictionary<string, object>>(
-                "GamesGenre",
-                l => l.HasOne<Genre>().WithMany().HasForeignKey("GenreId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Games_Genres_GenreID"),
-                r => r.HasOne<Game>().WithMany().HasForeignKey("GameId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Games_Genres_GameId"),
-                j =>
+            .UsingEntity<GameGenre>(
+                "GameGenre",
+
+                right => right
+                    .HasOne<Genre>()
+                    .WithMany()
+                    .HasForeignKey(j => j.GenreId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Games_Genres_GenreID"),
+
+                left => left
+                    .HasOne<Game>()
+                    .WithMany()
+                    .HasForeignKey(j => j.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Games_Genres_GameId"),
+
+                join =>
                 {
-                    j.HasKey("GameId", "GenreId");
+                    join.ToTable("Games_Genres")
+                        .HasKey(j => new { j.GenreId, j.GameId });
 
-                    j.ToTable("Games_Genres");
-
-                    j.HasIndex(new [] { "GenreId" }, "NIX_Games_Genres_GenreId");
-                });
+                    join.HasIndex(j => new { j.GenreId }, "NIX_Games_Genres_GenreId");
+                }
+            );
     }
 }
