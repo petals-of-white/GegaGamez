@@ -50,4 +50,7 @@ public class RatingRepository : Repository<Rating>, IRatingRepository
     {
         return DbSetWithIncludedProperties.SingleOrDefaultAsync(r => r.UserId == user.Id && r.GameId == game.Id);
     }
+
+    public byte GetAllGamesAvgRating() =>
+        (byte) Math.Round(DbSetWithIncludedProperties.Average(r => r.RatingScore));
 }

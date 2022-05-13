@@ -15,5 +15,6 @@ namespace GegaGamez.Shared.DataAccess.Repositories
         //Rating? GetUserRatingForAGame(User user, Game game);
 
         //Task<Rating?> GetUserRatingForAGameAsync(User user, Game game);
+        byte GetAllGamesAvgRating ();
     }
 }

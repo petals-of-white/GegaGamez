@@ -4,11 +4,13 @@ using System.Text;
 using GegaGamez.WebUI.Models.Display;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GegaGamez.WebUI.Auth
+namespace GegaGamez.WebUI.Security
 {
     internal class JwtAuthenticationManager : IJwtAuthenticationManager
     {
         private readonly string _key;
+        public const string CookieName = "jwt";
+
 
         private string GenerateToken(ICollection<Claim> userClaims)
         {
@@ -33,14 +35,19 @@ namespace GegaGamez.WebUI.Auth
 
         private ICollection<Claim> GetClaims(UserModel user)
         {
-            var claims = new Claim []
+            var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Username)
             };
 
+            var roles = new List<string>();
+
+            roles.ForEach(r => claims.Add(new Claim(ClaimTypes.Role, r)));
             return claims;
         }
+
+
 
         public JwtAuthenticationManager(string key)
         {
@@ -59,7 +66,7 @@ namespace GegaGamez.WebUI.Auth
             var token = GenerateToken(claims);
             var cookieOptions = new CookieOptions { HttpOnly = true };
 
-            return ("access_token", token, cookieOptions);
+            return (CookieName, token, cookieOptions);
         }
     }
 }

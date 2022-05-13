@@ -24,10 +24,6 @@ public class SearchModel : PageModel
 
     public void OnGet()
     {
-        //if ()
-        //Users = string.IsNullOrEmpty(UsernameSearchString) ? Users : _users
-        //    .FindByUsername(UsernameSearchString).ToList();
-
         if (string.IsNullOrWhiteSpace(UsernameSearchString))
         {
             var users = _userService.GetAll();

@@ -1,15 +1,17 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GegaGamez.WebUI.Pages
 {
-    [Authorize()]
+    [Authorize]
     public class LogoutModel : PageModel
     {
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            HttpContext.Response.Cookies.Delete("access_token");
+            //HttpContext.Response.Cookies.Delete("access_token");
+            await HttpContext.SignOutAsync();
             return RedirectToPage("/Games/Search");
         }
     }

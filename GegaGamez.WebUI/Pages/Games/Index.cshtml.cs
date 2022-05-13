@@ -1,9 +1,10 @@
 using AutoMapper;
-using GegaGamez.BLL.Services;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.Models.ModifyModels;
+using GegaGamez.WebUI.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -14,12 +15,14 @@ public class IndexModel : PageModel
     private readonly IGameService _gameService;
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly IAuthorizationService _authService;
 
-    public IndexModel(IGameService games, IUserService userService, IMapper mapper)
+    public IndexModel(IGameService games, IUserService userService, IMapper mapper, IAuthorizationService authService)
     {
         _gameService = games;
         _userService = userService;
         _mapper = mapper;
+        _authService = authService;
 
         //NewComment = new() { Game = new GameModel { }, User = new UserModel { }, Text = String.Empty };
     }
@@ -32,6 +35,7 @@ public class IndexModel : PageModel
 
     [BindProperty]
     public NewCommentModel NewComment { get; set; }
+
     public IActionResult OnGet(int id)
     {
         var requestedGame = _gameService.GetById(id);
@@ -53,32 +57,62 @@ public class IndexModel : PageModel
 
             if (userId is not null)
             {
-
                 UserRatingForGame = _mapper.Map<RatingModel>(_userService.GetRatingForGame(
                     new User { Id = userId.Value },
                     requestedGame));
             }
 
-
             return Page();
         }
     }
 
-    public IActionResult OnPostComment()
+    /*
+    public async Task<IActionResult> OnPostEditGameInfo()
     {
-        if (HttpContext.User.Identity?.IsAuthenticated == false)
+        var canEditGames = await _authService.AuthorizeAsync(User, PolicyNames.AdminPolicy);
+        if (canEditGames.Succeeded)
         {
-            return RedirectToPage("/");
+            if (ModelState.IsValid)
+            {
+            }
         }
-        else
+    }
+    */
+
+    public async Task<IActionResult> OnPostComment()
+    {
+        var canPostComments = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
+
+        if (canPostComments.Succeeded)
         {
             if (ModelState.IsValid)
             {
                 Comment newComment = _mapper.Map<Comment>(NewComment);
                 _userService.AddComment(newComment);
             }
+            else
+                ViewData ["Error"] = "Please check comment requirements";
 
             return OnGet(NewComment.GameId);
         }
+        else
+            return Forbid();
+
+        /*
+        if (HttpContext.User.Identity?.IsAuthenticated == false)
+        {
+            return Forbid()("/");
+        }
+        */
+        //else
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Comment newComment = _mapper.Map<Comment>(NewComment);
+        //        _userService.AddComment(newComment);
+        //    }
+
+        //    return OnGet(NewComment.GameId);
+        //}
     }
 }

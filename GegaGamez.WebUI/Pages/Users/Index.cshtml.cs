@@ -3,6 +3,8 @@ using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.Models.ModifyModels;
+using GegaGamez.WebUI.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,12 +16,14 @@ public class IndexModel : PageModel
     private readonly IUserService _userService;
     private readonly ICountryService _countryService;
     private readonly IMapper _mapper;
+    private readonly IAuthorizationService _authService;
 
-    public IndexModel(IUserService userService, ICountryService countryService, IMapper mapper)
+    public IndexModel(IUserService userService, IAuthorizationService authService, ICountryService countryService, IMapper mapper)
     {
         _userService = userService;
         _countryService = countryService;
         _mapper = mapper;
+        _authService = authService;
     }
 
     public UserModel UserProfile { get; set; }
@@ -57,18 +61,24 @@ public class IndexModel : PageModel
         }
     }
 
-    public IActionResult OnPostUpdateProfile()
+    public async Task<IActionResult> OnPostUpdateProfile()
     {
-        if (ModelState.IsValid)
+        var canUpdateProfile = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
+        if (canUpdateProfile.Succeeded)
         {
-            var user = _mapper.Map<User>(UpdateModel);
-            _userService.UpdateUser(user);
+            if (ModelState.IsValid)
+            {
+                var user = _mapper.Map<User>(UpdateModel);
+                _userService.UpdateUser(user);
+            }
+            else
+                ViewData ["Error"] = "Wrong update info. Please try again";
+
+            return OnGet(UpdateModel.Id);
         }
         else
-        {
-        }
+            return Unauthorized();
 
-        return RedirectToPage("/Users/Index", new { id = UpdateModel.Id });
-
+        //return RedirectToPage("/Users/Index", new { id = UpdateModel.Id });
     }
 }

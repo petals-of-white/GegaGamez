@@ -1,50 +1,65 @@
-﻿using System.Text;
-using System.Text.Json;
-using GegaGamez.WebUI.Auth;
+﻿using System.Text.Json;
 using GegaGamez.WebUI.Converters;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using GegaGamez.WebUI.Security;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace GegaGamez.WebUI
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, string securityKey)
+        public static IServiceCollection AddGegaGamezSecurity(this IServiceCollection services)
         {
-            services.AddScoped<IJwtAuthenticationManager>(service =>
+            //services.AddScoped<IJwtAuthenticationManager>(service =>
+            //{
+            //    return new JwtAuthenticationManager(securityKey);
+            //});
+
+            services.AddScoped<IAuthManager, AuthManager>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options =>
+                    {
+                        options.LoginPath = "/Login";
+                        options.AccessDeniedPath = "/AccessDenied";
+                    });
+
+            /*
+            .AddJwtBearer((o =>
             {
-                return new JwtAuthenticationManager(securityKey);
-            })
+                o.RequireHttpsMetadata = false;
+                o.SaveToken = true;
 
-                    .AddAuthentication(x =>
-                        {
-                            x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                            //x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                            //x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                        })
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
 
-                    .AddJwtBearer((o =>
-                         {
-                             o.RequireHttpsMetadata = false;
-                             o.SaveToken = true;
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies [JwtAuthenticationManager.CookieName];
+                        return Task.CompletedTask;
+                    }
+                };
+            }));
+            */
 
-                             o.TokenValidationParameters = new TokenValidationParameters
-                             {
-                                 ValidateIssuerSigningKey = true,
-                                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey)),
-                                 ValidateIssuer = false,
-                                 ValidateAudience = false,
-                             };
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(PolicyNames.UserPolicy, config =>
+                {
+                    config.RequireRole(Roles.User);
+                });
 
-                             o.Events = new JwtBearerEvents
-                             {
-                                 OnMessageReceived = context =>
-                                 {
-                                     context.Token = context.Request.Cookies ["jwt"];
-                                     return Task.CompletedTask;
-                                 }
-                             };
-                         }));
+                options.AddPolicy(PolicyNames.AdminPolicy, config =>
+                {
+                    config.RequireRole(Roles.Admin);
+                });
+            });
 
             return services;
         }

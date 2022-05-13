@@ -6,7 +6,7 @@ namespace GegaGamez.DAL.Repositories;
 
 public class UserRepository : Repository<User>, IUserRepository
 {
-    protected override IQueryable<User> DbSetWithIncludedProperties => _dbSet.Include(u => u.Country);
+    protected override IQueryable<User> DbSetWithIncludedProperties => _dbSet.Include(u => u.Country).Include(u=>u.Roles);
 
     public UserRepository(DbContext dbContext) : base(dbContext)
     {
