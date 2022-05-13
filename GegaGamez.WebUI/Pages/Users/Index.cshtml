@@ -1,4 +1,5 @@
 ﻿@page "{id:int}"
+@using GegaGamez.WebUI.Security
 @model IndexModel
 @{
     AuthDisplayHelper authHelper = new(User);
@@ -17,7 +18,11 @@
     <div id="info-and-buttons-container" class="flex-container">
         <section id="user-text-info" class="text-info-block">
             <h2>
-               @Model.UserProfile.Username
+				@Model.UserProfile.Username
+                @if(User.IsInRole(Roles.Admin))
+                {
+                    <span class="font-contrast">(admin)</span>
+                }
             </h2>
 
             <span class="font-secondary">

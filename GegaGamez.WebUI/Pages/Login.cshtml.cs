@@ -1,11 +1,9 @@
-using System.Security.Claims;
 using AutoMapper;
 using GegaGamez.Shared.Services;
-using GegaGamez.WebUI.Auth;
 using GegaGamez.WebUI.Models.Auth;
 using GegaGamez.WebUI.Models.Display;
+using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -43,7 +41,7 @@ namespace GegaGamez.WebUI.Pages
             }
         }
 
-        public async  Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (ModelState.IsValid)
             {
@@ -70,7 +68,7 @@ namespace GegaGamez.WebUI.Pages
                         //    .Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
 
                         //return signInResult;
-                        
+
                         return RedirectToPage("/Games/Search");
                     }
                 }

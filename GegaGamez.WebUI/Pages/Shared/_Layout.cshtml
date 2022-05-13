@@ -1,4 +1,5 @@
-﻿@{
+﻿@using GegaGamez.WebUI.Security
+@{
     
     AuthDisplayHelper authHelper = new(User);
 
@@ -64,6 +65,13 @@
                 Developers
             </a>
 
+            @if(User.IsInRole(Roles.Admin))
+            {
+                <a class="@NavLinkShouldBeSelected("report")" asp-page="/Admin/Report">
+                    Report
+                </a>
+            }
+            
 
             @if(loggedIn == true)
             {
