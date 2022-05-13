@@ -9,7 +9,6 @@ var builderConfig = builder.Configuration;
 
 // Razor pages
 builder.Services.AddRazorPages();
-
 // controllers
 builder.Services.AddControllers()
     .AddJsonOptions(opt=>opt.JsonSerializerOptions.AddDateOnlyConverters());
@@ -37,8 +36,8 @@ builder.Services.AddGegaGamezDB(builderConfig);
 builder.Services.AddGegaGamezServices();
 
 // Auth Auth manager
-string securityKey = builder.Configuration.GetSection("SecurityKey").Value;
-builder.Services.AddGegaGamezSecurity(securityKey);
+//string securityKey = builder.Configuration.GetSection("SecurityKey").Value;
+builder.Services.AddGegaGamezSecurity();
 
 // API
 builder.Services.AddEndpointsApiExplorer();
