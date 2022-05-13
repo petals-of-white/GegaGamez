@@ -4,7 +4,7 @@ using System.Text;
 using GegaGamez.WebUI.Models.Display;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GegaGamez.WebUI.Auth
+namespace GegaGamez.WebUI.Security
 {
     internal class JwtAuthenticationManager : IJwtAuthenticationManager
     {
@@ -47,26 +47,26 @@ namespace GegaGamez.WebUI.Auth
             return claims;
         }
 
-        
 
-    public JwtAuthenticationManager(string key)
-    {
-        _key = key;
+
+        public JwtAuthenticationManager(string key)
+        {
+            _key = key;
+        }
+
+        /// <summary>
+        /// Returns a cookie with a JWT token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="RememberMe"></param>
+        /// <returns></returns>
+        public (string cookieName, string tokenValue, CookieOptions cookieOptions) SignInUser(UserModel user, bool RememberMe = true)
+        {
+            var claims = GetClaims(user);
+            var token = GenerateToken(claims);
+            var cookieOptions = new CookieOptions { HttpOnly = true };
+
+            return (CookieName, token, cookieOptions);
+        }
     }
-
-    /// <summary>
-    /// Returns a cookie with a JWT token
-    /// </summary>
-    /// <param name="user"></param>
-    /// <param name="RememberMe"></param>
-    /// <returns></returns>
-    public (string cookieName, string tokenValue, CookieOptions cookieOptions) SignInUser(UserModel user, bool RememberMe = true)
-    {
-        var claims = GetClaims(user);
-        var token = GenerateToken(claims);
-        var cookieOptions = new CookieOptions { HttpOnly = true };
-
-        return (CookieName, token, cookieOptions);
-    }
-}
 }

@@ -1,6 +1,6 @@
 ﻿using GegaGamez.WebUI.Models.Display;
 
-namespace GegaGamez.WebUI.Auth
+namespace GegaGamez.WebUI.Security
 {
     public interface IJwtAuthenticationManager
     {

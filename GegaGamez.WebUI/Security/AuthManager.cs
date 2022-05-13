@@ -3,7 +3,7 @@ using GegaGamez.Shared.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace GegaGamez.WebUI.Auth;
+namespace GegaGamez.WebUI.Security;
 
 public class AuthManager : IAuthManager
 {
