@@ -2,6 +2,8 @@
 using GegaGamez.DAL.Repositories;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.DataAccess.Repositories;
+using GegaGamez.Shared.Exceptions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.DAL;
@@ -20,21 +22,10 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private readonly IRatingRepository _ratings;
     private readonly IUserCollectionRepository _userCollections;
     private readonly IUserRepository _users;
-
-    [Obsolete]
-    /// <summary>
-    /// This methods is bad, don't use it
-    /// </summary>
-    /// <param name="optionsBuilder"></param>
-    /// <param name="connectionString"></param>
-    private void AddDbProvider(DbContextOptionsBuilder<GegaGamezContext> optionsBuilder, string connectionString)
-    {
-        optionsBuilder.UseSqlServer(connectionString);
-    }
+    private readonly IRoleRepository _roles;
 
     public UnitOfWork(GegaGamezContext dbContext)
     {
-
         _dbContext = dbContext;
 
         _comments = new CommentRepository(dbContext);
@@ -47,28 +38,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         _ratings = new RatingRepository(dbContext);
         _userCollections = new UserCollectionRepository(dbContext);
         _users = new UserRepository(dbContext);
-    }
-
-    public UnitOfWork(string connectionString)
-    {
-        var optionsBuilder = new DbContextOptionsBuilder<GegaGamezContext>();
-
-        AddDbProvider(optionsBuilder, connectionString);
-
-        GegaGamezContext dbContext = new(optionsBuilder.Options);
-
-        _dbContext = dbContext;
-
-        _comments = new CommentRepository(dbContext);
-        _countries = new CountryRepository(dbContext);
-        _defaultCollections = new DefaultCollectionRepository(dbContext);
-        _defaultCollectionTypes = new DefaultCollectionTypeRepository(dbContext);
-        _developers = new DeveloperRepository(dbContext);
-        _games = new GameRepository(dbContext);
-        _genres = new GenreRepository(dbContext);
-        _ratings = new RatingRepository(dbContext);
-        _userCollections = new UserCollectionRepository(dbContext);
-        _users = new UserRepository(dbContext);
+        _roles = new RoleRepository(dbContext);
     }
 
     public ICommentRepository Comments => _comments;
@@ -91,14 +61,40 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     public IUserRepository Users => _users;
 
+    public IRoleRepository Roles => _roles;
+
     public void Dispose()
     {
         _dbContext.Dispose();
     }
 
-    public int Save() => _dbContext.SaveChanges();
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="DatabaseException"></exception>
+    public int Save()
+    {
+        try
+        {
+            return _dbContext.SaveChanges();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException)
+        {
+            throw new DatabaseException("An error occured while trying to update the db", ex);
+        }
+    }
 
-    public Task<int> SaveAsync() => _dbContext.SaveChangesAsync();
+    public Task<int> SaveAsync()
+    {
+        try
+        {
+            return _dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException)
+        {
+            throw new DatabaseException("An error occured while trying to update the db", ex);
+        }
+    }
 
     public void Update<TEntity>(TEntity entityToUpdate) where TEntity : class
     {
