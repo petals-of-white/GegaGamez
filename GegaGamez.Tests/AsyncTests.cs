@@ -12,6 +12,7 @@ namespace GegaGamez.Tests;
 
 public class AsyncTests
 {
+    /*
     [Fact]
     public void GetAsync_ShouldWork()
     {
@@ -53,4 +54,5 @@ public class AsyncTests
             Debug.Write($"Do {i} ");
         }
     }
+    */
 }
