@@ -9,7 +9,7 @@ public class StatisticsService : IStatisticsService
 
     public StatisticsService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
     public int GamesQuantity => _db.Games.Count();

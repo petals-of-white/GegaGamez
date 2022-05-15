@@ -10,7 +10,7 @@ public class CountryService : ICountryService
 
     public CountryService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
     public Country? GetById(int id) => _db.Countries.Get(id);

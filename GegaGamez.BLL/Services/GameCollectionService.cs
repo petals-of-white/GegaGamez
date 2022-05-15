@@ -10,7 +10,7 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
     public GameCollectionService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
     public UserCollection? GetUserCollectionById(int id) => _db.UserCollections.Get(id);

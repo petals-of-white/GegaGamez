@@ -10,24 +10,12 @@ public class UserService : IDisposable, IUserService
 
     public UserService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
-    public User? GetById(int id)
-    {
-        //var userEntity = _db.Users.Get(id);
-        var user = _db.Users.Get(id);
-        //var user = AutoMapping.Mapper.Map<User>(userEntity);
+    public User? GetById(int id) => _db.Users.Get(id);
 
-        return user;
-    }
-
-    public IEnumerable<User> GetAll()
-    {
-        var allUsers = _db.Users.AsEnumerable();
-        //return AutoMapping.Mapper.Map<IEnumerable<User>>(allUsers);
-        return allUsers;
-    }
+    public IEnumerable<User> GetAll() => _db.Users.AsEnumerable();
 
     public IEnumerable<User> Find(string username)
     {
@@ -197,6 +185,10 @@ public class UserService : IDisposable, IUserService
         }
 
         newUser.DefaultCollections = userDefaultCollections;
+        newUser.UserCollections = new HashSet<UserCollection>();
+
+        Role userRole = _db.Roles.FindAll(r => r.Name == "User").First();
+        newUser.Roles = new HashSet<Role>() { userRole };
 
         try
         {

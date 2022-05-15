@@ -10,7 +10,7 @@ public class DeveloperService : IDisposable, IDeveloperService
 
     public DeveloperService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
     public IEnumerable<Developer> FindAll() => _db.Developers.AsEnumerable();

@@ -10,7 +10,7 @@ public class CommentService : ICommentService
 
     public CommentService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
     public void AddComment(Comment newComment)

@@ -11,7 +11,7 @@ public class GameService : IDisposable, IGameService
 
     public GameService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
     public IEnumerable<Game> FindAll() => _db.Games.AsEnumerable();

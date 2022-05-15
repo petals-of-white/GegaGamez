@@ -10,7 +10,7 @@ public class GenreService : IDisposable, IGenreService
 
     public GenreService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
     public Genre? GetById(int id) => _db.Genres.Get(id);
