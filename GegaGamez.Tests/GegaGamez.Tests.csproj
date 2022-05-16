@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="Moq" Version="4.18.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -25,6 +26,7 @@
     <ProjectReference Include="..\GegaGamez.BLL\GegaGamez.BLL.csproj" />
     <ProjectReference Include="..\GegaGamez.DAL\GegaGamez.DAL.csproj" />
     <ProjectReference Include="..\GegaGamez.Shared\GegaGamez.Shared.csproj" />
+    <ProjectReference Include="..\GegaGamez.WebUI\GegaGamez.WebUI.csproj" />
   </ItemGroup>
 
 </Project>
