@@ -12,29 +12,32 @@ namespace GegaGamez.WebUI.Pages.Games;
 
 public class IndexModel : PageModel
 {
+    private readonly IAuthorizationService _authService;
+    private readonly ICommentService _commentService;
     private readonly IGameService _gameService;
+    private readonly IGenreService _genreService;
+    private readonly IRatingService _ratingService;
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
-    private readonly IAuthorizationService _authService;
 
-    public IndexModel(IGameService games, IUserService userService, IMapper mapper, IAuthorizationService authService)
+    public IndexModel(IGameService games, IRatingService ratingService, ICommentService commentService, IUserService userService, IGenreService genreService, IMapper mapper, IAuthorizationService authService)
     {
         _gameService = games;
+        _ratingService = ratingService;
+        _commentService = commentService;
         _userService = userService;
+        _genreService = genreService;
         _mapper = mapper;
         _authService = authService;
-
-        //NewComment = new() { Game = new GameModel { }, User = new UserModel { }, Text = String.Empty };
     }
 
     public GameModel Game { get; set; }
     public RatingModel UserRatingForGame { get; set; }
     public List<GenreModel> GameGenres { get; set; }
-
     public List<CommentModel> Comments { get; set; } = new();
 
     [BindProperty]
-    public NewCommentModel NewComment { get; set; }
+    public NewCommentModel? NewComment { get; set; }
 
     public IActionResult OnGet(int id)
     {
@@ -44,12 +47,14 @@ public class IndexModel : PageModel
             return NotFound();
         else
         {
-            _gameService.LoadGameGenres(requestedGame);
-            _gameService.LoadGameComments(requestedGame);
+            //_gameService.LoadGameGenres(requestedGame);
+            //_gameService.LoadGameComments(requestedGame);
+            requestedGame.Genres = _genreService.GetGameGenres(requestedGame).ToHashSet();
+            requestedGame.Comments = _commentService.GetGameComments(requestedGame).ToHashSet();
 
             Game = _mapper.Map<GameModel>(requestedGame);
-            GameGenres = _mapper.Map<List<GenreModel>>(requestedGame.Genres.ToList());
-            Comments = _mapper.Map<List<CommentModel>>(requestedGame.Comments.ToList());
+            GameGenres = _mapper.Map<List<GenreModel>>((HashSet<Genre>) requestedGame.Genres);
+            Comments = _mapper.Map<List<CommentModel>>((HashSet<Comment>) requestedGame.Comments);
 
             AuthDisplayHelper authHelper = new(User);
 
@@ -57,9 +62,8 @@ public class IndexModel : PageModel
 
             if (userId is not null)
             {
-                UserRatingForGame = _mapper.Map<RatingModel>(_userService.GetRatingForGame(
-                    new User { Id = userId.Value },
-                    requestedGame));
+                Rating? userRating = _ratingService.GetUserRating(new User { Id = userId.Value }, requestedGame);
+                UserRatingForGame = _mapper.Map<RatingModel>(userRating);
             }
 
             return Page();
@@ -81,14 +85,15 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnPostComment()
     {
-        var canPostComments = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
+        AuthorizationResult canPostComments = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
 
         if (canPostComments.Succeeded)
         {
             if (ModelState.IsValid)
             {
                 Comment newComment = _mapper.Map<Comment>(NewComment);
-                _userService.AddComment(newComment);
+                _commentService.AddComment(newComment);
+                //_userService.AddComment(newComment);
             }
             else
                 ViewData ["Error"] = "Please check comment requirements";

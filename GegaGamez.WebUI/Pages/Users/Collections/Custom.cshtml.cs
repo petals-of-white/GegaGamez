@@ -1,5 +1,4 @@
 using AutoMapper;
-using GegaGamez.BLL.Services;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
@@ -10,14 +9,16 @@ namespace GegaGamez.WebUI.Pages.Users.Collections
 {
     public class CustomModel : PageModel
     {
-        private readonly IMapper _mapper;
         private readonly IGameCollectionService _collectionService;
+        private readonly IGameService _gameService;
+        private readonly IMapper _mapper;
         private readonly IUserService _userService;
 
-        public CustomModel(IMapper mapper, IGameCollectionService collectionService, IUserService userService)
+        public CustomModel(IMapper mapper, IGameCollectionService collectionService, IGameService gameService, IUserService userService)
         {
             _mapper = mapper;
             _collectionService = collectionService;
+            _gameService = gameService;
             _userService = userService;
         }
 
@@ -37,10 +38,12 @@ namespace GegaGamez.WebUI.Pages.Users.Collections
             }
             else
             {
-                _collectionService.LoadCollectionGames(collection);
+                collection.Games = _gameService.GetGamesInCollection(collection).ToHashSet();
+                //_collectionService.LoadCollectionGames(collection);
 
                 Collection = _mapper.Map<UserCollectionModel>(collection);
-                GamesInCollection = _mapper.Map<List<GameModel>>(collection.Games.ToList());
+
+                GamesInCollection = _mapper.Map<List<GameModel>>((HashSet<Game>)collection.Games);
 
                 return Page();
             }

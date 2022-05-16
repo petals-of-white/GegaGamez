@@ -50,7 +50,8 @@ public class SearchModel : PageModel
         // fill genres for each game
         foreach (var game in games)
         {
-            _gameService.LoadGameGenres(game);
+            game.Genres = _genreService.GetGameGenres(game).ToHashSet();
+            //_gameService.LoadGameGenres(game);
         }
 
         // filter games by genre
