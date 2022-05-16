@@ -4,6 +4,7 @@ namespace GegaGamez.Shared.Services;
 
 public interface ICountryService
 {
+    IEnumerable<Country> FindAll();
+
     Country? GetById(int id);
-    public IEnumerable<Country> FindAll();
 }
