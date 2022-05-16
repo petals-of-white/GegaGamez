@@ -10,19 +10,18 @@ namespace GegaGamez.DAL;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
-    private readonly DbContext _dbContext;
-
     private readonly ICommentRepository _comments;
     private readonly ICountryRepository _countries;
+    private readonly DbContext _dbContext;
     private readonly IDefaultCollectionRepository _defaultCollections;
     private readonly IDefaultCollectionTypeRepository _defaultCollectionTypes;
     private readonly IDeveloperRepository _developers;
     private readonly IGameRepository _games;
     private readonly IGenreRepository _genres;
     private readonly IRatingRepository _ratings;
+    private readonly IRoleRepository _roles;
     private readonly IUserCollectionRepository _userCollections;
     private readonly IUserRepository _users;
-    private readonly IRoleRepository _roles;
 
     public UnitOfWork(GegaGamezContext dbContext)
     {
@@ -57,11 +56,10 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     public IRatingRepository Ratings => _ratings;
 
+    public IRoleRepository Roles => _roles;
     public IUserCollectionRepository UserCollections => _userCollections;
 
     public IUserRepository Users => _users;
-
-    public IRoleRepository Roles => _roles;
 
     public void Dispose()
     {
