@@ -4,7 +4,7 @@ using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.Services;
 
-public class CountryService : ICountryService
+public class CountryService : ICountryService, IDisposable
 {
     private readonly IUnitOfWork _db;
 
@@ -13,7 +13,9 @@ public class CountryService : ICountryService
         _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
-    public Country? GetById(int id) => _db.Countries.Get(id);
+    public void Dispose() => _db.Dispose();
 
     public IEnumerable<Country> FindAll() => _db.Countries.AsEnumerable();
+
+    public Country? GetById(int id) => _db.Countries.Get(id);
 }

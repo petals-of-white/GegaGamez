@@ -13,24 +13,12 @@ public class DeveloperService : IDisposable, IDeveloperService
         _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
+    public void Dispose() => _db.Dispose();
+
+    public IEnumerable<Developer> Find(string name) =>
+        _db.Developers.FindAll(d => d.Name.ToLower().Contains(name.ToLower()));
+
     public IEnumerable<Developer> FindAll() => _db.Developers.AsEnumerable();
 
     public Developer? GetById(int id) => _db.Developers.Get(id);
-
-    public IEnumerable<Developer> Find(string name)
-    {
-        var developersByName = _db.Developers.FindAll(d => d.Name.ToLower().Contains(name.ToLower()));
-        return developersByName;
-    }
-
-    public void LoadGames(Developer developer)
-    {
-        var games = _db.Games.FindAll(g => g.DeveloperId == developer.Id).ToList();
-        developer.Games = games;
-    }
-
-    public void Dispose()
-    {
-        _db.Dispose();
-    }
 }

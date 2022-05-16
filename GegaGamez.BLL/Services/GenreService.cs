@@ -13,17 +13,15 @@ public class GenreService : IDisposable, IGenreService
         _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
-    public Genre? GetById(int id) => _db.Genres.Get(id);
-       
+    public void Dispose() => _db.Dispose();
+
     public IEnumerable<Genre> FindAll() => _db.Genres.AsEnumerable();
 
-    public IEnumerable<Genre> FindByName(string genreName)
-    {
-        throw new NotImplementedException();
-    }
+    public IEnumerable<Genre> FindByName(string genreName) =>
+        _db.Genres.FindAll(g => g.Name.ToLower().Contains(genreName.ToLower()));
 
-    public void Dispose()
-    {
-        _db.Dispose();
-    }
+    public Genre? GetById(int id) => _db.Genres.Get(id);
+
+    public IEnumerable<Genre> GetGameGenres(Game game) =>
+        _db.Genres.FindAll(genre => genre.Games.Select(g => g.Id).Contains(game.Id));
 }
