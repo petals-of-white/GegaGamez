@@ -9,5 +9,4 @@ public class DeveloperRepository : Repository<Developer>, IDeveloperRepository
     public DeveloperRepository(DbContext dbContext) : base(dbContext)
     {
     }
-
 }
