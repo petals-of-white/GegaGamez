@@ -21,6 +21,13 @@ public class UserService_Tests : IDisposable
     }
 
     [Fact]
+    public void Constructor_ShouldThrowNullReferenceException()
+    {
+        UserService serviceWithNullUoW;
+        Assert.Throws<ArgumentNullException>(() => serviceWithNullUoW = new(null));
+    }
+
+    [Fact]
     public void CreateUser_GeneratesDefaultCollections()
     {
         // Arrange

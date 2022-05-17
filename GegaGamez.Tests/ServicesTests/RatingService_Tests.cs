@@ -10,14 +10,20 @@ namespace GegaGamez.Tests.ServicesTests;
 
 public class RatingService_Tests : IDisposable
 {
+    private readonly ITestOutputHelper _outputHelper;
     private readonly RatingService _ratingService;
     private readonly Mock<IUnitOfWork> _uowMock = new();
-    private readonly ITestOutputHelper _outputHelper;
-
     public RatingService_Tests(ITestOutputHelper outputHelper)
     {
         _ratingService = new(_uowMock.Object);
         _outputHelper = outputHelper;
+    }
+
+    [Fact]
+    public void Constructor_ShouldThrowNullReferenceException()
+    {
+        RatingService serviceWithNullUoW;
+        Assert.Throws<ArgumentNullException>(() => serviceWithNullUoW = new(null));
     }
 
     [Fact]
@@ -38,16 +44,13 @@ public class RatingService_Tests : IDisposable
 
         _uowMock.Setup(uow => uow.Update<Rating>(updatedRating)).Callback(() =>
         {
-            _outputHelper.WriteLine("Updating entity called"); 
+            _outputHelper.WriteLine("Updating entity called");
         });
 
         _uowMock.Setup(uow => uow.Save()).Callback(() =>
         {
             _outputHelper.WriteLine("Saved to the db!!!");
-
         });
-
-
 
         // Act
         _ratingService.RateGame(updatedRating);
