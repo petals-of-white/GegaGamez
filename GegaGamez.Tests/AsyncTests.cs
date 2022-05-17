@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using GegaGamez.DAL;
-using GegaGamez.Shared.DataAccess;
-using GegaGamez.Shared.Entities;
-using Xunit;
-
-namespace GegaGamez.Tests;
+﻿namespace GegaGamez.Tests;
 
 public class AsyncTests
 {

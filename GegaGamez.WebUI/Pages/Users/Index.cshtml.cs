@@ -41,14 +41,11 @@ public class IndexModel : PageModel
     {
         // get user
         var user = _userService.GetById(id);
-        //UserProfile = _userService.GetById(id);
 
         if (user is null)
             return NotFound();
         else
         {
-            // get collections
-            //_userService.LoadUsersCollections(user);
             user.DefaultCollections = _collectionService.GetDefaultColletionsForUser(user).ToHashSet();
             user.UserCollections = _collectionService.GetUserCollectionsForUser(user).ToHashSet();
 

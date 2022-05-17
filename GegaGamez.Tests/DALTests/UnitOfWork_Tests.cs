@@ -122,7 +122,6 @@ public class UnitOfWork_Tests : IDisposable
         });
     }
 
-
     public void Dispose() => _db.Dispose();
 
     [Theory]
