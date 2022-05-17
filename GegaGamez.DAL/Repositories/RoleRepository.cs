@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.DAL.Repositories;
 
-public class GenreRepository : Repository<Genre>, IGenreRepository
+public class RoleRepository : Repository<Role>, IRoleRepository
 {
-    public GenreRepository(DbContext dbContext) : base(dbContext)
+    public RoleRepository(DbContext dbContext) : base(dbContext)
     {
     }
 }

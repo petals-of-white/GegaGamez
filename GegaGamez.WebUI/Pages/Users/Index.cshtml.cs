@@ -13,43 +13,45 @@ namespace GegaGamez.WebUI.Pages.Users;
 
 public class IndexModel : PageModel
 {
-    private readonly IUserService _userService;
+    private readonly IAuthorizationService _authService;
+    private readonly IGameCollectionService _collectionService;
     private readonly ICountryService _countryService;
     private readonly IMapper _mapper;
-    private readonly IAuthorizationService _authService;
+    private readonly IUserService _userService;
 
-    public IndexModel(IUserService userService, IAuthorizationService authService, ICountryService countryService, IMapper mapper)
+    public IndexModel(IUserService userService, IAuthorizationService authService, IGameCollectionService collectionService, ICountryService countryService, IMapper mapper)
     {
         _userService = userService;
         _countryService = countryService;
         _mapper = mapper;
         _authService = authService;
+        _collectionService = collectionService;
     }
 
-    public UserModel UserProfile { get; set; }
-
+    public ICollection<SelectListItem> Countries { get; set; }
     public List<DefaultCollectionModel> DefaultCollections { get; set; }
-    public List<UserCollectionModel> UserCollections { get; set; } = new();
 
     [BindProperty]
     public UpdateProfileModel UpdateModel { get; set; }
 
-    public ICollection<SelectListItem> Countries { get; set; }
+    public List<UserCollectionModel> UserCollections { get; set; } = new();
+    public UserModel UserProfile { get; set; }
 
     public IActionResult OnGet(int id)
     {
         // get user
         var user = _userService.GetById(id);
-        //UserProfile = _userService.GetById(id);
 
         if (user is null)
             return NotFound();
         else
         {
-            // get collections
-            _userService.LoadUsersCollections(user);
+            user.DefaultCollections = _collectionService.GetDefaultColletionsForUser(user).ToHashSet();
+            user.UserCollections = _collectionService.GetUserCollectionsForUser(user).ToHashSet();
+
             UserProfile = _mapper.Map<UserModel>(user);
-            DefaultCollections = _mapper.Map<List<DefaultCollectionModel>>(user.DefaultCollections.ToList());
+            DefaultCollections = _mapper.Map<List<DefaultCollectionModel>>((HashSet<DefaultCollection>) user.DefaultCollections);
+            UserCollections = _mapper.Map<List<UserCollectionModel>>((HashSet<UserCollection>) user.UserCollections);
 
             //load countries
             var countries = _countryService.FindAll();

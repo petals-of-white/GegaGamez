@@ -4,7 +4,11 @@ namespace GegaGamez.Shared.Services;
 
 public interface IGenreService
 {
-    Genre? GetById(int id);
-    IEnumerable<Genre> FindByName(string genreName);
     IEnumerable<Genre> FindAll();
+
+    IEnumerable<Genre> FindByName(string genreName);
+
+    Genre? GetById(int id);
+
+    IEnumerable<Genre> GetGameGenres(Game game);
 }

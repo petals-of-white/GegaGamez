@@ -12,12 +12,12 @@ namespace GegaGamez.WebUI.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly IUserService _userService;
-
         //private readonly IJwtAuthenticationManager _authManager;
         private readonly IAuthManager _authManager;
 
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
+        private bool IsAnonymous => User.Identity?.IsAuthenticated == false;
 
         public RegisterModel(IUserService userService, IAuthManager authManager, IMapper mapper)
         {
@@ -31,46 +31,45 @@ namespace GegaGamez.WebUI.Pages
 
         public IActionResult OnGet()
         {
-            if (User?.Identity?.IsAuthenticated == true)
-            {
-                {
-                    return BadRequest();
-                }
-            }
-            else
-            {
+            if (IsAnonymous)
                 return Page();
-            }
+            else
+                return Forbid();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            if (ModelState.IsValid)
+            if (IsAnonymous)
             {
-                User user = _mapper.Map<User>(RegisterForm);
-
-                try
+                if (ModelState.IsValid)
                 {
-                    _userService.Create(user);
-                }
-                catch (Exception ex)
-                {
-                    // log...
-                    ViewData ["Error"] = ex.Message;
-                    return Page();
-                }
+                    User user = _mapper.Map<User>(RegisterForm);
 
-                UserModel rightUser = _mapper.Map<UserModel>(user);
-                //var cookieResult = _authManager.SignInUser(rightUser);
-                //HttpContext.Response.Cookies
-                //.Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
+                    try
+                    {
+                        _userService.Create(user);
+                    }
+                    catch (Exception ex)
+                    {
+                        // log...
+                        ViewData ["Error"] = ex.Message;
+                        return Page();
+                    }
 
-                var (principal, properties) = _authManager.CreatePrincipalWithAuthProperties(user);
-                await HttpContext.SignInAsync(principal, properties);
-                return RedirectToPage("/Games/Search");
+                    UserModel rightUser = _mapper.Map<UserModel>(user);
+                    //var cookieResult = _authManager.SignInUser(rightUser);
+                    //HttpContext.Response.Cookies
+                    //.Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
+
+                    var (principal, properties) = _authManager.CreatePrincipalWithAuthProperties(user);
+                    await HttpContext.SignInAsync(principal, properties);
+                    return RedirectToPage("/Games/Search");
+                }
+                else
+                    return RedirectToPage("/Register");
             }
             else
-                return RedirectToPage("/Register");
+                return Forbid();
         }
     }
 }

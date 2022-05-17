@@ -45,7 +45,8 @@ namespace GegaGamez.BLL
                 .AddTransient<IDeveloperService, DeveloperService>()
                 .AddTransient<ICountryService, CountryService>()
                 .AddTransient<ICommentService, CommentService>()
-                .AddTransient<IStatisticsService, StatisticsService>();
+                .AddTransient<IStatisticsService, StatisticsService>()
+                .AddTransient<IRatingService, RatingService>();
 
             return services;
         }

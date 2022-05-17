@@ -12,7 +12,7 @@ public class RatingRepository : Repository<Rating>, IRatingRepository
     {
     }
 
-    // Need to think about these two
+    // Need to think about this one and async
     public override Rating? Get(int id)
     {
         var explanation = "This method should not be called by rating repository, " +
@@ -21,6 +21,9 @@ public class RatingRepository : Repository<Rating>, IRatingRepository
         throw new NotImplementedException(explanation);
     }
 
+    public byte GetAllGamesAvgRating() =>
+        (byte) Math.Round(DbSetWithIncludedProperties.Average(r => r.RatingScore));
+
     public override Task<Rating?> GetAsync(int id)
     {
         var explanation = "This method should not be called by rating repository, " +
@@ -28,29 +31,4 @@ public class RatingRepository : Repository<Rating>, IRatingRepository
 
         throw new NotImplementedException(explanation);
     }
-
-    public int GetAverageGameRatingScore(Game game)
-    {
-        return (int) Math.Floor(DbSetWithIncludedProperties.Where(r => r.GameId == game.Id).Average(r => r.RatingScore));
-    }
-
-    public async Task<int> GetAverageGameRatingScoreAsync(Game game)
-    {
-        var avg = await DbSetWithIncludedProperties.Where(r => r.GameId == game.Id).AverageAsync(r => r.RatingScore);
-
-        return (int) Math.Floor(avg);
-    }
-
-    public Rating? GetUserRatingForAGame(User user, Game game)
-    {
-        return DbSetWithIncludedProperties.SingleOrDefault(r => r.UserId == user.Id && r.GameId == game.Id);
-    }
-
-    public Task<Rating?> GetUserRatingForAGameAsync(User user, Game game)
-    {
-        return DbSetWithIncludedProperties.SingleOrDefaultAsync(r => r.UserId == user.Id && r.GameId == game.Id);
-    }
-
-    public byte GetAllGamesAvgRating() =>
-        (byte) Math.Round(DbSetWithIncludedProperties.Average(r => r.RatingScore));
 }

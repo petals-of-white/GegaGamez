@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
@@ -11,24 +12,10 @@ public class GameService : IDisposable, IGameService
 
     public GameService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
-    public IEnumerable<Game> FindAll() => _db.Games.AsEnumerable();
-
-    public Game? GetById(int id) => _db.Games.Get(id);
-
-    public void LoadGameComments(Game game)
-    {
-        var comments = _db.Comments.FindAll(c => c.GameId == game.Id);
-        game.Comments = comments as ICollection<Comment>;
-    }
-
-    public void LoadGameGenres(Game game)
-    {
-        var genres = _db.Genres.FindAll(genre => genre.Games.Select(g => g.Id).Contains(game.Id));
-        game.Genres = genres as ICollection<Genre>;
-    }
+    public void Dispose() => _db.Dispose();
 
     public IEnumerable<Game> Find(string? byTitle, params Genre [] byGenre)
     {
@@ -61,8 +48,16 @@ public class GameService : IDisposable, IGameService
         return filteredGames;
     }
 
-    public void Dispose()
-    {
-        _db.Dispose();
-    }
+    public IEnumerable<Game> FindAll() => _db.Games.AsEnumerable();
+
+    public Game? GetById(int id) => _db.Games.Get(id);
+
+    public IEnumerable<Game> GetDeveloperGames(Developer dev) =>
+        _db.Games.FindAll(g => g.DeveloperId == dev.Id);
+
+    public IEnumerable<Game> GetGamesInCollection(UserCollection userCollection) =>
+            _db.Games.FindAll(g => g.UserCollections.Select(uc => uc.Id).Contains(userCollection.Id));
+
+    public IEnumerable<Game> GetGamesInCollection(DefaultCollection defaultCollection) =>
+        _db.Games.FindAll(g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id));
 }

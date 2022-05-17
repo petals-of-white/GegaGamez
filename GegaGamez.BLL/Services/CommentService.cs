@@ -4,13 +4,13 @@ using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.Services;
 
-public class CommentService : ICommentService
+public class CommentService : ICommentService, IDisposable
 {
     private readonly IUnitOfWork _db;
 
     public CommentService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
     public void AddComment(Comment newComment)
@@ -19,9 +19,12 @@ public class CommentService : ICommentService
         _db.Save();
     }
 
+    public void Dispose() => _db.Dispose();
+
     public IEnumerable<Comment> FindAll() => _db.Comments.AsEnumerable();
 
     public Comment? GetById(int id) => _db.Comments.Get(id);
 
-    public IEnumerable<Comment> GetGameComments(Game game) => _db.Comments.FindAll(c => c.GameId == game.Id);
+    public IEnumerable<Comment> GetGameComments(Game game) =>
+        _db.Comments.FindAll(c => c.GameId == game.Id);
 }

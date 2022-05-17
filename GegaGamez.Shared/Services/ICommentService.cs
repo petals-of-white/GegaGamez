@@ -4,11 +4,11 @@ namespace GegaGamez.Shared.Services;
 
 public interface ICommentService
 {
-    public Comment? GetById(int id);
+    void AddComment(Comment newComment);
 
     public IEnumerable<Comment> FindAll();
 
-    public IEnumerable<Comment> GetGameComments(Game game);
+    public Comment? GetById(int id);
 
-    void AddComment(Comment newComment);
+    public IEnumerable<Comment> GetGameComments(Game game);
 }

@@ -35,6 +35,8 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 
     public Task AddRangeAsync(IEnumerable<TEntity> entities) => _dbSet.AddRangeAsync(entities);
 
+    public virtual IEnumerable<TEntity> AsEnumerable() => DbSetWithIncludedProperties.ToList();
+
     public virtual async Task<IEnumerable<TEntity>> AsEnumerableAsync()
     {
         var list = await DbSetWithIncludedProperties.ToListAsync();
@@ -49,14 +51,6 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     public Task<int> CountAllAsync(Expression<Func<TEntity, bool>> predicate) => _dbSet.CountAsync(predicate);
 
     public Task<int> CountAsync() => _dbSet.CountAsync();
-
-    /// <summary>
-    /// Finds an entry by Id. This method doesn't use eager loading by default, So it can be
-    /// overriden to do so
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns>TEntity if found, otherwise null</returns>
-    public virtual TEntity? Get(int id) => _dbSet.Find(id);
 
     /// <summary>
     /// Finds all the entries by predicate.
@@ -77,13 +71,19 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     }
 
     /// <summary>
+    /// Finds an entry by Id. This method doesn't use eager loading by default, So it can be
+    /// overriden to do so
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>TEntity if found, otherwise null</returns>
+    public virtual TEntity? Get(int id) => _dbSet.Find(id);
+
+    /// <summary>
     /// This method doesn't use eager loading by default, So it can be overriden to do so
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
     public virtual Task<TEntity?> GetAsync(int id) => _dbSet.FindAsync(id).AsTask();
-
-    public virtual IEnumerable<TEntity> AsEnumerable() => DbSetWithIncludedProperties.ToList();
 
     public void Remove(int id)
     {

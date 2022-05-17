@@ -1,15 +1,12 @@
 ﻿using GegaGamez.Shared.Entities;
 
-namespace GegaGamez.Shared.Services
+namespace GegaGamez.Shared.Services;
+
+public interface IDeveloperService
 {
-    public interface IDeveloperService
-    {
-        IEnumerable<Developer> Find(string byName = "");
+    IEnumerable<Developer> Find(string byName = "");
 
-        IEnumerable<Developer> FindAll();
+    IEnumerable<Developer> FindAll();
 
-        Developer? GetById(int id);
-
-        void LoadGames(Developer developer);
-    }
+    Developer? GetById(int id);
 }

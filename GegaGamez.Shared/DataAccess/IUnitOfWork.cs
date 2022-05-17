@@ -14,6 +14,7 @@ namespace GegaGamez.Shared.DataAccess
         IRatingRepository Ratings { get; }
         IUserRepository Users { get; }
         IUserCollectionRepository UserCollections { get; }
+        IRoleRepository Roles { get; }
 
         void Update<TEntity>(TEntity entityToUpdate) where TEntity : class;
 

@@ -11,11 +11,11 @@ namespace GegaGamez.WebUI.Pages
 {
     public class LoginModel : PageModel
     {
-        private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
+        private readonly IMapper _mapper;
         private readonly IUserService _userService;
 
-        //private readonly IJwtAuthenticationManager _authManager;
+        private bool IsAnonymous => User.Identity?.IsAuthenticated == false;
 
         public LoginModel(IUserService userService, IAuthManager authManager, IMapper mapper)
         {
@@ -29,52 +29,60 @@ namespace GegaGamez.WebUI.Pages
 
         public IActionResult OnGet()
         {
-            if (User?.Identity?.IsAuthenticated == true)
-            {
-                {
-                    return BadRequest();
-                }
-            }
+            if (IsAnonymous)
+                return Page();
             else
             {
-                return Page();
+                ViewData ["Error"] = "You can not do that because you are already logged in!";
+                return Forbid();
             }
+            //if (User?.Identity?.IsAuthenticated == true)
+            //    return BadRequest();
+            //else
+            //    return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            if (ModelState.IsValid)
+            if (IsAnonymous)
             {
-                var user = _userService.GetByUsername(LoginForm.Username);
-
-                if (user is null)
-                    return RedirectToPage("/Login");
-                else
+                if (ModelState.IsValid)
                 {
-                    if (user.Password != LoginForm.Password)
+                    var user = _userService.GetByUsername(LoginForm.Username);
+
+                    if (user is null)
                         return RedirectToPage("/Login");
                     else
                     {
-                        UserModel rightUser = _mapper.Map<UserModel>(user);
+                        if (user.Password != LoginForm.Password)
+                            return RedirectToPage("/Login");
+                        else
+                        {
+                            UserModel rightUser = _mapper.Map<UserModel>(user);
 
-                        (var principal, var properties) = _authManager.CreatePrincipalWithAuthProperties(user);
+                            (var principal, var properties) = _authManager.CreatePrincipalWithAuthProperties(user);
+                            await HttpContext.SignInAsync(principal, properties);
+                            //var signInResult = SignIn(principal, properties, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                        await HttpContext.SignInAsync(principal, properties);
-                        //var signInResult = SignIn(principal, properties, CookieAuthenticationDefaults.AuthenticationScheme);
+                            //var cookieResult = _authManager.SignInUser(rightUser);
 
-                        //var cookieResult = _authManager.SignInUser(rightUser);
+                            //HttpContext.Response.Cookies
+                            //    .Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
 
-                        //HttpContext.Response.Cookies
-                        //    .Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
+                            //return signInResult;
 
-                        //return signInResult;
-
-                        return RedirectToPage("/Games/Search");
+                            return RedirectToPage("/Games/Search");
+                        }
                     }
                 }
+                else
+                    return RedirectToPage("/Login");
             }
             else
-                return RedirectToPage("/Login");
+            {
+                ViewData ["Error"] = "You can not do that because you are already logged in!";
+                return Forbid();
+            }
         }
     }
 }

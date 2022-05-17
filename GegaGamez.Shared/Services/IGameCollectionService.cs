@@ -1,21 +1,28 @@
 ﻿using GegaGamez.Shared.Entities;
 
-namespace GegaGamez.Shared.Services
+namespace GegaGamez.Shared.Services;
+
+public interface IGameCollectionService
 {
-    public interface IGameCollectionService
-    {
-        UserCollection? GetUserCollectionById(int id);
+    void AddGame(DefaultCollection defaultCollection, Game game);
 
-        DefaultCollection? GetDefaultCollectionById(int id);
+    void AddGame(UserCollection userCollection, Game game);
 
-        IEnumerable<DefaultCollectionType> GetDefaultCollectionTypes();
+    void CreateUserCollection(UserCollection newCollection);
 
-        void LoadCollectionGames(DefaultCollection defaultCollection);
+    void DeleteCollection(UserCollection userCollection);
 
-        void LoadCollectionGames(UserCollection userCollection);
+    DefaultCollection? GetDefaultCollectionById(int id);
 
-        void CreateUserCollection(UserCollection newCollection);
+    IEnumerable<DefaultCollectionType> GetDefaultCollectionTypes();
 
-        void DeleteCollection(UserCollection userCollection);
-    }
+    IEnumerable<DefaultCollection> GetDefaultColletionsForUser(User user);
+
+    UserCollection? GetUserCollectionById(int id);
+
+    IEnumerable<UserCollection> GetUserCollectionsForUser(User user);
+
+    void RemoveGame(DefaultCollection defaultCollection, Game game);
+
+    void RemoveGame(UserCollection userCollection, Game game);
 }

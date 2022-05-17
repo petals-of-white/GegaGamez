@@ -10,34 +10,18 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
     public GameCollectionService(IUnitOfWork db)
     {
-        _db = db;
+        _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
-    public UserCollection? GetUserCollectionById(int id) => _db.UserCollections.Get(id);
-
-    public IEnumerable<DefaultCollectionType> GetDefaultCollectionTypes() => _db.DefaultCollectionTypes.AsEnumerable();
-
-    public void LoadCollectionGames(UserCollection userCollection)
+    public void AddGame(DefaultCollection defaultCollection, Game game)
     {
-        var games = _db.Games.FindAll(
-            g => g.UserCollections.Select(uc => uc.Id).Contains(userCollection.Id)
-            );
-
-        userCollection.Games = games as ICollection<Game>;
+        throw new NotImplementedException();
     }
 
-    public void LoadCollectionGames(DefaultCollection defaultCollection)
+    public void AddGame(UserCollection userCollection, Game game)
     {
-        var games = _db.Games.FindAll(
-            g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id)
-            );
-
-        defaultCollection.Games = games as ICollection<Game>;
+        throw new NotImplementedException();
     }
-
-    public DefaultCollection? GetDefaultCollectionById(int id) => _db.DefaultCollections.Get(id);
-
-    public void Dispose() => _db.Dispose();
 
     public void CreateUserCollection(UserCollection newCollection)
     {
@@ -48,6 +32,56 @@ public class GameCollectionService : IDisposable, IGameCollectionService
     public void DeleteCollection(UserCollection userCollection)
     {
         _db.UserCollections.Remove(userCollection);
+        _db.Save();
+    }
+
+    public void Dispose() => _db.Dispose();
+
+    public DefaultCollection? GetDefaultCollectionById(int id) => _db.DefaultCollections.Get(id);
+
+    public IEnumerable<DefaultCollectionType> GetDefaultCollectionTypes() => _db.DefaultCollectionTypes.AsEnumerable();
+
+    public IEnumerable<DefaultCollection> GetDefaultColletionsForUser(User user) =>
+        _db.DefaultCollections.FindAll(dc => dc.UserId == user.Id);
+
+    public UserCollection? GetUserCollectionById(int id) => _db.UserCollections.Get(id);
+
+    public IEnumerable<UserCollection> GetUserCollectionsForUser(User user) =>
+        _db.UserCollections.FindAll(uc => uc.UserId == user.Id);
+
+    public void RemoveGame(DefaultCollection defaultCollection, Game game)
+    {
+        var defaultCollectionEntity = _db.UserCollections.Get(defaultCollection.Id);
+
+        var gameEntityToRemove = _db.Games.Get(game.Id);
+
+        if (defaultCollectionEntity is null || gameEntityToRemove is null)
+        {
+            throw new ArgumentException("A collection or game doesn't exist!");
+        }
+
+        defaultCollectionEntity.Games.Remove(gameEntityToRemove);
+
+        _db.Update(defaultCollectionEntity);
+
+        _db.Save();
+    }
+
+    public void RemoveGame(UserCollection userCollection, Game game)
+    {
+        var collection = _db.UserCollections.Get(userCollection.Id);
+
+        var gameToRemove = _db.Games.Get(game.Id);
+
+        if (collection is null || gameToRemove is null)
+        {
+            throw new ArgumentException("A collection or game doesn't exist!");
+        }
+
+        collection.Games.Remove(gameToRemove);
+
+        _db.Update(collection);
+
         _db.Save();
     }
 }

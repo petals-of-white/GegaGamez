@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GegaGamez.Shared.Entities;
+﻿using GegaGamez.Shared.Entities;
 
 namespace GegaGamez.Shared.Services;
 
@@ -15,7 +10,9 @@ public interface IGameService : IDisposable
 
     Game? GetById(int id);
 
-    void LoadGameComments(Game game);
+    IEnumerable<Game> GetDeveloperGames(Developer dev);
 
-    void LoadGameGenres(Game game);
+    IEnumerable<Game> GetGamesInCollection(UserCollection userCollection);
+
+    IEnumerable<Game> GetGamesInCollection(DefaultCollection defaultCollection);
 }
