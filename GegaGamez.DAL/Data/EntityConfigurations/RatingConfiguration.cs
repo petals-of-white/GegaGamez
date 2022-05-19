@@ -9,7 +9,6 @@ internal class RatingConfiguration : IEntityTypeConfiguration<Rating>
     public void Configure(EntityTypeBuilder<Rating> builder)
     {
         builder.HasKey(r => r.Id);
-        //builder.HasKey(e => new { e.UserId, e.RatingScore, e.GameId });
 
         builder.ToTable("Rating");
 
@@ -22,13 +21,13 @@ internal class RatingConfiguration : IEntityTypeConfiguration<Rating>
         builder.HasOne(d => d.Game)
             .WithMany(p => p.Ratings)
             .HasForeignKey(d => d.GameId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_Rating_Game");
 
         builder.HasOne(d => d.User)
             .WithMany(p => p.Ratings)
             .HasForeignKey(d => d.UserId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_Rating_User");
     }
 }

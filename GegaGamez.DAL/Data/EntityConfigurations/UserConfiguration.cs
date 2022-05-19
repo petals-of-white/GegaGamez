@@ -24,6 +24,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasOne(d => d.Country)
             .WithMany(p => p.Users)
             .HasForeignKey(d => d.CountryId)
+            .OnDelete(DeleteBehavior.SetNull) // that's right
             .HasConstraintName("FK_User_Country");
 
         builder.HasMany(u => u.Roles)
@@ -35,14 +36,14 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
                     .HasOne<Role>()
                     .WithMany()
                     .HasForeignKey(u => u.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UserRole_Role"),
 
                 left => left
                     .HasOne<User>()
                     .WithMany()
                     .HasForeignKey(u => u.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UserRole_User"),
 
                 join => join

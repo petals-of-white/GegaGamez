@@ -25,7 +25,7 @@ internal class GameConfiguration : IEntityTypeConfiguration<Game>
         builder.HasOne(d => d.Developer)
             .WithMany(p => p.Games)
             .HasForeignKey(d => d.DeveloperId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_Game_Developer");
 
         builder.HasMany(d => d.Genres)
@@ -37,7 +37,7 @@ internal class GameConfiguration : IEntityTypeConfiguration<Game>
                     .HasOne<Genre>()
                     .WithMany()
                     .HasForeignKey(j => j.GenreId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Games_Genres_GenreID"),
 
                 left => left

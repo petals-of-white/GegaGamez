@@ -20,7 +20,7 @@ internal class UserCollectionConfiguration : IEntityTypeConfiguration<UserCollec
         builder.HasOne(d => d.User)
             .WithMany(p => p.UserCollections)
             .HasForeignKey(d => d.UserId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_UserComzllection_User");
 
         builder.HasMany(d => d.Games)
@@ -32,14 +32,14 @@ internal class UserCollectionConfiguration : IEntityTypeConfiguration<UserCollec
                     .HasOne<Game>()
                     .WithMany()
                     .HasForeignKey(join => join.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_GamesInUserCollections_Game"),
 
                 right => right
                     .HasOne<UserCollection>()
                     .WithMany()
                     .HasForeignKey(join => join.UserCollectionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_GamesInUserCollections_Collection"),
 
                 join => join
