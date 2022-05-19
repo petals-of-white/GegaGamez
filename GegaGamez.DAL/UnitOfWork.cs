@@ -96,11 +96,11 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     public void Update<TEntity>(TEntity entityToUpdate) where TEntity : class
     {
-        if (_dbContext.Entry(entityToUpdate).State == EntityState.Detached)
-        {
-            _dbContext.Set<TEntity>().Attach(entityToUpdate);
-        }
-
-        _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
+        //if (_dbContext.Entry(entityToUpdate).State == EntityState.Detached)
+        //{
+            //_dbContext.Set<TEntity>().Attach(entityToUpdate);
+        //}
+        _dbContext.Update<TEntity>(entityToUpdate);
+        //_dbContext.Entry(entityToUpdate).State = EntityState.Modified;
     }
 }
