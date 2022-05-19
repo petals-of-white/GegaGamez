@@ -2,7 +2,7 @@
 
 public record class RatingModel
 {
-    //public int UserId { get; set; }
-    //public int GameId { get; set; }
+    public UserModel User { get; set; }
+    public GameModel Game { get; set; }
     public byte RatingScore { get; set; }
 }

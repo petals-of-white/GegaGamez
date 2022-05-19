@@ -7,5 +7,5 @@ public record class GameModel
     public DateOnly ReleaseDate { get; set; }
     public string Description { get; set; }
     public DeveloperModel Developer { get; set; }
-    public byte AvgRatingScore { get; set; }
+    public byte? AvgRatingScore { get; set; }
 }

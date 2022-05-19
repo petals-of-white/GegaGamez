@@ -9,11 +9,6 @@ namespace GegaGamez.WebUI
     {
         public static IServiceCollection AddGegaGamezSecurity(this IServiceCollection services)
         {
-            //services.AddScoped<IJwtAuthenticationManager>(service =>
-            //{
-            //    return new JwtAuthenticationManager(securityKey);
-            //});
-
             services.AddScoped<IAuthManager, AuthManager>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -22,31 +17,6 @@ namespace GegaGamez.WebUI
                         options.LoginPath = "/Login";
                         options.AccessDeniedPath = "/AccessDenied";
                     });
-
-            /*
-            .AddJwtBearer((o =>
-            {
-                o.RequireHttpsMetadata = false;
-                o.SaveToken = true;
-
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
-
-                o.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        context.Token = context.Request.Cookies [JwtAuthenticationManager.CookieName];
-                        return Task.CompletedTask;
-                    }
-                };
-            }));
-            */
 
             services.AddAuthorization(options =>
             {

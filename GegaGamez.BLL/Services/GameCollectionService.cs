@@ -1,5 +1,6 @@
 ﻿using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.Services;
@@ -15,12 +16,18 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
     public void AddGame(DefaultCollection defaultCollection, Game game)
     {
-        throw new NotImplementedException();
+        var actualGame = _db.Games.Get(game.Id);
+        var dc = _db.DefaultCollections.Get(defaultCollection.Id) ?? throw new ArgumentException("Entry was not found");
+        dc.Games.Add(actualGame);
+        _db.Save();
     }
 
     public void AddGame(UserCollection userCollection, Game game)
     {
-        throw new NotImplementedException();
+        var actualGame = _db.Games.Get(game.Id);
+        var uc = _db.UserCollections.Get(userCollection.Id) ?? throw new ArgumentException("Entry was not found");
+        uc.Games.Add(actualGame);
+        _db.Save();
     }
 
     public void CreateUserCollection(UserCollection newCollection)

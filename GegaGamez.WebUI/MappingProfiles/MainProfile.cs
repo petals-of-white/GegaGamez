@@ -14,6 +14,8 @@ public class MainProfile : Profile
 
         CreateMap<UpdateProfileModel, User>();
 
+        CreateMap<UpdateRatingModel, Rating>();
+
         CreateMap<RegisterUserModel, User>();
 
         CreateMap<User, UserModel>();
