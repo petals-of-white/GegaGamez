@@ -5,7 +5,7 @@ CREATE TABLE [dbo].[UserCollection]
     [UserId] INT NOT NULL,
     [Name] NVARCHAR(50) NOT NULL, 
     [Description] NVARCHAR(100) NULL, 
-    CONSTRAINT [FK_UserCollection_User] FOREIGN KEY ([UserId]) REFERENCES [User]([Id])
+    CONSTRAINT [FK_UserCollection_User] FOREIGN KEY ([UserId]) REFERENCES [User]([Id])  ON DELETE CASCADE
  )
 GO
 

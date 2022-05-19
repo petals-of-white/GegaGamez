@@ -54,7 +54,7 @@ public class UsersController : ControllerBase
             return BadRequest();
 
         var user = _mapper.Map<User>(newUser);
-        _userService.Create(user);
+        _userService.CreateUser(user);
         var createdUser = _mapper.Map<UserModel>(user);
         return createdUser;
     }

@@ -47,12 +47,12 @@ namespace GegaGamez.WebUI.Pages
 
                     try
                     {
-                        _userService.Create(user);
+                        _userService.CreateUser(user);
                     }
                     catch (Exception ex)
                     {
                         // log...
-                        ViewData ["Error"] = ex.Message;
+                        ViewData ["InfoMessage"] = ex.Message;
                         return Page();
                     }
 

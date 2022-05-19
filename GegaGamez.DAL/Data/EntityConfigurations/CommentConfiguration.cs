@@ -17,13 +17,13 @@ internal class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.HasOne(d => d.Game)
             .WithMany(p => p.Comments)
             .HasForeignKey(d => d.GameId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_Comment_GameId");
 
         builder.HasOne(d => d.User)
             .WithMany(p => p.Comments)
             .HasForeignKey(d => d.UserId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_Comment_User");
     }
 }

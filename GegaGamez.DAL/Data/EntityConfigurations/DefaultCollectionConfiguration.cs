@@ -16,13 +16,13 @@ internal class DefaultCollectionConfiguration : IEntityTypeConfiguration<Default
         builder.HasOne(d => d.DefaultCollectionType)
             .WithMany(p => p.DefaultCollections)
             .HasForeignKey(d => d.DefaultCollectionTypeId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_DefaultCollection_DefaultCollectionType");
 
         builder.HasOne(d => d.User)
             .WithMany(p => p.DefaultCollections)
             .HasForeignKey(d => d.UserId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("FK_DefaultCollection_User");
 
         builder.HasMany(d => d.Games)
@@ -34,14 +34,14 @@ internal class DefaultCollectionConfiguration : IEntityTypeConfiguration<Default
                     .HasOne<Game>()
                     .WithMany()
                     .HasForeignKey(join => join.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_GamesInDefaultCollections_Game"),
 
                 right => right
                     .HasOne<DefaultCollection>()
                     .WithMany()
                     .HasForeignKey(join => join.DefaultCollectionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_GamesInDefaultCollections_DefaultCollection"),
 
                 join => join

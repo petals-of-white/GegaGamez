@@ -4,18 +4,22 @@
 const modalOpenedClass = "opened";
 
 // Edit profile Modal
-function showEditProfileModal() {
+function showEditProfileModal()
+{
     const editProfileModal = document.getElementById("edit-profile-modal");
     editProfileModal.classList.add(modalOpenedClass);
 }
 
-function hideEditProfileModal() {
+function hideEditProfileModal()
+{
     const editProfileModal = document.getElementById("edit-profile-modal");
     editProfileModal.classList.remove(modalOpenedClass);
 }
 
 // deleteCommentModal
-function showDeleteCommentModal(commentId) {
+
+function showDeleteCommentModal(commentId)
+{
     const deleteCommentModal = document.getElementById("delete-comment-modal");
 
     const idField = deleteCommentModal.querySelector("input[name=id]");
@@ -24,15 +28,8 @@ function showDeleteCommentModal(commentId) {
 
     deleteCommentModal.classList.add(modalOpenedClass);
 }
-
-function hideDeleteCommentModal() {
-    const deleteCommentModal = document.getElementById("delete-comment-modal");
-    deleteCommentModal.classList.remove(modalOpenedClass);
-}
-
-// Move to collection Modal
-
-function showCollectionModal(gameId=null) {
+function showCollectionModal(gameId = null)
+{
     const showCollectionModal = document.getElementById("move-game-to-collection-modal");
 
     if (gameId != null) {
@@ -43,14 +40,8 @@ function showCollectionModal(gameId=null) {
 
     showCollectionModal.classList.add(modalOpenedClass);
 }
-
-function hideCollectionModal() {
-    const moveToCollectionModel = document.getElementById("move-game-to-collection-modal");
-
-    moveToCollectionModel.classList.remove(modalOpenedClass);
-}
-
-function showRemoveFromCollectionModal(gameId) {
+function showRemoveFromCollectionModal(gameId)
+{
     const removeFromCollectionModal = document.getElementById("remove-game-from-collection-modal");
 
     const idField = removeFromCollectionModal.querySelector("input[name=id]");
@@ -59,14 +50,8 @@ function showRemoveFromCollectionModal(gameId) {
 
     removeFromCollectionModal.classList.add(modalOpenedClass);
 }
-
-function hideRemoveFromCollectionModal() {
-    const removeFromCollectionModal = document.getElementById("remove-game-from-collection-modal");
-
-    removeFromCollectionModal.classList.remove(modalOpenedClass);
-}
-
-function showRateGameModal(gameId = null) {
+function showRateGameModal(gameId = null)
+{
     const rateGameModal = document.getElementById("rate-game-modal");
     if (gameId != null) {
         const idField = rateGameModal.querySelector("input[name=id]");
@@ -75,9 +60,34 @@ function showRateGameModal(gameId = null) {
 
     rateGameModal.classList.add(modalOpenedClass);
 }
+function showDeleteAccountModal()
+{
+    const deleteAccountModal = document.getElementById("delete-account-modal");
+    deleteAccountModal.classList.add(modalOpenedClass);
+}
 
-function hideRateGameModal() {
+function hideDeleteCommentModal()
+{
+    const deleteCommentModal = document.getElementById("delete-comment-modal");
+    deleteCommentModal.classList.remove(modalOpenedClass);
+}
+function hideCollectionModal()
+{
+    const moveToCollectionModel = document.getElementById("move-game-to-collection-modal");
+    moveToCollectionModel.classList.remove(modalOpenedClass);
+}
+function hideRemoveFromCollectionModal()
+{
+    const removeFromCollectionModal = document.getElementById("remove-game-from-collection-modal");
+    removeFromCollectionModal.classList.remove(modalOpenedClass);
+}
+function hideRateGameModal()
+{
     const rateGameModal = document.getElementById("rate-game-modal");
-
+    rateGameModal.classList.remove(modalOpenedClass);
+}
+function hideDeleteAccountModal()
+{
+    const rateGameModal = document.getElementById("delete-account-modal");
     rateGameModal.classList.remove(modalOpenedClass);
 }

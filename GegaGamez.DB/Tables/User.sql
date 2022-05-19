@@ -6,7 +6,7 @@
     [Name] NVARCHAR(100) NULL, 
     [CountryId] INT NULL, 
     [About] NVARCHAR(500) NULL, 
-    CONSTRAINT [FK_User_Country] FOREIGN KEY ([CountryId]) REFERENCES [Country]([Id])
+    CONSTRAINT [FK_User_Country] FOREIGN KEY ([CountryId]) REFERENCES [Country]([Id])  ON DELETE SET NULL
 )
 
 GO

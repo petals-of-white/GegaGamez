@@ -4,6 +4,7 @@ using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.Models.ModifyModels;
 using GegaGamez.WebUI.Security;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -32,7 +33,7 @@ public class IndexModel : PageModel
     public List<DefaultCollectionModel> DefaultCollections { get; set; }
 
     [BindProperty]
-    public UpdateProfileModel UpdateModel { get; set; }
+    public UpdateProfileModel UpdatedUserProfile { get; set; }
 
     public List<UserCollectionModel> UserCollections { get; set; } = new();
     public UserModel UserProfile { get; set; }
@@ -63,24 +64,40 @@ public class IndexModel : PageModel
         }
     }
 
-    public async Task<IActionResult> OnPostUpdateProfile()
+    public async Task<IActionResult> OnPostUpdateProfileAsync()
     {
-        var canUpdateProfile = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
-        if (canUpdateProfile.Succeeded)
+        var permissionToUpdateProfile = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
+        bool areTheSameUser = new AuthDisplayHelper(User).UserId == UpdatedUserProfile.Id;
+
+        if (permissionToUpdateProfile.Succeeded && areTheSameUser)
         {
             if (ModelState.IsValid)
             {
-                var user = _mapper.Map<User>(UpdateModel);
+                var user = _mapper.Map<User>(UpdatedUserProfile);
                 _userService.UpdateUser(user);
             }
             else
-                ViewData ["Error"] = "Wrong update info. Please try again";
+                ViewData ["InfoMessage"] = "Wrong update info. Please try again";
 
-            return OnGet(UpdateModel.Id);
+            return OnGet(UpdatedUserProfile.Id);
         }
         else
             return Unauthorized();
+    }
 
-        //return RedirectToPage("/Users/Index", new { id = UpdateModel.Id });
+    public async Task<IActionResult> OnPostDeleteAccountAsync(int userId)
+    {
+        var permissionToDeleteAccount = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
+        bool areTheSameUser = new AuthDisplayHelper(User).UserId == userId;
+
+        if (permissionToDeleteAccount.Succeeded && areTheSameUser)
+        {
+            var userToDelete = new User { Id = userId };
+            _userService.DeleteUser(userToDelete);
+            await HttpContext.SignOutAsync();
+            return RedirectToPage("/Games/Search");
+        }
+        else
+            return Unauthorized();
     }
 }
