@@ -16,17 +16,12 @@
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
-    /* padding: .4em 1.3em; */
     text-align: center;
     box-sizing: border-box;
 }
 
     .btn-contrast:active {
-        /*padding: 5px 5px;*/
-        /*border-color: transparent;
-        border-style:solid;
 
-        border-width: 5px;*/
         transform: scale(.95);
     }
 
@@ -94,14 +89,6 @@
     width: var(--img-size-big);
     /*position: relative;*/
 }
-
-/*    .game-collection-card.user-collection-card {
-        --display-remove-collection-button: none;
-    }
-
-        .game-collection-card.user-collection-card:hover {
-            --display-remove-collection-button: unset;
-        }*/
 
 .btn-remove-collection {
     display: var(--display-collection-actions);
@@ -304,6 +291,7 @@
 }
 
 .collections-container {
+    margin-top: 10px;
     display: grid;
     grid-template-columns: auto auto auto auto;
     row-gap: 30px;
