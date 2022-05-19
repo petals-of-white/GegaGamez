@@ -133,7 +133,7 @@ public class IndexModel : PageModel
                 _commentService.AddComment(newComment);
             }
             else
-                ViewData ["Error"] = "Please check comment requirements";
+                ViewData ["InfoMessage"] = "Please check comment requirements";
 
             return OnGet(NewComment!.GameId);
         }
@@ -190,7 +190,7 @@ public class IndexModel : PageModel
                 _ratingService.RateGame(rating);
             }
             else
-                ViewData ["Error"] = "Wrong rate input data";
+                ViewData ["InfoMessage"] = "Wrong rate input data";
 
             return RedirectToPage( new { id = UpdateUserRating.GameId });
         }

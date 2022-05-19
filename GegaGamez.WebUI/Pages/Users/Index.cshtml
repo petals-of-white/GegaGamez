@@ -6,9 +6,9 @@
 
     bool logedIn = authHelper.IsAuthenticated;
 
-    bool authorized = authHelper.IsAuthorized(Model.UserProfile!.Id);
+    bool isPageOwner = authHelper.IsAuthorized(Model.UserProfile!.Id);
 
-    if (authorized)
+    if (isPageOwner)
     {
         ViewData ["profile"] = true;
     }
@@ -39,9 +39,10 @@
         </section>
 
         <section id="profile-buttons" class="btn-group">
-            @if(logedIn && authorized)
+            @if(logedIn && isPageOwner)
             {
                 <button onclick="showEditProfileModal()" type="button" class="btn-contrast rounded">Edit profile</button>
+                <button onclick="showDeleteAccountModal()" type="button" class="btn-contrast rounded font">Delete my profile</button>
             }
         </section>
     </div>
@@ -56,7 +57,7 @@
                 // render collection
                 <div class="game-collection-item default-collection-item">
                     <a href="/Users/@(Model.UserProfile.Id)/@(defaultCollection.Type.Name)" class="game-collection-card user-collection-card">
-                        <img class="collection-preview" src="/img/game.png" alt="Last game adde to collection" />
+                        <img class="collection-preview" src="/img/game.png" alt="Last game added to collection" />
                         <span class="collection-name">@defaultCollection.Type.Name</span>
                     </a>
                     <section class="game-collection-actions">
@@ -93,23 +94,36 @@
 </article>
 
 <form asp-page-handler="UpdateProfile" method="post" id="edit-profile-modal" class="popup-interactive bg-secondary border-primary">
-        <input hidden asp-for=UpdateModel.Id value=@Model.UserProfile.Id />
-        <h3 class="font-contrast">Something</h3>
-        <section class="main-something">
-            <div class="input-block">
-                <label>Choose your country</label>
-                <select asp-items=@Model.Countries asp-for=UpdateModel.CountryId>
+    <input hidden asp-for=UpdatedUserProfile.Id value=@Model.UserProfile.Id />
+    <h3 class="font-contrast">Edit profile info</h3>
+    <section class="main-something">
+        <div class="input-block">
+            <label>Choose your country</label>
+            <select asp-items=@Model.Countries asp-for=UpdatedUserProfile.CountryId>
 
-                </select>
-            </div>
+            </select>
+        </div>
 
-            <div class="input-block">
-                <label>Say a few things about yourself</label>
-                <textarea asp-for=UpdateModel.About title="About" placeholder="About yourself"></textarea>
-            </div>
-        </section>
-        <section class="popup-actions">
-            <button type="submit" class="borderless">Update profile</button>
-            <button type="button" onclick="hideEditProfileModal()" class="btn-contrast rounded">Cancel</button>
-        </section>
-    </form>
+        <div class="input-block">
+            <label>Say a few things about yourself</label>
+            <textarea asp-for=UpdatedUserProfile.About title="About" placeholder="About yourself"></textarea>
+        </div>
+    </section>
+    <section class="popup-actions">
+        <button type="submit" class="borderless">Update profile</button>
+        <button type="button" onclick="hideEditProfileModal()" class="btn-contrast rounded">Cancel</button>
+    </section>
+</form>
+
+<form asp-page-handler="DeleteAccount" method="post" id="delete-account-modal" class="popup-interactive bg-secondary border-primary">
+    <input hidden name="userId" value=@Model.UserProfile.Id />
+    <h3 class="font-contrast">Warning!</h3>
+    <section class="main-something">
+        <h4>Are you sure you want to delete your account? This action cannot be reverted.</h4>
+    </section>
+    <section class="popup-actions">
+        <button type="submit" class="borderless">Yes, delete</button>
+        <button type="button" onclick="hideDeleteAccountModal()" class="btn-contrast rounded">Cancel</button>
+    </section>
+</form>
+

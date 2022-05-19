@@ -33,7 +33,7 @@ namespace GegaGamez.WebUI.Pages
                 return Page();
             else
             {
-                ViewData ["Error"] = "You can not do that because you are already logged in!";
+                ViewData ["InfoMessage"] = "You can not do that because you are already logged in!";
                 return Forbid();
             }
             //if (User?.Identity?.IsAuthenticated == true)
@@ -80,7 +80,7 @@ namespace GegaGamez.WebUI.Pages
             }
             else
             {
-                ViewData ["Error"] = "You can not do that because you are already logged in!";
+                ViewData ["InfoMessage"] = "You can not do that because you are already logged in!";
                 return Forbid();
             }
         }
