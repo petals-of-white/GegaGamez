@@ -2,6 +2,7 @@
 
 public partial class Rating
 {
+    public int Id { get; set; }
     public int UserId { get; set; }
     public int GameId { get; set; }
     public byte RatingScore { get; set; }

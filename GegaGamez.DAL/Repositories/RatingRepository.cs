@@ -13,6 +13,7 @@ public class RatingRepository : Repository<Rating>, IRatingRepository
     }
 
     // Need to think about this one and async
+    /*
     public override Rating? Get(int id)
     {
         var explanation = "This method should not be called by rating repository, " +
@@ -20,15 +21,32 @@ public class RatingRepository : Repository<Rating>, IRatingRepository
 
         throw new NotImplementedException(explanation);
     }
+    */
 
-    public byte GetAllGamesAvgRating() =>
-        (byte) Math.Round(DbSetWithIncludedProperties.Average(r => r.RatingScore));
+    public byte GetAllGamesAvgRating()
+    {
+        if (DbSetWithIncludedProperties.Count() == 0)
+            return 0;
+        else
+            return (byte) Math.Round(DbSetWithIncludedProperties.Average(r => r.RatingScore));
+    }
 
+    /*
     public override Task<Rating?> GetAsync(int id)
     {
         var explanation = "This method should not be called by rating repository, " +
             "because Rating entity doesn't have an Id property";
 
         throw new NotImplementedException(explanation);
+    }
+    */
+
+    public byte? GetAvgRating(Game game)
+    {
+        if (DbSetWithIncludedProperties.Where(r => r.GameId == game.Id).Count() == 0)
+            return null;
+        else
+            return (byte) Math.Round(DbSetWithIncludedProperties.Where(r => r.GameId == game.Id)
+                .Average(r => r.RatingScore));
     }
 }

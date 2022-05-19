@@ -4,7 +4,7 @@ namespace GegaGamez.Shared.Services;
 
 public interface IRatingService
 {
-    byte GetAverageRatingScore(Game game);
+    byte? GetAverageRatingScore(Game game);
 
     Rating? GetUserRating(User user, Game game);
 

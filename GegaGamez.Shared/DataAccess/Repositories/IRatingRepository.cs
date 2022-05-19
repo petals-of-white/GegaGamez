@@ -4,17 +4,12 @@ namespace GegaGamez.Shared.DataAccess.Repositories
 {
     public interface IRatingRepository : IRepository<Rating>
     {
+        byte GetAllGamesAvgRating();
+
         /// <summary>
         /// </summary>
         /// <param name="game"></param>
         /// <returns>Int number (1-10) that describes average rating for a game</returns>
-        //int GetAverageGameRatingScore(Game game);
-
-        //Task<int> GetAverageGameRatingScoreAsync(Game game);
-
-        //Rating? GetUserRatingForAGame(User user, Game game);
-
-        //Task<Rating?> GetUserRatingForAGameAsync(User user, Game game);
-        byte GetAllGamesAvgRating ();
+        byte? GetAvgRating(Game game);
     }
 }

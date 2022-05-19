@@ -8,10 +8,13 @@ internal class RatingConfiguration : IEntityTypeConfiguration<Rating>
 {
     public void Configure(EntityTypeBuilder<Rating> builder)
     {
-        builder.HasKey(e => new { e.UserId, e.RatingScore, e.GameId });
+        builder.HasKey(r => r.Id);
+        //builder.HasKey(e => new { e.UserId, e.RatingScore, e.GameId });
 
         builder.ToTable("Rating");
 
+        builder.HasIndex(r => new {r.UserId, r.GameId, r.RatingScore}, "NIX_Rating_UserId_GameId_RatingScore")
+            .IsUnique();
         builder.HasIndex(e => e.GameId, "NIX_Rating_GameId");
 
         builder.HasIndex(e => e.RatingScore, "NIX_Rating_RatingScore");

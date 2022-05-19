@@ -15,36 +15,24 @@ public class RatingService : IRatingService, IDisposable
 
     public void Dispose() => _db.Dispose();
 
-    public byte GetAverageRatingScore(Game game)
-    {
-        throw new NotImplementedException();
-    }
+    public byte? GetAverageRatingScore(Game game) => _db.Ratings.GetAvgRating(game);
 
     public Rating? GetUserRating(User user, Game game) =>
         _db.Ratings.FindAll(r => r.UserId == user.Id && r.GameId == game.Id)
         .SingleOrDefault();
 
-    /*
     public void RateGame(Rating rating)
     {
-        Rating? possibleRating = _db.Ratings.FindAll(r => r.UserId == rating.UserId && r.GameId == rating.GameId)
+        Rating? actualRating = _db.Ratings.FindAll(r => r.UserId == rating.UserId && r.GameId == rating.GameId)
             .SingleOrDefault();
 
-        if (possibleRating is not null)
-        {
-            possibleRating.RatingScore = rating.RatingScore;
-            _db.Update(possibleRating);
-        }
-        else
+        if (actualRating is null)
             _db.Ratings.Add(rating);
-
-        _db.Save();
-    }
-    */
-
-    public void RateGame(Rating rating)
-    {
-        _db.Update(rating);
+        else
+        {
+            actualRating.RatingScore = rating.RatingScore;
+            _db.Update(actualRating);
+        }
 
         _db.Save();
     }
