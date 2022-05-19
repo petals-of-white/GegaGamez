@@ -4,7 +4,9 @@ namespace GegaGamez.Shared.Services;
 
 public interface IUserService
 {
-    void Create(User newUser);
+    void CreateUser(User newUser);
+
+    void DeleteUser(User user);
 
     IEnumerable<User> Find(string username);
 
@@ -14,5 +16,5 @@ public interface IUserService
 
     User? GetByUsername(string username);
 
-    User UpdateUser(User user);
+    void UpdateUser(User user);
 }

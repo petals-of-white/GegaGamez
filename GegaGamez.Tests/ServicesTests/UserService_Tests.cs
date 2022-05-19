@@ -54,7 +54,7 @@ public class UserService_Tests : IDisposable
         _uowMock.Setup(uow => uow.Users.Add(It.IsAny<User>()));
 
         // Act
-        _userService.Create(newUser);
+        _userService.CreateUser(newUser);
 
         // Assert
         Assert.Equal(types, newUser.DefaultCollections.Select(dc => dc.DefaultCollectionType));
