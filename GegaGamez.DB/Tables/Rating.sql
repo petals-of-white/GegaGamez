@@ -4,8 +4,8 @@
     [UserId] INT NOT NULL, 
     [GameId] INT NOT NULL,
     [RatingScore] TINYINT NOT NULL, 
-    CONSTRAINT [FK_Rating_Game] FOREIGN KEY ([GameId]) REFERENCES [Game]([Id]), 
-    CONSTRAINT [FK_Rating_User] FOREIGN KEY ([UserId]) REFERENCES [User]([Id]), 
+    CONSTRAINT [FK_Rating_Game] FOREIGN KEY ([GameId]) REFERENCES [Game]([Id])  ON DELETE CASCADE, 
+    CONSTRAINT [FK_Rating_User] FOREIGN KEY ([UserId]) REFERENCES [User]([Id])  ON DELETE CASCADE, 
     CONSTRAINT [CK_Rating_RatingScore] CHECK (RatingScore Between 1 and 10), 
     CONSTRAINT [PK_Rating] PRIMARY KEY ([Id])
 )
