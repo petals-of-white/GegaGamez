@@ -1,0 +1,35 @@
+﻿@page "{id:int}"
+@model GegaGamez.WebUI.Pages.Games.UpdateModel
+@{
+}
+
+<form method="post" id="update-game-form">
+	<img src="img/game.png" alt="Game image" />
+
+	<div>
+		<label asp-for="UpdatedGame.Id">Game id</label>
+		<input asp-for="UpdatedGame.Id" />
+	</div>
+	<div>
+		<label asp-for="UpdatedGame.Title"></label>
+		<input asp-for="UpdatedGame.Title" />
+	</div>
+	<div>
+		<label asp-for="UpdatedGame.ReleaseDate"></label>
+		<input asp-for="UpdatedGame.ReleaseDate" />
+	</div>
+	<div>
+		<label asp-for="UpdatedGame.DeveloperId">Developers</label>
+		<select asp-items="@Model.Developers" asp-for="UpdatedGame.DeveloperId"></select>
+	</div>
+	<div>
+		<label asp-for="UpdatedGame.GenreIds">Genres</label>
+		<select asp-for="UpdatedGame.GenreIds" multiple asp-items="@Model.Genres" />
+	</div>
+
+	<div>
+		<button type="submit">Update game</button>
+		<button type="reset">Reset</button>
+	</div>
+	
+</form>

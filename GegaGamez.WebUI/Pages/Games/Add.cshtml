@@ -1,0 +1,30 @@
+﻿@page
+@model GegaGamez.WebUI.Pages.Games.AddModel
+@{
+}
+
+<form method="post" id="add-game-form">
+	<img src="img/game.png" alt="New game image" />
+	<div>
+		<label asp-for="NewGame.Title"></label>
+		<input asp-for="NewGame.Title" />
+	</div>
+	<div>
+		<label asp-for="NewGame.ReleaseDate"></label>
+		<input asp-for="NewGame.ReleaseDate" />
+	</div>
+	<div>
+		<label asp-for="@Model.NewGame.DeveloperId">Developers</label>
+		<select asp-items="@Model.Developers" asp-for="NewGame.DeveloperId"></select>
+	</div>
+	<div>
+		<label asp-for="NewGame.GenreIds">Genres</label>
+		<select asp-for="NewGame.GenreIds" multiple asp-items="@Model.Genres" />
+	</div>
+
+	<div>
+		<button type="submit">Submit new game</button>
+		<button type="reset">Reset</button>
+	</div>
+	
+</form>
