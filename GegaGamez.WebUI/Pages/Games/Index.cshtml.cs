@@ -102,7 +102,6 @@ public class IndexModel : PageModel
             {
                 User user = new() { Id = userId.Value };
                 Rating? userRating = _ratingService.GetUserRating(user, requestedGame);
-                //UserRatingForGame = _mapper.Map<RatingModel>(userRating);
                 UserRatingForGame = userRating?.RatingScore;
                 var defaultCollectionsForUser = _collectionService.GetDefaultColletionsForUser(user);
                 var userCollectionsForUser = _collectionService.GetUserCollectionsForUser(user);
@@ -122,11 +121,10 @@ public class IndexModel : PageModel
         }
     }
 
-    public async Task<IActionResult> OnPostCommentAsync()
+    public IActionResult OnPostComment()
     {
-        AuthorizationResult canPostComments = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
-
-        if (canPostComments.Succeeded)
+        bool canPostComments = User.IsUser();
+        if (canPostComments)
         {
             if (ModelState.IsValid)
             {
@@ -140,6 +138,30 @@ public class IndexModel : PageModel
         }
         else
             return Forbid();
+    }
+
+    public IActionResult OnPostDeleteComment(int id)
+    {
+        bool canDeleteComments = User.IsUser();
+
+        Comment? actualComment = _commentService.GetById(id);
+
+        if (actualComment is not null)
+        {
+            try
+            {
+                _commentService.DeleteComment(actualComment);
+            }
+            catch (Exception ex)
+            {
+                // log
+                ViewData ["InfoMessage"] = "An error occured while trying to delete comment";
+            }
+            return RedirectToPage(new { id = actualComment.GameId });
+        }
+        else
+            return NotFound();
+
     }
 
     public IActionResult OnPostDeleteGame(int id)
