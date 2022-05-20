@@ -11,4 +11,5 @@ public interface ICommentService
     public Comment? GetById(int id);
 
     public IEnumerable<Comment> GetGameComments(Game game);
+    void DeleteComment(Comment actualComment);
 }

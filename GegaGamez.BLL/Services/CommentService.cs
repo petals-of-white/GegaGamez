@@ -15,7 +15,14 @@ public class CommentService : ICommentService, IDisposable
 
     public void AddComment(Comment newComment)
     {
+        newComment.CreatedAt = DateTime.Now;
         _db.Comments.Add(newComment);
+        _db.Save();
+    }
+
+    public void DeleteComment(Comment actualComment)
+    {
+        _db.Comments.Remove(actualComment);
         _db.Save();
     }
 
