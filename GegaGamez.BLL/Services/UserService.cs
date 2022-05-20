@@ -82,8 +82,8 @@ public class UserService : IDisposable, IUserService
 			actualUser.Country = user.Country;
 
 			_db.Update(actualUser);
+			_db.Save();
 		}
 
-		_db.Save();
 	}
 }
