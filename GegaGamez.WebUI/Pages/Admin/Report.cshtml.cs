@@ -15,14 +15,15 @@ namespace GegaGamez.WebUI.Pages.Admin
             _statisticsService = statisticsService;
         }
 
-        public int GamesQuantity { get; set; }
-        public int DevsQuantity { get; set; }
-        public int UsersQuantity { get; set; }
-        public int GenresQuantity { get; set; }
         public int AdminsQuantity { get; set; }
-        public int CommentsQuantity { get; set; }
         public byte AvgGameScore { get; set; }
+        public int CommentsQuantity { get; set; }
+        public int DevsQuantity { get; set; }
+        public int GamesQuantity { get; set; }
+        public int GenresQuantity { get; set; }
         public TimeOnly LastUpdated { get; set; }
+        public int UsersQuantity { get; set; }
+
         public void OnGet()
         {
             GamesQuantity = _statisticsService.GamesQuantity;

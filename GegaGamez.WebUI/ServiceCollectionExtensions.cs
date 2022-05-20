@@ -7,6 +7,12 @@ namespace GegaGamez.WebUI
 {
     public static class ServiceCollectionExtensions
     {
+        public static void AddDateOnlyConverters(this JsonSerializerOptions options)
+        {
+            options.Converters.Add(new DateOnlyConverter());
+            options.Converters.Add(new DateOnlyNullableConverter());
+        }
+
         public static IServiceCollection AddGegaGamezSecurity(this IServiceCollection services)
         {
             services.AddScoped<IAuthManager, AuthManager>();
@@ -32,12 +38,6 @@ namespace GegaGamez.WebUI
             });
 
             return services;
-        }
-
-        public static void AddDateOnlyConverters(this JsonSerializerOptions options)
-        {
-            options.Converters.Add(new DateOnlyConverter());
-            options.Converters.Add(new DateOnlyNullableConverter());
         }
     }
 }

@@ -8,8 +8,8 @@ namespace GegaGamez.WebUI.Pages.Users;
 
 public class SearchModel : PageModel
 {
-    private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly IUserService _userService;
 
     public SearchModel(IUserService users, IMapper mapper)
     {

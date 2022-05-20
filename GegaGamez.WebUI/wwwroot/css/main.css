@@ -21,7 +21,6 @@
 }
 
     .btn-contrast:active {
-
         transform: scale(.95);
     }
 
@@ -500,13 +499,13 @@
     bottom: 0;
 }
 
-#report{
+#report {
     margin-top: 60px;
-    display:grid;
+    display: grid;
     grid-template-columns: auto auto auto auto;
     grid-gap: 30px;
 }
 
-.fat-text{
+.fat-text {
     font-size: 30px;
 }

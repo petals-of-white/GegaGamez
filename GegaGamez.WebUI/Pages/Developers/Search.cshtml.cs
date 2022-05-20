@@ -1,5 +1,4 @@
 using AutoMapper;
-using GegaGamez.BLL.Services;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +17,10 @@ public class SearchModel : PageModel
         this._mapper = mapper;
     }
 
+    public List<DeveloperModel> Developers { get; set; }
+
     [BindProperty(SupportsGet = true)]
     public string DevSearchName { get; set; }
-
-    public List<DeveloperModel> Developers { get; set; }
 
     public void OnGet()
     {

@@ -9,8 +9,6 @@ namespace GegaGamez.WebUI.Security
     internal class JwtAuthenticationManager : IJwtAuthenticationManager
     {
         private readonly string _key;
-        public const string CookieName = "jwt";
-
 
         private string GenerateToken(ICollection<Claim> userClaims)
         {
@@ -47,7 +45,7 @@ namespace GegaGamez.WebUI.Security
             return claims;
         }
 
-
+        public const string CookieName = "jwt";
 
         public JwtAuthenticationManager(string key)
         {

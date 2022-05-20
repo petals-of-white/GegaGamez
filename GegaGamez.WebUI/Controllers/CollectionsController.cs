@@ -12,13 +12,22 @@ namespace GegaGamez.WebUI.Controllers;
 [ApiController]
 public class CollectionsController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly IGameCollectionService _collectionService;
+    private readonly IMapper _mapper;
 
     public CollectionsController(IMapper mapper, IGameCollectionService collectionService)
     {
         _mapper = mapper;
         _collectionService = collectionService;
+    }
+
+    [HttpPost("custom")]
+    public ActionResult<UserCollectionModel> CreateUserCollection([FromBody] UserCollectionModel newUserCollection)
+    {
+        var uc = _mapper.Map<UserCollection>(newUserCollection);
+        _collectionService.CreateUserCollection(uc);
+        var createdCollection = _mapper.Map<UserCollectionModel>(uc);
+        return createdCollection;
     }
 
     [HttpGet("default/{id}")]
@@ -33,14 +42,5 @@ public class CollectionsController : ControllerBase
     {
         var dc = _collectionService.GetUserCollectionById(id);
         return dc is null ? NotFound() : _mapper.Map<UserCollectionModel>(dc);
-    }
-
-    [HttpPost("custom")]
-    public ActionResult<UserCollectionModel> CreateUserCollection([FromBody] UserCollectionModel newUserCollection)
-    {
-        var uc = _mapper.Map<UserCollection>(newUserCollection);
-        _collectionService.CreateUserCollection(uc);
-        var createdCollection = _mapper.Map<UserCollectionModel>(uc);
-        return createdCollection;
     }
 }

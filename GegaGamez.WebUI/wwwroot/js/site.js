@@ -65,6 +65,15 @@ function showDeleteAccountModal()
     const deleteAccountModal = document.getElementById("delete-account-modal");
     deleteAccountModal.classList.add(modalOpenedClass);
 }
+function showDeleteGameModal(gameId = null)
+{
+    const deleteGameModal = document.getElementById("delete-game-modal");
+    if (gameId != null) {
+        const idField = deleteGameModal.querySelector("input[name=id]");
+        idField.value = gameId;
+    }
+    deleteGameModal.classList.add(modalOpenedClass);
+}
 
 function hideDeleteCommentModal()
 {
@@ -90,4 +99,9 @@ function hideDeleteAccountModal()
 {
     const rateGameModal = document.getElementById("delete-account-modal");
     rateGameModal.classList.remove(modalOpenedClass);
+}
+function hideDeleteGameModal()
+{
+    const deleteGameModal = document.getElementById("delete-game-modal");
+    deleteGameModal.classList.remove(modalOpenedClass);
 }

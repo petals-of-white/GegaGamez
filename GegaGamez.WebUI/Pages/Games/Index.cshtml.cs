@@ -44,6 +44,7 @@ public class IndexModel : PageModel
     }
 
     public List<SelectListItem>? AvailableDefaultCollections { get; set; }
+
     public List<SelectListItem> AvailableRatingScores { get; set; } = new List<SelectListItem>(10)
     {
         new (){ Value = "1", Text = "Pain (1/10)"},
@@ -74,8 +75,8 @@ public class IndexModel : PageModel
 
     [BindProperty]
     public UpdateRatingModel UpdateUserRating { get; set; }
+
     public byte? UserRatingForGame { get; set; }
-    //public RatingModel? UserRatingForGame { get; set; }
 
     public IActionResult OnGet(int id)
     {
@@ -141,6 +142,35 @@ public class IndexModel : PageModel
             return Forbid();
     }
 
+    public IActionResult OnPostDeleteGame(int id)
+    {
+        bool isAuthenticated = User.IsAuthenticated();
+        bool isAdmin = User.IsAdmin();
+
+        if (isAuthenticated)
+        {
+            if (isAdmin)
+            {
+                var game = new Game { Id = id };
+                try
+                {
+                    _gameService.DeleteGame(game);
+                }
+                catch (Exception)
+                {
+                    // log
+                    ViewData ["InfoMessage"] = "An error occured while trying to delete this game";
+                    return RedirectToPage(new { id = id });
+                }
+                return RedirectToPage("/Games/Search");
+            }
+            else
+                return Forbid();
+        }
+        else
+            return Unauthorized();
+    }
+
     public IActionResult OnPostMoveGameToCollection()
     {
         if (GameToDefaultCollection.GameId != GameToUserCollection.GameId)
@@ -180,7 +210,7 @@ public class IndexModel : PageModel
 
         if (canRateGames.Succeeded)
         {
-            foreach(var entry in ModelState)
+            foreach (var entry in ModelState)
             {
                 if (entry.Key.StartsWith(nameof(UpdateUserRating)) == false) ModelState.Remove(entry.Key);
             }
@@ -192,7 +222,7 @@ public class IndexModel : PageModel
             else
                 ViewData ["InfoMessage"] = "Wrong rate input data";
 
-            return RedirectToPage( new { id = UpdateUserRating.GameId });
+            return RedirectToPage(new { id = UpdateUserRating.GameId });
         }
         else
             return Forbid();

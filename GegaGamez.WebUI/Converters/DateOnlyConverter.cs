@@ -6,15 +6,16 @@ namespace GegaGamez.WebUI.Converters;
 public class DateOnlyConverter : JsonConverter<DateOnly>
 {
     private readonly string serializationFormat;
+
     public DateOnlyConverter() : this(null)
     {
-
     }
 
     public DateOnlyConverter(string? serializationFormat)
     {
         serializationFormat = serializationFormat ?? "dd.MM.yyyy";
     }
+
     public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var value = reader.GetString();

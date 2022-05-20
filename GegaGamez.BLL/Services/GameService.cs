@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
@@ -10,9 +9,35 @@ public class GameService : IDisposable, IGameService
 {
     private readonly IUnitOfWork _db;
 
+    private List<Genre> LoadActualGenres(List<Genre> genres)
+    {
+        List<Genre> actualGenres = new(genres.Count);
+
+        for (int i = 0; i < genres.Count; i++)
+        {
+            var actualGenre = _db.Genres.Get(genres [i].Id);
+            if (actualGenre is not null) actualGenres.Add(actualGenre);
+        }
+
+        return actualGenres;
+    }
+
     public GameService(IUnitOfWork db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
+    }
+
+    public void CreateGame(Game game)
+    {
+        game.Genres = LoadActualGenres(game.Genres.ToList());
+        _db.Games.Add(game);
+        _db.Save();
+    }
+
+    public void DeleteGame(Game game)
+    {
+        _db.Games.Remove(game);
+        _db.Save();
     }
 
     public void Dispose() => _db.Dispose();
@@ -60,4 +85,24 @@ public class GameService : IDisposable, IGameService
 
     public IEnumerable<Game> GetGamesInCollection(DefaultCollection defaultCollection) =>
         _db.Games.FindAll(g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id));
+
+    public void UpdateGame(Game game)
+    {
+        var actualGame = _db.Games.Get(game.Id);
+
+        if (actualGame is null)
+            throw new KeyNotFoundException($"Game with id {game.Id} wasn't found");
+        else
+        {
+            actualGame.Description = game.Description;
+            actualGame.Title = game.Title;
+            actualGame.DeveloperId = game.DeveloperId;
+            actualGame.ReleaseDate = game.ReleaseDate;
+            actualGame.Genres = LoadActualGenres(game.Genres.ToList());
+
+            _db.Update(actualGame);
+
+            _db.Save();
+        }
+    }
 }

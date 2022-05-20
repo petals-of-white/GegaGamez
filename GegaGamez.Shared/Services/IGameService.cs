@@ -10,9 +10,14 @@ public interface IGameService : IDisposable
 
     Game? GetById(int id);
 
+    void DeleteGame(Game game);
+
     IEnumerable<Game> GetDeveloperGames(Developer dev);
 
     IEnumerable<Game> GetGamesInCollection(UserCollection userCollection);
 
     IEnumerable<Game> GetGamesInCollection(DefaultCollection defaultCollection);
+    void CreateGame(Game game);
+
+    void UpdateGame(Game game);
 }

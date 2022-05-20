@@ -8,51 +8,88 @@ namespace GegaGamez.WebUI.MappingProfiles;
 
 public class MainProfile : Profile
 {
-    public MainProfile()
+    private void Collections()
     {
-        // Create my maps here
+        CreateMap<DefaultCollection, DefaultCollectionModel>()
+    .ForMember(dest => dest.Type, act => act.MapFrom(src => src.DefaultCollectionType));
 
-        CreateMap<UpdateProfileModel, User>();
+        CreateMap<DefaultCollectionType, DefaultCollectionTypeModel>();
+        CreateMap<UserCollection, UserCollectionModel>();
+    }
 
-        CreateMap<UpdateRatingModel, Rating>();
-
-        CreateMap<RegisterUserModel, User>();
-
-        CreateMap<User, UserModel>();
-
-
+    private void Comment()
+    {
         CreateMap<NewCommentModel, Comment>();
 
         CreateMap<Comment, CommentModel>().ReverseMap();
+    }
 
-
+    private void Country()
+    {
         CreateMap<Country, CountryModel>();
+    }
 
-        CreateMap<DefaultCollection, DefaultCollectionModel>()
-            .ForMember(dest => dest.Type, act => act.MapFrom(src => src.DefaultCollectionType));
-
-        CreateMap<DefaultCollectionType, DefaultCollectionTypeModel>();
-
+    private void Developer()
+    {
         CreateMap<Developer, DeveloperModel>()
-            .ForMember(dest => dest.BeginDate,
-                       act => act.MapFrom(src => DateOnly.FromDateTime(src.BeginDate)))
-            .ForMember(dest => dest.EndDate,
-                       act => act.MapFrom(
-                            delegate (Developer dev,
-                                      DeveloperModel devModel)
-                            {
-                                DateOnly? result = dev.EndDate.HasValue ? DateOnly.FromDateTime(dev.EndDate.Value) : null;
-                                return result;
-                            }));
+    .ForMember(dest => dest.BeginDate,
+               act => act.MapFrom(src => DateOnly.FromDateTime(src.BeginDate)))
+    .ForMember(dest => dest.EndDate,
+               act => act.MapFrom(
+                    delegate (Developer dev,
+                              DeveloperModel devModel)
+                    {
+                        DateOnly? result = dev.EndDate.HasValue ? DateOnly.FromDateTime(dev.EndDate.Value) : null;
+                        return result;
+                    }));
+    }
 
+    private void Game()
+    {
         CreateMap<Game, GameModel>()
             .ForMember(dest => dest.ReleaseDate, act => act.MapFrom(src => DateOnly.FromDateTime(src.ReleaseDate)));
 
+        CreateMap<EditGameModel, Game>()
+            .ForMember(dest => dest.ReleaseDate, act =>
+            {
+                act.MapFrom(src => src.ReleaseDate.ToDateTime(TimeOnly.MinValue));
+            })
+            .ForMember(dest => dest.Genres, act =>
+            {
+                act.MapFrom(src => src.GenreIds.Select(gid => new Genre { Id = gid }).ToHashSet());
+            })
+            .ReverseMap()
+                .ForMember(src => src.ReleaseDate, act => act.MapFrom(dest => DateOnly.FromDateTime(dest.ReleaseDate)))
+                .ForMember(src => src.GenreIds, act => act.MapFrom(dest => dest.Genres.Select(g => g.Id).ToHashSet()));
+    }
+
+    private void Genre()
+    {
         CreateMap<Genre, GenreModel>();
+    }
 
+    private void Rating()
+    {
+        CreateMap<UpdateRatingModel, Rating>();
         CreateMap<Rating, RatingModel>();
+    }
 
-        CreateMap<UserCollection, UserCollectionModel>();
+    private void User()
+    {
+        CreateMap<UpdateProfileModel, User>();
+        CreateMap<RegisterUserModel, User>();
+        CreateMap<User, UserModel>();
+    }
 
+    public MainProfile()
+    {
+        User();
+        Rating();
+        Game();
+        Comment();
+        Country();
+        Developer();
+        Collections();
+        Genre();
     }
 }

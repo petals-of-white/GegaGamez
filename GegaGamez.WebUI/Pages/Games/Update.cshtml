@@ -1,0 +1,43 @@
+﻿@page "{id:int}"
+@model GegaGamez.WebUI.Pages.Games.UpdateModel
+@{
+}
+
+<form method="post" id="update-game-form">
+	<img src="img/game.png" alt="Game image" />
+
+	<div>
+		<label asp-for="UpdatedGame.Id">Game id</label>
+		<input asp-for="UpdatedGame.Id" value="@Model.UpdatedGame.Id" readonly />
+	</div>
+	<div>
+		<label asp-for="UpdatedGame.Title"></label>
+		<input asp-for="UpdatedGame.Title" value="@Model.UpdatedGame.Title" />
+	</div>
+	
+	<div>
+		<label asp-for="UpdatedGame.DeveloperId">Developer</label>
+		<select asp-items="@Model.Developers" asp-for="UpdatedGame.DeveloperId"></select>
+	</div>
+
+	<div>
+		<label asp-for="UpdatedGame.ReleaseDate">Release Date</label>
+		<input type="date" asp-for="UpdatedGame.ReleaseDate" value="@Model.UpdatedGame.ReleaseDate.ToString("yyyy-MM-dd")"/>
+	</div>
+
+	<div>
+		<label asp-for="UpdatedGame.Description"></label>
+		<textarea asp-for="UpdatedGame.Description"></textarea>
+	</div>
+
+	<div>
+		<label asp-for="UpdatedGame.GenreIds">Genres</label>
+		<select asp-for="UpdatedGame.GenreIds" multiple asp-items="@Model.Genres"></select>
+	</div>
+	
+	<div class="flex-container">
+		<button type="submit" class="btn-contrast rounded">Update game</button>
+		<button type="reset" class="btn-contrast rounded">Reset</button>
+	</div>
+	
+</form>
