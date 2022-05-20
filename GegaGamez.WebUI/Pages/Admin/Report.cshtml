@@ -4,34 +4,13 @@
 	ViewData["report"] = true;
 }
 
-@*<table>
-	<tr>
-		<td>Last updated: @Model.LastUpdated</td>
-		<td>@Model.GamesQuantity games</td>
-		<td>@Model.UsersQuantity users</td>
-		<td>@Model.AdminsQuantity admins</td>
-		<td>@Model.DevsQuantity developers</td>
-		<td>@Model.GenresQuantity genres</td>
-		<td>@Model.CommentsQuantity comments</td>
-		<td>@Model.AvgGameScore - avg game rating</td>
-	</tr>
-</table>*@
-
 <section id="report">
 	<div><b class="font-contrast">Last updated: </b>@Model.LastUpdated</div>
 	<div><b class="fat-text"> @Model.GamesQuantity</b> games</div>
 	<div><b class="fat-text">@Model.UsersQuantity</b> users</div>
-	<div><b class="fat-text">@Model.AdminsQuantity</b> admins</div>
+	<div>including <b class="fat-text">@Model.AdminsQuantity</b> admins</div>
 	<div><b class="fat-text">@Model.DevsQuantity</b> developers</div>
 	<div><b class="fat-text">@Model.GenresQuantity</b> genres</div>
-	<div><b class="fat-text">@Model.CommentsQuantity</b> genres</div>
+	<div><b class="fat-text">@Model.CommentsQuantity</b> comments</div>
 	<div><b class="fat-text">@Model.AvgGameScore</b> - average rating</div>
 </section>
-
-@*<p>Games: @Model.GamesQuantity</p>
-<p>Developers: @Model.DevsQuantity</p>
-<p>Comments: @Model.CommentsQuantity</p>
-<p>All users: @Model.UsersQuantity</p>
-<p>Including admins: @Model.AdminsQuantity</p>
-<p>Average game score: @Model.AvgGameScore</p>
-*@
