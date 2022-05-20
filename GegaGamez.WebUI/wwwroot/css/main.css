@@ -509,3 +509,15 @@
 .fat-text {
     font-size: 30px;
 }
+
+a.inverse-link {
+    color: var(--text-color-contrast);
+}
+
+    a.inverse-link:visited {
+        color: var(--text-color-contrast);
+    }
+
+    a.inverse-link:hover {
+        color: var(--text-color-primary);
+    }
