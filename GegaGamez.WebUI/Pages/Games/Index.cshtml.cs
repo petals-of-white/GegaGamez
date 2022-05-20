@@ -197,4 +197,34 @@ public class IndexModel : PageModel
         else
             return Forbid();
     }
+
+    public IActionResult OnPostDeleteGame(int id)
+    {
+        bool isAuthenticated = User.IsAuthenticated();
+        bool isAdmin = User.IsAdmin();
+
+        if (isAuthenticated)
+        {
+            if (isAdmin)
+            {
+                var game = new Game { Id = id };
+                try
+                {
+                    _gameService.DeleteGame(game);
+                }
+                catch(Exception)
+                {
+                    // log
+                    ViewData ["InfoMessage"] = "An error occured while trying to delete this game";
+                    return RedirectToPage(new { id = id });
+                }
+                return RedirectToPage("/Games/Search");
+            }
+            else
+                return Forbid();
+        }
+        else
+            return Unauthorized();
+
+    }
 }

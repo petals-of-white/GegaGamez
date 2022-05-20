@@ -1,11 +1,16 @@
 ﻿@page "{id:int}"
+@using GegaGamez.WebUI.Security
 @model GegaGamez.WebUI.Pages.Games.IndexModel
 @{
-    AuthDisplayHelper authHelper = new(User);
+    //AuthDisplayHelper authHelper = new(User);
 
-    bool logedIn = authHelper.IsAuthenticated;
+    // bool authenticated = authHelper.IsAuthenticated;
+    bool authenticated = User.IsAuthenticated();
 
-    int? userId = authHelper.UserId;
+    //int? userId = authHelper.UserId;
+    int? userId = User.GetId();
+
+    bool isAdmin = User.IsAdmin();
 }
 
 <div class="page-content-header border-primary ">
@@ -50,10 +55,14 @@
     </section>
 
     <section class="btn-group">
-        @if(logedIn == true)
+        @if(authenticated == true)
         {
            <button type="button" class="btn-contrast rounded" onclick="showCollectionModal()">Add to</button>
            <button type="button" class="btn-contrast rounded" onclick="showRateGameModal()">Rate</button> 
+           if (isAdmin)
+            {
+                <button type="button" class="btn-contrast rounded" onclick="showDeleteGameModal()">Delete game</button>
+            }
         }
     </section>
 </article>
@@ -61,7 +70,7 @@
 <section id="comments-section">
     <h3>Comments</h3>
 
-    @if(logedIn == true)
+    @if(authenticated == true)
     {
         <button type="button" class="font-primary borderless link-default btn-add-comment">
             Add comment
@@ -110,6 +119,7 @@
 <form method="post" id="delete-comment-modal" class="popup-interactive bg-secondary border-primary">
     <h3 class="font-contrast">Delete this comment?</h3>
     <input type="number" name="id" value="@Model.Game.Id" readonly />
+    <section class="main-something"></section>
     <section class="popup-actions">
         <button type="submit" class="borderless">Do something</button>
         <button type="button" onclick="hideDeleteCommentModal()" class="btn-contrast rounded">Cancel</button>
@@ -124,39 +134,18 @@
     </h3>
     <input asp-for=GameToDefaultCollection.GameId value=@Model.Game.Id readonly hidden />
     <input asp-for=GameToUserCollection.GameId value=@Model.Game.Id readonly hidden />
-    <div>
-        <select size="5" asp-for=GameToDefaultCollection.CollectionId asp-items=@Model.AvailableDefaultCollections></select>
-    </div>
-	<div>
-        <select size="5" asp-for=GameToUserCollection.CollectionId asp-items=@Model.AvailableUserCollections></select>
-    </div>
-
+    <section class="main-something">
+        <div>
+            <select size="5" asp-for=GameToDefaultCollection.CollectionId asp-items=@Model.AvailableDefaultCollections></select>
+        </div>
+	    <div>
+            <select size="5" asp-for=GameToUserCollection.CollectionId asp-items=@Model.AvailableUserCollections></select>
+        </div>
+    </section>
     <section class="popup-actions">
         <button type="submit" class="borderless">Ok</button>
         <button type="button" onclick="hideCollectionModal()" class="btn-contrast rounded">Cancel</button>
     </section>
-    @*<select title="Collection">
-        @foreach (var defaultCollection in new List<string>())
-        {
-            <option value="Planned">Planned</option>
-        }
-
-        @foreach(var userCollection in new List<string>())
-        {
-            <option value="Favorites or something">My Absolute favorites</option>
-        }
-
-        <!--!!! REMOVE THIS LATER !!!-->
-        <option value="Planned">Planned</option>
-        <option value="Playing">Playing</option>
-        <option value="Completed">Completed</option>
-        <option value="Dropped">Dropped</option>
-
-        <option value="Planned">My Favorites</option>
-        <option value="Playing">To me whey hey hey YEAH!</option>
-        <option value="Completed">Lorem Ipsum</option>
-        <option value="Dropped">Dolor sit amet</option>
-    </select>*@
 
 </form>
 
@@ -165,12 +154,25 @@
     <h3 class="font-contrast">
         How do you rate this game?
     </h3>
-    @*<input type="number" name="id" readonly hidden />*@
     <input asp-for="UpdateUserRating.GameId" value="@Model.Game.Id" hidden/>
     <input asp-for="UpdateUserRating.UserId" value=@userId  hidden/>
-    <select asp-for="UpdateUserRating.RatingScore" title="Score?" asp-items=@Model.AvailableRatingScores></select>
+    <section class="main-something">
+        <select asp-for="UpdateUserRating.RatingScore" title="Score?" asp-items=@Model.AvailableRatingScores></select>
+    </section>
     <section class="popup-actions">
         <button type="submit" class="borderless">Rate!</button>
         <button type="button" onclick="hideRateGameModal()" class="btn-contrast rounded">Cancel</button>
+    </section>
+
+</form>
+
+<form method="post" asp-page-handler="DeleteGame" id="delete-game-modal" class="popup-interactive bg-secondary border-primary">
+    <h3 class="font-contrast">
+        Are you sure you want to delete this game?
+    </h3>
+    <input type="number" name="id" value=@Model.Game.Id  readonly hidden />
+    <section class="popup-actions">
+        <button type="submit" class="borderless">Delete!</button>
+        <button type="button" onclick="hideDeleteGameModal()" class="btn-contrast rounded">Cancel</button>
     </section>
 </form>
