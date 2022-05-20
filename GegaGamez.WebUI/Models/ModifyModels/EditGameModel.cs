@@ -7,5 +7,5 @@ public record class EditGameModel
     public DateOnly ReleaseDate { get; set; }
     public string Description { get; set; }
     public int DeveloperId { get; set; }
-    public ICollection<int> GenreIds { get; set; }
+    public HashSet<int> GenreIds { get; set; }
 }

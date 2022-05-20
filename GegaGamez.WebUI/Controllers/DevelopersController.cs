@@ -20,6 +20,13 @@ public class DevelopersController : ControllerBase
         _mapper = mapper;
     }
 
+    [HttpGet("filter")]
+    public IEnumerable<DeveloperModel> Find(string byName)
+    {
+        var devs = _devService.Find(byName);
+        return _mapper.Map<IEnumerable<DeveloperModel>>(devs);
+    }
+
     // GET: api/<DeveloperController>
     [HttpGet]
     public IEnumerable<DeveloperModel> Get()
@@ -34,12 +41,5 @@ public class DevelopersController : ControllerBase
     {
         var dev = _devService.GetById(id);
         return dev is null ? NotFound() : _mapper.Map<DeveloperModel>(dev);
-    }
-
-    [HttpGet("filter")]
-    public IEnumerable<DeveloperModel> Find(string byName)
-    {
-        var devs = _devService.Find(byName);
-        return _mapper.Map<IEnumerable<DeveloperModel>>(devs);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
@@ -10,9 +9,29 @@ public class GameService : IDisposable, IGameService
 {
     private readonly IUnitOfWork _db;
 
+    private List<Genre> LoadActualGenres(List<Genre> genres)
+    {
+        List<Genre> actualGenres = new(genres.Count);
+
+        for (int i = 0; i < genres.Count; i++)
+        {
+            var actualGenre = _db.Genres.Get(genres [i].Id);
+            if (actualGenre is not null) actualGenres.Add(actualGenre);
+        }
+
+        return actualGenres;
+    }
+
     public GameService(IUnitOfWork db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
+    }
+
+    public void CreateGame(Game game)
+    {
+        game.Genres = LoadActualGenres(game.Genres.ToList());
+        _db.Games.Add(game);
+        _db.Save();
     }
 
     public void DeleteGame(Game game)
@@ -21,11 +40,6 @@ public class GameService : IDisposable, IGameService
         _db.Save();
     }
 
-    public void CreateGame(Game game)
-    {
-        _db.Games.Add(game);
-        _db.Save();
-    }
     public void Dispose() => _db.Dispose();
 
     public IEnumerable<Game> Find(string? byTitle, params Genre [] byGenre)
@@ -84,13 +98,11 @@ public class GameService : IDisposable, IGameService
             actualGame.Title = game.Title;
             actualGame.DeveloperId = game.DeveloperId;
             actualGame.ReleaseDate = game.ReleaseDate;
-            actualGame.Genres = game.Genres;
+            actualGame.Genres = LoadActualGenres(game.Genres.ToList());
 
             _db.Update(actualGame);
 
             _db.Save();
         }
-
-        
     }
 }

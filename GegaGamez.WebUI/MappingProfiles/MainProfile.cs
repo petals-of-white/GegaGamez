@@ -8,43 +8,28 @@ namespace GegaGamez.WebUI.MappingProfiles;
 
 public class MainProfile : Profile
 {
-    void User()
+    private void Collections()
     {
-        CreateMap<UpdateProfileModel, User>();
-        CreateMap<RegisterUserModel, User>();
-        CreateMap<User, UserModel>();
+        CreateMap<DefaultCollection, DefaultCollectionModel>()
+    .ForMember(dest => dest.Type, act => act.MapFrom(src => src.DefaultCollectionType));
 
+        CreateMap<DefaultCollectionType, DefaultCollectionTypeModel>();
+        CreateMap<UserCollection, UserCollectionModel>();
     }
 
-    void Rating()
+    private void Comment()
     {
-        CreateMap<UpdateRatingModel, Rating>();
-        CreateMap<Rating, RatingModel>();
-
-    }
-    void Game()
-    {
-        CreateMap<Game, GameModel>()
-            .ForMember(dest => dest.ReleaseDate, act => act.MapFrom(src => DateOnly.FromDateTime(src.ReleaseDate)));
-
-        CreateMap<EditGameModel, Game>()
-            .ForMember(dest => dest.ReleaseDate, act => act.MapFrom(src => src.ReleaseDate.ToDateTime(TimeOnly.MinValue));
-
-    }
-    void Comment()
-    {
-
         CreateMap<NewCommentModel, Comment>();
 
         CreateMap<Comment, CommentModel>().ReverseMap();
     }
 
-    void Country()
+    private void Country()
     {
         CreateMap<Country, CountryModel>();
     }
 
-    void Developer()
+    private void Developer()
     {
         CreateMap<Developer, DeveloperModel>()
     .ForMember(dest => dest.BeginDate,
@@ -59,20 +44,43 @@ public class MainProfile : Profile
                     }));
     }
 
-    void Collections()
+    private void Game()
     {
-        CreateMap<DefaultCollection, DefaultCollectionModel>()
-    .ForMember(dest => dest.Type, act => act.MapFrom(src => src.DefaultCollectionType));
+        CreateMap<Game, GameModel>()
+            .ForMember(dest => dest.ReleaseDate, act => act.MapFrom(src => DateOnly.FromDateTime(src.ReleaseDate)));
 
-        CreateMap<DefaultCollectionType, DefaultCollectionTypeModel>();
-        CreateMap<UserCollection, UserCollectionModel>();
-
+        CreateMap<EditGameModel, Game>()
+            .ForMember(dest => dest.ReleaseDate, act =>
+            {
+                act.MapFrom(src => src.ReleaseDate.ToDateTime(TimeOnly.MinValue));
+            })
+            .ForMember(dest => dest.Genres, act =>
+            {
+                act.MapFrom(src => src.GenreIds.Select(gid => new Genre { Id = gid }).ToHashSet());
+            })
+            .ReverseMap()
+                .ForMember(src => src.ReleaseDate, act => act.MapFrom(dest => DateOnly.FromDateTime(dest.ReleaseDate)))
+                .ForMember(src => src.GenreIds, act => act.MapFrom(dest => dest.Genres.Select(g => g.Id).ToHashSet()));
     }
-    
-    void Genre()
+
+    private void Genre()
     {
         CreateMap<Genre, GenreModel>();
     }
+
+    private void Rating()
+    {
+        CreateMap<UpdateRatingModel, Rating>();
+        CreateMap<Rating, RatingModel>();
+    }
+
+    private void User()
+    {
+        CreateMap<UpdateProfileModel, User>();
+        CreateMap<RegisterUserModel, User>();
+        CreateMap<User, UserModel>();
+    }
+
     public MainProfile()
     {
         User();
@@ -84,5 +92,4 @@ public class MainProfile : Profile
         Collections();
         Genre();
     }
-
 }

@@ -62,6 +62,7 @@
            if (isAdmin)
             {
                 <button type="button" class="btn-contrast rounded" onclick="showDeleteGameModal()">Delete game</button>
+                <a class="btn-contrast rounded" asp-page="/Games/Update" asp-route-id=@Model.Game.Id>Remove the game</a>   
             }
         }
     </section>

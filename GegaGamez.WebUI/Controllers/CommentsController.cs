@@ -14,13 +14,26 @@ namespace GegaGamez.WebUI.Controllers;
 [ApiController]
 public class CommentsController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly ICommentService _commentService;
+    private readonly IMapper _mapper;
 
     public CommentsController(IMapper mapper, ICommentService commentService)
     {
         _mapper = mapper;
         _commentService = commentService;
+    }
+
+    [HttpPost]
+    [Authorize]
+    public ActionResult<CommentModel> Create([FromBody] NewCommentModel newComment)
+    {
+        var comment = _mapper.Map<Comment>(newComment);
+
+        _commentService.AddComment(comment);
+
+        var createdComment = _mapper.Map<CommentModel>(comment);
+
+        return createdComment;
     }
 
     // GET: api/<CommentsController>
@@ -44,18 +57,5 @@ public class CommentsController : ControllerBase
     {
         var comments = _commentService.GetGameComments(new Game { Id = gameId });
         return _mapper.Map<IEnumerable<CommentModel>>(comments);
-    }
-
-    [HttpPost]
-    [Authorize]
-    public ActionResult<CommentModel> Create([FromBody] NewCommentModel newComment)
-    {
-        var comment = _mapper.Map<Comment>(newComment);
-
-        _commentService.AddComment(comment);
-
-        var createdComment = _mapper.Map<CommentModel>(comment);
-
-        return createdComment;
     }
 }

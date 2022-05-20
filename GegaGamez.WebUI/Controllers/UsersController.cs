@@ -13,13 +13,21 @@ namespace GegaGamez.WebUI.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly IUserService _userService;
 
     public UsersController(IUserService userService, IMapper mapper)
     {
         _userService = userService;
         _mapper = mapper;
+    }
+
+    [HttpGet("filter")]
+    public IEnumerable<UserModel> Find(string username)
+    {
+        var users = _userService.Find(username);
+
+        return _mapper.Map<IEnumerable<UserModel>>(users);
     }
 
     // GET: api/<UserController>
@@ -37,14 +45,6 @@ public class UsersController : ControllerBase
         var user = _userService.GetById(id);
 
         return user is null ? NotFound() : _mapper.Map<UserModel>(user);
-    }
-
-    [HttpGet("filter")]
-    public IEnumerable<UserModel> Find(string username)
-    {
-        var users = _userService.Find(username);
-
-        return _mapper.Map<IEnumerable<UserModel>>(users);
     }
 
     [HttpPost]

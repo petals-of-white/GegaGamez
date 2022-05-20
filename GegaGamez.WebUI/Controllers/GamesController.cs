@@ -2,7 +2,6 @@
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -42,10 +41,10 @@ public class GamesController : ControllerBase
 
     // GET: api/<GameController>
     [HttpGet("filter")]
-    public IEnumerable<GameModel> Get(string? title, [FromQuery] int[] genreIds)
+    public IEnumerable<GameModel> Get(string? title, [FromQuery] int [] genreIds)
     {
         var filterGenres = (from genre in genreIds
-                           select _genreService.GetById(genre)).Where(g=>g is not null).ToArray();
+                            select _genreService.GetById(genre)).Where(g => g is not null).ToArray();
 
         var games = _gameService.Find(title, filterGenres);
 

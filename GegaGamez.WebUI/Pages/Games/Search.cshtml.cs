@@ -29,6 +29,7 @@ public class SearchModel : PageModel
 
     [BindProperty(SupportsGet = true)]
     public string? GameTitle { get; set; }
+
     public void OnGet()
     {
         // Get all the genres

@@ -8,11 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 var builderConfig = builder.Configuration;
 
 // Razor pages
-builder.Services.AddRazorPages();
-// controllers
-builder.Services.AddControllers()
-    .AddJsonOptions(opt=>opt.JsonSerializerOptions.AddDateOnlyConverters());
+builder.Services.AddRazorPages()
+    .AddJsonOptions(opt => opt.UseDateOnlyTimeOnlyStringConverters());
 
+// controllers
+builder.Services
+    .AddControllers(opt => opt.UseDateOnlyTimeOnlyStringConverters())
+    .AddJsonOptions(opt => opt.UseDateOnlyTimeOnlyStringConverters());
+//.AddJsonOptions(opt => opt.JsonSerializerOptions.AddDateOnlyConverters());
 
 // Validation
 builder.Services
@@ -29,14 +32,13 @@ builder.Services
     // Mapping profiles
     .AddAutoMapper(typeof(MainProfile));
 
-// Add DB
+// DB
 builder.Services.AddGegaGamezDB(builderConfig);
 
-// Add services
+// Services
 builder.Services.AddGegaGamezServices();
 
-// Auth Auth manager
-//string securityKey = builder.Configuration.GetSection("SecurityKey").Value;
+// Security: Authentication + Authorization
 builder.Services.AddGegaGamezSecurity();
 
 // API
@@ -84,7 +86,5 @@ app.UseAuthentication()
 app.MapDefaultControllerRoute();
 
 app.MapRazorPages();
-
-//app.MapGet("/", () => "HelloWorld");
 
 app.Run();

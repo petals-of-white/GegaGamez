@@ -3,7 +3,7 @@ using GegaGamez.WebUI.Models.Auth;
 
 namespace GegaGamez.WebUI.Models.Validation
 {
-    public class LoginValidator: AbstractValidator<LoginUserModel>
+    public class LoginValidator : AbstractValidator<LoginUserModel>
     {
         public LoginValidator()
         {

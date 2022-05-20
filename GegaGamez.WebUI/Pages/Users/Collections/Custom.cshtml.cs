@@ -43,7 +43,7 @@ namespace GegaGamez.WebUI.Pages.Users.Collections
 
                 Collection = _mapper.Map<UserCollectionModel>(collection);
 
-                GamesInCollection = _mapper.Map<List<GameModel>>((HashSet<Game>)collection.Games);
+                GamesInCollection = _mapper.Map<List<GameModel>>((HashSet<Game>) collection.Games);
 
                 return Page();
             }

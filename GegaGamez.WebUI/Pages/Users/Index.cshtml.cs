@@ -64,27 +64,6 @@ public class IndexModel : PageModel
         }
     }
 
-    public async Task<IActionResult> OnPostUpdateProfileAsync()
-    {
-        var permissionToUpdateProfile = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
-        bool areTheSameUser = new AuthDisplayHelper(User).UserId == UpdatedUserProfile.Id;
-
-        if (permissionToUpdateProfile.Succeeded && areTheSameUser)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = _mapper.Map<User>(UpdatedUserProfile);
-                _userService.UpdateUser(user);
-            }
-            else
-                ViewData ["InfoMessage"] = "Wrong update info. Please try again";
-
-            return OnGet(UpdatedUserProfile.Id);
-        }
-        else
-            return Unauthorized();
-    }
-
     public async Task<IActionResult> OnPostDeleteAccountAsync(int userId)
     {
         var permissionToDeleteAccount = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
@@ -96,6 +75,27 @@ public class IndexModel : PageModel
             _userService.DeleteUser(userToDelete);
             await HttpContext.SignOutAsync();
             return RedirectToPage("/Games/Search");
+        }
+        else
+            return Unauthorized();
+    }
+
+    public async Task<IActionResult> OnPostUpdateProfileAsync()
+    {
+        var isAuthenticated = User.IsAuthenticated();
+        bool areTheSameUser = User.GetId() == UpdatedUserProfile.Id;
+
+        if (isAuthenticated && areTheSameUser)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _mapper.Map<User>(UpdatedUserProfile);
+                _userService.UpdateUser(user);
+            }
+            else
+                ViewData ["InfoMessage"] = "Wrong update info. Please try again";
+
+            return OnGet(UpdatedUserProfile.Id);
         }
         else
             return Unauthorized();

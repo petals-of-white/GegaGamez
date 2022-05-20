@@ -43,7 +43,7 @@ public class User_Tests
             .Verifiable();
 
         // Act
-        var postResult = await _userPage.OnPostUpdateProfile();
+        var postResult = await _userPage.OnPostUpdateProfileAsync();
 
         // Assert
         _authServiceMock.Verify();
@@ -64,7 +64,7 @@ public class User_Tests
             .Returns(AuthorizationResult.Failed()).Verifiable();
 
         // Act
-        var postResult = await _userPage.OnPostUpdateProfile();
+        var postResult = await _userPage.OnPostUpdateProfileAsync();
 
         // Assert
         _authServiceMock.Verify();

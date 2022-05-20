@@ -49,6 +49,7 @@ public class AddModel : PageModel
         if (ModelState.IsValid)
         {
             var newGame = _mapper.Map<Game>(NewGame);
+
             try
             {
                 _gameService.CreateGame(newGame);
