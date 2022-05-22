@@ -80,7 +80,7 @@ public class IndexModel : PageModel
             return Unauthorized();
     }
 
-    public async Task<IActionResult> OnPostUpdateProfileAsync()
+    public IActionResult OnPostUpdateProfileAsync()
     {
         var isAuthenticated = User.IsAuthenticated();
         bool areTheSameUser = User.GetId() == UpdatedUserProfile.Id;
