@@ -2,8 +2,10 @@ using AutoMapper;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
+using GegaGamez.WebUI.Models.ModifyModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GegaGamez.WebUI.Pages.Users.Collections
 {
@@ -27,8 +29,18 @@ namespace GegaGamez.WebUI.Pages.Users.Collections
             _defaultCollectionTypes = _mapper.Map<ICollection<DefaultCollectionTypeModel>>(defaultCollectionTypes);
         }
 
+        public List<SelectListItem>? AvailableDefaultCollections { get; set; }
+        public List<SelectListItem>? AvailableUserCollections { get; set; }
+
         public DefaultCollectionModel Collection { get; set; }
+
         public List<GameModel> GamesInCollection { get; set; }
+
+        [BindProperty]
+        public GameToDefaultCollectionModel GameToDefaultCollection { get; set; }
+
+        [BindProperty]
+        public GameToUserCollectionModel GameToUserCollection { get; set; }
 
         public IActionResult OnGet(int userId, string defaultCollection)
         {
