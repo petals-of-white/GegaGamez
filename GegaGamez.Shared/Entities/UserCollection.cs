@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.Shared.Entities;
 
-public partial class UserCollection
+public partial class UserCollection : IEntity
 {
     public UserCollection()
     {

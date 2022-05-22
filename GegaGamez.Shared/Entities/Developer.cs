@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.Shared.Entities
 {
-    public partial class Developer
+    public partial class Developer : IEntity
     {
         public Developer()
         {

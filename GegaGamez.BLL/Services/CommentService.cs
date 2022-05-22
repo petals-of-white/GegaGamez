@@ -1,4 +1,5 @@
-﻿using GegaGamez.Shared.DataAccess;
+﻿using System.Linq.Expressions;
+using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
 
@@ -7,6 +8,7 @@ namespace GegaGamez.BLL.Services;
 public class CommentService : ICommentService, IDisposable
 {
     private readonly IUnitOfWork _db;
+    private Expression<Func<Comment, object>> [] _commentInclues = { c=>c.User, c=>c.Game};
 
     public CommentService(IUnitOfWork db)
     {
@@ -28,10 +30,10 @@ public class CommentService : ICommentService, IDisposable
 
     public void Dispose() => _db.Dispose();
 
-    public IEnumerable<Comment> FindAll() => _db.Comments.AsEnumerable();
+    public IEnumerable<Comment> FindAll() => _db.Comments.AsEnumerable(_commentInclues);
 
-    public Comment? GetById(int id) => _db.Comments.Get(id);
+    public Comment? GetById(int id) => _db.Comments.Get(id, _commentInclues);
 
     public IEnumerable<Comment> GetGameComments(Game game) =>
-        _db.Comments.FindAll(c => c.GameId == game.Id);
+        _db.Comments.FindAll(c => c.GameId == game.Id, _commentInclues);
 }

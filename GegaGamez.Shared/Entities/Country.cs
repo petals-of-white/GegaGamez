@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.Shared.Entities;
 
-public partial class Country
+public partial class Country : IEntity
 {
     public Country()
     {

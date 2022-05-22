@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.Shared.Entities;
 
-public partial class Game
+public partial class Game : IEntity
 {
     public Game()
     {
