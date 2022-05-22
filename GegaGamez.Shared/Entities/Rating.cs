@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.Shared.Entities;
 
-public partial class Rating
+public partial class Rating : IEntity
 {
     public int Id { get; set; }
     public int UserId { get; set; }

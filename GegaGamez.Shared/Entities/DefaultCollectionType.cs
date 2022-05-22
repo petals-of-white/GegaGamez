@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.Shared.Entities;
 
-public partial class DefaultCollectionType
+public partial class DefaultCollectionType : IEntity
 {
     public DefaultCollectionType()
     {

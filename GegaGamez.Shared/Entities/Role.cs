@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.Shared.Entities;
 
-public partial class Role
+public partial class Role : IEntity
 {
     public Role()
     {

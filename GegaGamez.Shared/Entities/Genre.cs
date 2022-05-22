@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.Shared.Entities;
 
-public partial class Genre
+public partial class Genre : IEntity
 {
     public Genre()
     {
