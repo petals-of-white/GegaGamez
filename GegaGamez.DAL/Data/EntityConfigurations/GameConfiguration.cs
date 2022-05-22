@@ -34,23 +34,23 @@ internal class GameConfiguration : IEntityTypeConfiguration<Game>
                 "GameGenre",
 
                 right => right
-                    .HasOne<Genre>()
+                    .HasOne(j => j.Genre)
                     .WithMany()
                     .HasForeignKey(j => j.GenreId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Games_Genres_GenreID"),
 
                 left => left
-                    .HasOne<Game>()
+                    .HasOne(j => j.Game)
                     .WithMany()
                     .HasForeignKey(j => j.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Games_Genres_GameId"),
 
                 join =>
                 {
                     join.ToTable("Games_Genres")
-                        .HasKey(j => new { j.GenreId, j.GameId });
+                        .HasKey(j => new { j.GameId, j.GenreId });
 
                     join.HasIndex(j => new { j.GenreId }, "NIX_Games_Genres_GenreId");
                 }
