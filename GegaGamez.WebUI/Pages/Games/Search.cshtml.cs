@@ -12,12 +12,14 @@ public class SearchModel : PageModel
     private readonly IGameService _gameService;
     private readonly IGenreService _genreService;
     private readonly IMapper _mapper;
+    private readonly IRatingService _ratingService;
 
-    public SearchModel(IGameService gameService, IGenreService genreService, IMapper mapper)
+    public SearchModel(IGameService gameService, IGenreService genreService, IMapper mapper, IRatingService ratingService)
     {
         _gameService = gameService;
         _genreService = genreService;
         _mapper = mapper;
+        _ratingService = ratingService;
     }
 
     public List<GenreModel> AvailableGenres { get; set; } = new();
@@ -40,46 +42,24 @@ public class SearchModel : PageModel
         IEnumerable<Game> games;
 
         if (string.IsNullOrWhiteSpace(GameTitle) && ByGenre.Count == 0)
-        {
             games = _gameService.FindAll();
-        }
         else
-        {
             games = _gameService.Find(GameTitle, ByGenre.Select(gId => new Genre { Id = gId }).ToArray());
-        }
 
+        List<byte?> avgScores = new() { };
         foreach (var game in games)
         {
             game.Genres = _genreService.GetGameGenres(game).ToHashSet();
+            avgScores.Add(_ratingService.GetAverageRatingScore(game));
         }
 
         Games = _mapper.Map<List<GameModel>>(games);
 
-        //IEnumerable<Game> games;
-        //if (string.IsNullOrWhiteSpace(GameTitle))
-        //{
-        //    games = _gameService.FindAll();
-        //}
-        //else
-        //{
-        //    //games = _gameService.FindByTitle(GameTitle);
-        //    games = _gameService.Find(GameTitle);
-        //}
+        for (var i = 0; i< avgScores.Count; i++)
+        {
+            Games [i].AvgRatingScore = avgScores [i];
+        }
 
-        // fill genres for each game
-        //foreach (var game in games)
-        //{
-        //    game.Genres = _genreService.GetGameGenres(game).ToHashSet();
-        //}
-
-        /*
-        // filter games by genre
-        games = (from game in games
-                 where game.Genres.Select(genre => genre.Id).ToHashSet().IsSupersetOf(ByGenre)
-                 select game);
-        */
-
-        //Games = _mapper.Map<List<GameModel>>(games);
     }
 
     public void OnPost()

@@ -2,12 +2,8 @@
 @using GegaGamez.WebUI.Security
 @model GegaGamez.WebUI.Pages.Games.IndexModel
 @{
-    //AuthDisplayHelper authHelper = new(User);
-
-    // bool authenticated = authHelper.IsAuthenticated;
     bool authenticated = User.IsAuthenticated();
 
-    //int? userId = authHelper.UserId;
     int? userId = User.GetId();
 
     bool isAdmin = User.IsAdmin();
@@ -62,7 +58,7 @@
            if (isAdmin)
             {
                 <button type="button" class="btn-contrast rounded" onclick="showDeleteGameModal()">Delete game</button>
-                <a class="btn-contrast rounded" asp-page="/Games/Update" asp-route-id=@Model.Game.Id>Remove the game</a>   
+                <a class="btn-contrast rounded" asp-page="/Games/Update" asp-route-id=@Model.Game.Id>Edit game</a>   
             }
         }
     </section>
