@@ -1,4 +1,5 @@
-﻿using GegaGamez.BLL.Services;
+﻿using EntityFramework.Exceptions.SqlServer;
+using GegaGamez.BLL.Services;
 using GegaGamez.DAL;
 using GegaGamez.DAL.Data;
 using GegaGamez.Shared.DataAccess;
@@ -22,7 +23,10 @@ namespace GegaGamez.BLL
             var connectionString = config.GetConnectionString("GegaGamezDev");
 
             // EFCore SqlServer
-            services.AddSqlServer<GegaGamezContext>(connectionString,optionsAction: builder=>builder.EnableSensitiveDataLogging());
+            services.AddSqlServer<GegaGamezContext>(connectionString, optionsAction: builder => {
+                builder.EnableSensitiveDataLogging();
+                builder.UseExceptionProcessor();
+            });
 
             // UoW implementation
             services.AddScoped<IUnitOfWork, UnitOfWork>();
