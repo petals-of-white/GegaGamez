@@ -31,7 +31,7 @@ public class User_Tests
     }
 
     [Fact]
-    public async Task AuthroziedUser_ReturnsPageResult()
+    public void AuthroziedUser_ReturnsPageResult()
     {
         // Arrange
         _authServiceMock.Setup(aus => aus.AuthorizeAsync(
@@ -43,7 +43,7 @@ public class User_Tests
             .Verifiable();
 
         // Act
-        var postResult = await _userPage.OnPostUpdateProfileAsync();
+        var postResult = _userPage.OnPostUpdateProfile();
 
         // Assert
         _authServiceMock.Verify();
@@ -51,7 +51,7 @@ public class User_Tests
     }
 
     [Fact]
-    public async Task UnauthroziedUser_ReturnsUnauthorizedResult()
+    public void UnauthroziedUser_ReturnsUnauthorizedResult()
     {
         /*(auS => auS.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()).Result)*/
 
@@ -64,7 +64,7 @@ public class User_Tests
             .Returns(AuthorizationResult.Failed()).Verifiable();
 
         // Act
-        var postResult = await _userPage.OnPostUpdateProfileAsync();
+        var postResult = _userPage.OnPostUpdateProfile();
 
         // Assert
         _authServiceMock.Verify();
