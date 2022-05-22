@@ -3,8 +3,6 @@
 public struct DefaultCollectionModel
 {
     public int Id { get; set; }
-
-    //public int UserId { get; set; }
-    //public int DefaultCollectionTypeId { get; set; }
+    public UserModel User { get; set; }
     public DefaultCollectionTypeModel Type { get; set; }
 }

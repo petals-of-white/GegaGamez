@@ -127,13 +127,10 @@
 
 <!-- Game to Collection modal -->
 <form asp-page-handler="MoveGameToCollection" method="post" id="move-game-to-collection-modal" class="popup-interactive bg-secondary border-primary">
-	@*<input asp-for value=@Model.Game.Id />*@
-    <h3 class="font-contrast">
-        Select collection:
-    </h3>
+    <h3 class="font-contrast">Select collection:</h3>
     <input asp-for=GameToDefaultCollection.GameId value=@Model.Game.Id readonly hidden />
     <input asp-for=GameToUserCollection.GameId value=@Model.Game.Id readonly hidden />
-    <section class="main-something">
+    <section title="Select collection..." class="main-something">
         <div>
             <select size="5" asp-for=GameToDefaultCollection.CollectionId asp-items=@Model.AvailableDefaultCollections></select>
         </div>
@@ -145,7 +142,6 @@
         <button type="submit" class="borderless">Ok</button>
         <button type="button" onclick="hideCollectionModal()" class="btn-contrast rounded">Cancel</button>
     </section>
-
 </form>
 
 <!-- Rate Game modal -->
