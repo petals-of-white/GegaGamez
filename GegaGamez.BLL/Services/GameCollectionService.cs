@@ -1,6 +1,6 @@
-﻿using GegaGamez.Shared.DataAccess;
+﻿using System.Linq.Expressions;
+using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
-using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 
 namespace GegaGamez.BLL.Services;
@@ -8,6 +8,8 @@ namespace GegaGamez.BLL.Services;
 public class GameCollectionService : IDisposable, IGameCollectionService
 {
     private readonly IUnitOfWork _db;
+    private Expression<Func<DefaultCollection, object>> [] _dcIncludes = { dc => dc.DefaultCollectionType, dc => dc.User };
+    private Expression<Func<UserCollection, object>> [] _ucIncludes = { uc => uc.User };
 
     public GameCollectionService(IUnitOfWork db)
     {
@@ -44,17 +46,20 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
     public void Dispose() => _db.Dispose();
 
-    public DefaultCollection? GetDefaultCollectionById(int id) => _db.DefaultCollections.Get(id);
+    public DefaultCollection? GetDefaultCollectionById(int id) =>
+        _db.DefaultCollections.Get(id, _dcIncludes);
 
-    public IEnumerable<DefaultCollectionType> GetDefaultCollectionTypes() => _db.DefaultCollectionTypes.AsEnumerable();
+    public IEnumerable<DefaultCollectionType> GetDefaultCollectionTypes() =>
+        _db.DefaultCollectionTypes.AsEnumerable();
 
     public IEnumerable<DefaultCollection> GetDefaultColletionsForUser(User user) =>
-        _db.DefaultCollections.FindAll(dc => dc.UserId == user.Id);
+        _db.DefaultCollections.FindAll(dc => dc.UserId == user.Id, _dcIncludes);
 
-    public UserCollection? GetUserCollectionById(int id) => _db.UserCollections.Get(id);
+    public UserCollection? GetUserCollectionById(int id) =>
+        _db.UserCollections.Get(id, _ucIncludes);
 
     public IEnumerable<UserCollection> GetUserCollectionsForUser(User user) =>
-        _db.UserCollections.FindAll(uc => uc.UserId == user.Id);
+        _db.UserCollections.FindAll(uc => uc.UserId == user.Id, _ucIncludes);
 
     public void RemoveGame(DefaultCollection defaultCollection, Game game)
     {

@@ -1,4 +1,5 @@
-﻿using GegaGamez.Shared.DataAccess;
+﻿using System.Linq.Expressions;
+using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
 
@@ -7,6 +8,7 @@ namespace GegaGamez.BLL.Services;
 public class RatingService : IRatingService, IDisposable
 {
     private readonly IUnitOfWork _db;
+    private Expression<Func<Rating, object>> [] _ratingIncludes = {r=>r.User, r=>r.Game};
 
     public RatingService(IUnitOfWork db)
     {
@@ -18,7 +20,7 @@ public class RatingService : IRatingService, IDisposable
     public byte? GetAverageRatingScore(Game game) => _db.Ratings.GetAvgRating(game);
 
     public Rating? GetUserRating(User user, Game game) =>
-        _db.Ratings.FindAll(r => r.UserId == user.Id && r.GameId == game.Id)
+        _db.Ratings.FindAll(r => r.UserId == user.Id && r.GameId == game.Id, _ratingIncludes)
         .SingleOrDefault();
 
     public void RateGame(Rating rating)

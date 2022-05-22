@@ -8,6 +8,8 @@ namespace GegaGamez.BLL.Services;
 public class GameService : IDisposable, IGameService
 {
     private readonly IUnitOfWork _db;
+    private Expression<Func<Game, object>> [] _gameIncludes = { g=>g.Developer, g=>g.Genres};
+
 
     private List<Genre> LoadActualGenres(List<Genre> genres)
     {
@@ -44,6 +46,26 @@ public class GameService : IDisposable, IGameService
 
     public IEnumerable<Game> Find(string? byTitle, params Genre [] byGenre)
     {
+        Expression<Func<Game, bool>> filter = g => true;
+
+        if (string.IsNullOrWhiteSpace(byTitle) == false)
+            filter = filter.AndAlso(g => g.Title.ToLower().Contains(byTitle.ToLower()));
+
+        if (byGenre is not null && byGenre.Length != 0)
+        {
+            var filterGenreIds = byGenre.Select(genre => genre.Id);
+            foreach (var filterGenreId in filterGenreIds)
+            {
+                filter = filter.AndAlso(g => g.Genres.Select(g => g.Id).Contains(filterGenreId));
+            }
+            //filter = filter.AndAlso(g => filterGenreIds.All(gid => g.Genres.Select(gr => gr.Id).Contains(gid)));
+        }
+        return _db.Games.FindAll(filter, _gameIncludes);
+    }
+
+    /*
+    public IEnumerable<Game> Find(string? byTitle, params Genre [] byGenre)
+    {
         Expression<Func<Game, bool>> filter;
 
         IEnumerable<Game> filteredGames;
@@ -72,20 +94,26 @@ public class GameService : IDisposable, IGameService
 
         return filteredGames;
     }
+    */
 
-    public IEnumerable<Game> FindAll() => _db.Games.AsEnumerable();
+    public IEnumerable<Game> FindAll() => _db.Games.AsEnumerable(_gameIncludes);
 
-    public Game? GetById(int id) => _db.Games.Get(id);
+    public Game? GetById(int id) => _db.Games.Get(id, _gameIncludes);
 
     public IEnumerable<Game> GetDeveloperGames(Developer dev) =>
-        _db.Games.FindAll(g => g.DeveloperId == dev.Id);
+        _db.Games.FindAll(g => g.DeveloperId == dev.Id, _gameIncludes);
 
     public IEnumerable<Game> GetGamesInCollection(UserCollection userCollection) =>
-            _db.Games.FindAll(g => g.UserCollections.Select(uc => uc.Id).Contains(userCollection.Id));
+            _db.Games.FindAll(g => g.UserCollections.Select(uc => uc.Id).Contains(userCollection.Id), _gameIncludes);
 
     public IEnumerable<Game> GetGamesInCollection(DefaultCollection defaultCollection) =>
-        _db.Games.FindAll(g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id));
+        _db.Games.FindAll(g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id), _gameIncludes);
 
+    /// <summary>
+    /// ?????
+    /// </summary>
+    /// <param name="game"></param>
+    /// <exception cref="KeyNotFoundException"></exception>
     public void UpdateGame(Game game)
     {
         var actualGame = _db.Games.Get(game.Id);
@@ -98,9 +126,16 @@ public class GameService : IDisposable, IGameService
             actualGame.Title = game.Title;
             actualGame.DeveloperId = game.DeveloperId;
             actualGame.ReleaseDate = game.ReleaseDate;
+
+            actualGame.Genres = new HashSet<Genre>();
+
+            //_db.Update(actualGame);
+
+            _db.Save();
+
             actualGame.Genres = LoadActualGenres(game.Genres.ToList());
 
-            _db.Update(actualGame);
+            //_db.Update(actualGame);
 
             _db.Save();
         }
