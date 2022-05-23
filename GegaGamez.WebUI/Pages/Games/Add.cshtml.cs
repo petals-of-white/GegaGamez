@@ -3,6 +3,7 @@ using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.ModifyModels;
+using GegaGamez.WebUI.PageHelpers;
 using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -63,7 +64,7 @@ public class AddModel : PageModel
             {
                 _logger.LogWarning(ex, "Failed to create a new game.");
 
-                ViewData ["InfoMessage"] = "Failed to create a new game. It most likely aleady exists";
+                TempData [Messages.InfoKey] = "Failed to create a new game. It most likely aleady exists";
                 return RedirectToPage();
             }
             return RedirectToPage("/Games/Index", new { id = newGame.Id });
@@ -72,7 +73,7 @@ public class AddModel : PageModel
         {
             _logger.LogDebug($"{ModelState.ErrorCount} validation errors.");
 
-            ViewData ["InfoMessage"] = "Wrong input. Please check again.";
+            TempData [Messages.InfoKey] = "Wrong input. Please check again.";
             return RedirectToPage();
         }
     }

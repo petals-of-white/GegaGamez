@@ -1,4 +1,5 @@
-﻿@using GegaGamez.WebUI.Security
+﻿@using GegaGamez.WebUI.PageHelpers
+@using GegaGamez.WebUI.Security
 @{
 
     bool authenticated = User.IsAuthenticated();
@@ -19,6 +20,9 @@
         return className;
 
     }
+
+    object? infoMessageContent;
+    bool showInfoMessage = TempData.TryGetValue(Messages.InfoKey, out infoMessageContent);
 }
 
 <!DOCTYPE html>
@@ -90,37 +94,24 @@
         Maksym Syvash 2022 (c)
     </footer>
 
-    <!--<header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">GegaGamez.WebUI</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header> 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-    -->
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @if(showInfoMessage)
+    {
+        <script>
+            closeInfoMessageShortly();
+        </script>
+        <div class="info-modal" id="info-message">
+            <span>@((string?)infoMessageContent)</span>
+            <button onclick="closeInfoMessage()" type="button" class="borderless">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    }
+
+
     
 
     @await RenderSectionAsync("Scripts", required: false)

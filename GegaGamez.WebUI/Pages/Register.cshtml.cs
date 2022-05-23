@@ -4,6 +4,7 @@ using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Auth;
 using GegaGamez.WebUI.Models.Display;
+using GegaGamez.WebUI.PageHelpers;
 using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -60,7 +61,7 @@ namespace GegaGamez.WebUI.Pages
                     catch (UniqueEntityException ex)
                     {
                         _logger.LogWarning(ex, $"Failed to create a user {user.Username} due to unique constraint violation.");
-                        ViewData ["InfoMessage"] = "User alreadye exists. Please choose a different username";
+                        TempData [Messages.InfoKey] = "User alreadye exists. Please choose a different username";
 
                         return Page();
                     }
@@ -70,14 +71,14 @@ namespace GegaGamez.WebUI.Pages
                     await HttpContext.SignInAsync(principal, properties);
 
                     _logger.LogInformation($"User {User.GetId()} has signed in.");
-                    ViewData ["InfoMessage"] = "Successfully signed out";
+                    TempData [Messages.InfoKey] = "Successfully signed in";
 
                     return RedirectToPage("/Games/Search");
                 }
                 else
                 {
                     _logger.LogDebug($"Validation errors: {ModelState.ErrorCount}");
-                    ViewData ["InfoMessage"] = "Validation erorrs";
+                    TempData [Messages.InfoKey] = "Validation erorrs";
 
                     return RedirectToPage("/Register");
                 }

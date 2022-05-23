@@ -3,6 +3,7 @@ using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.ModifyModels;
+using GegaGamez.WebUI.PageHelpers;
 using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -99,14 +100,14 @@ public class UpdateModel : PageModel
             catch (UniqueEntityException ex)
             {
                 _logger.LogWarning(ex, $"Cannot update the game {updatedGame.Id}");
-                ViewData ["InfoMessage"] = "Failed to update the game. Please try again";
+                TempData [Messages.InfoKey] = "Failed to update the game. Please try again";
 
                 return RedirectToPage(new { updatedGame.Id });
             }
             catch(EntityNotFoundException ex)
             {
                 _logger.LogWarning(ex, $"Cannot update the game {updatedGame.Id}");
-                ViewData ["InfoMessage"] = "Failed to update the game. Please try again";
+                TempData [Messages.InfoKey] = "Failed to update the game. Please try again";
 
                 return RedirectToPage(new { updatedGame.Id });
             }
@@ -114,7 +115,7 @@ public class UpdateModel : PageModel
         else
         {
             _logger.LogDebug($"Validation errors: {ModelState.ErrorCount}");
-            ViewData ["InfoMessage"] = "Wrong input. Please check";
+            TempData [Messages.InfoKey] = "Wrong input. Please check";
 
             return RedirectToPage(new { id = UpdatedGame.Id });
         }

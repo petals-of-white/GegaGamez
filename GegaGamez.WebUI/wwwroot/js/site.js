@@ -105,3 +105,14 @@ function hideDeleteGameModal()
     const deleteGameModal = document.getElementById("delete-game-modal");
     deleteGameModal.classList.remove(modalOpenedClass);
 }
+
+function closeInfoMessageShortly()
+{
+    setTimeout(closeInfoMessage, 2000)
+}
+function closeInfoMessage()
+{
+    const infoMsg = document.getElementById("info-message");
+    infoMsg.classList.add("closed");
+}
+

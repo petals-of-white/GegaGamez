@@ -2,6 +2,7 @@ using AutoMapper;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Auth;
 using GegaGamez.WebUI.Models.Display;
+using GegaGamez.WebUI.PageHelpers;
 using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +39,7 @@ namespace GegaGamez.WebUI.Pages
             else
             {
                 _logger.LogInformation("Authenticated user tried to access login page.");
-                ViewData ["InfoMessage"] = "You can not do that because you are already logged in!";
+                TempData [Messages.InfoKey] = "You can not do that because you are already logged in!";
                 
                 return Forbid();
             }
@@ -55,7 +56,7 @@ namespace GegaGamez.WebUI.Pages
                     if (user is null)
                     {
                         _logger.LogInformation($"User with username {LoginForm.Username} was not found.");
-                        ViewData ["InfoMessage"] = $"User with username {LoginForm.Username} was not found.";
+                        TempData [Messages.InfoKey] = $"User with username {LoginForm.Username} was not found.";
 
                         return RedirectToPage("/Login");
                     }
@@ -64,7 +65,7 @@ namespace GegaGamez.WebUI.Pages
                         if (user.Password != LoginForm.Password)
                         {
                             _logger.LogInformation($"Incorrect password for user {user.Username}");
-                            ViewData ["InfoMessage"] = $"Incorrect password for user {user.Username}";
+                            TempData [Messages.InfoKey] = $"Incorrect password for user {user.Username}";
 
                             return RedirectToPage("/Login");
                         }
@@ -75,7 +76,7 @@ namespace GegaGamez.WebUI.Pages
                             await HttpContext.SignInAsync(principal, properties);
 
                             _logger.LogInformation($"Successfully signed in user {user.Username}");
-                            ViewData ["InfoMessage"] = "Successfully loged in.";
+                            TempData [Messages.InfoKey] = "Successfully loged in.";
 
                             return RedirectToPage("/Games/Search");
                         }
@@ -84,14 +85,14 @@ namespace GegaGamez.WebUI.Pages
                 else
                 {
                     _logger.LogInformation($"Validation Errors: {ModelState.ErrorCount}");
-                    ViewData ["InfoMessage"] = "validation errors.";
+                    TempData [Messages.InfoKey] = "validation errors.";
 
                     return RedirectToPage("/Login");
                 }
             }
             else
             {
-                ViewData ["InfoMessage"] = "You can not do that because you are already logged in!";
+                TempData [Messages.InfoKey] = "You can not do that because you are already logged in!";
 
                 return Forbid();
             }
