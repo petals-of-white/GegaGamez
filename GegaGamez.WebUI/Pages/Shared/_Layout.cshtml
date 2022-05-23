@@ -1,12 +1,9 @@
 ﻿@using GegaGamez.WebUI.Security
 @{
-    
-    AuthDisplayHelper authHelper = new(User);
 
+    bool authenticated = User.IsAuthenticated();
 
-    bool loggedIn = authHelper.IsAuthenticated;
-
-    int? userId = authHelper.UserId;
+    int? userId = User.GetId();
 
     string NavLinkShouldBeSelected(string link)
     {
@@ -52,7 +49,7 @@
                 </h1>
             </a>
 
-            @if(loggedIn == true)
+            @if(authenticated == true)
             {
                 <a class="@NavLinkShouldBeSelected("profile")" asp-page="/Users/Index" asp-route-id="@userId">Profile</a>
             }
@@ -73,7 +70,7 @@
             }
             
 
-            @if(loggedIn == true)
+            @if(authenticated == true)
             {
                 <a asp-page="/Logout" class="btn-contrast rounded">Logout</a>
             }

@@ -66,10 +66,11 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnPostDeleteAccountAsync(int userId)
     {
-        var permissionToDeleteAccount = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
-        bool areTheSameUser = new AuthDisplayHelper(User).UserId == userId;
+        //var isAuthenticated = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
+        var isAuthenticated = User.IsAuthenticated();
+        bool areTheSameUser = User.GetId() == userId;
 
-        if (permissionToDeleteAccount.Succeeded && areTheSameUser)
+        if (isAuthenticated && areTheSameUser)
         {
             var userToDelete = new User { Id = userId };
             _userService.DeleteUser(userToDelete);

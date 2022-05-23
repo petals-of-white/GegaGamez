@@ -1,14 +1,17 @@
 ﻿using System.Linq.Expressions;
+using EntityFramework.Exceptions.Common;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.BLL.Services;
 
 public class UserService : IDisposable, IUserService
 {
     private readonly IUnitOfWork _db;
-    private Expression<Func<User, object>> [] _userIncludes = {u=>u.Country!, u=>u.Roles};
+    private readonly Expression<Func<User, object>> [] _userIncludes = { u => u.Country!, u => u.Roles };
 
     /// <summary>
     /// Generate default collections, usually 4 of them
@@ -46,10 +49,9 @@ public class UserService : IDisposable, IUserService
             _db.Users.Add(newUser);
             _db.Save();
         }
-        catch (Exception)
+        catch (UniqueConstraintException ex)
         {
-            // log ?
-            throw;
+            throw new EntityNotFoundException(newUser, ex);
         }
     }
 
@@ -60,12 +62,10 @@ public class UserService : IDisposable, IUserService
             _db.Users.Remove(user);
             _db.Save();
         }
-        catch (Exception)
+        catch (DbUpdateConcurrencyException ex)
         {
-            // log ?
-            throw;
+            throw new EntityNotFoundException(user, ex);
         }
-
     }
 
     public void Dispose() => _db.Dispose();
@@ -82,18 +82,34 @@ public class UserService : IDisposable, IUserService
 
     public void UpdateUser(User user)
     {
-        var actualUser = _db.Users.Get(user.Id);
+        var actualUser = _db.Users.Get(user.Id)
+            ?? throw new EntityNotFoundException(user, null);
 
-        if (actualUser is null)
-            throw new KeyNotFoundException("User wasn't found");
-        else
+
+        var actualCountry = user.CountryId.HasValue
+            ? _db.Countries.Get(user.CountryId.Value)
+            : null;
+
+
+        actualUser.About = user.About;
+
+        if (user.CountryId.HasValue)
         {
-            actualUser.About = user.About;
-            actualUser.CountryId = user.CountryId;
-            actualUser.Country = user.Country;
+            if (actualCountry is not null)
+                actualUser.CountryId = actualCountry.Id;
+            else
+                throw new EntityNotFoundException(new Country { Id = user.CountryId.Value }, null);
+        }
 
-            _db.Update(actualUser);
+        try
+        {
+            //_db.Update(actualUser);
             _db.Save();
+        }
+        catch (UniqueConstraintException ex)
+        {
+            var msg = $"Can Update User {user.Id} because it or it's member violate unique constraint";
+            throw new UniqueEntityException(msg, ex);
         }
     }
 }

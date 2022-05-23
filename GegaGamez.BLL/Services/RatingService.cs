@@ -1,14 +1,17 @@
 ﻿using System.Linq.Expressions;
+using EntityFramework.Exceptions.Common;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.BLL.Services;
 
 public class RatingService : IRatingService, IDisposable
 {
     private readonly IUnitOfWork _db;
-    private Expression<Func<Rating, object>> [] _ratingIncludes = {r=>r.User, r=>r.Game};
+    private readonly Expression<Func<Rating, object>> [] _ratingIncludes = { r => r.User, r => r.Game };
 
     public RatingService(IUnitOfWork db)
     {
@@ -25,6 +28,11 @@ public class RatingService : IRatingService, IDisposable
 
     public void RateGame(Rating rating)
     {
+        var actualGame = _db.Games.Get(rating.GameId)
+            ?? throw new EntityNotFoundException(rating, null);
+        var actualUser = _db.Users.Get(rating.UserId)
+            ?? throw new EntityNotFoundException(rating, null);
+
         Rating? actualRating = _db.Ratings.FindAll(r => r.UserId == rating.UserId && r.GameId == rating.GameId)
             .SingleOrDefault();
 
@@ -36,12 +44,26 @@ public class RatingService : IRatingService, IDisposable
             _db.Update(actualRating);
         }
 
-        _db.Save();
+        try
+        {
+            _db.Save();
+        }
+        catch (UniqueConstraintException ex)
+        {
+            throw new UniqueEntityException(rating, ex);
+        }
     }
 
     public void UnrateGame(Rating rating)
     {
-        _db.Ratings.Remove(rating);
-        _db.Save();
+        try
+        {
+            _db.Ratings.Remove(rating);
+            _db.Save();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw new EntityNotFoundException(rating, ex);
+        }
     }
 }

@@ -94,9 +94,7 @@ public class IndexModel : PageModel
             GameGenres = _mapper.Map<List<GenreModel>>((HashSet<Genre>) requestedGame.Genres);
             Comments = _mapper.Map<List<CommentModel>>((HashSet<Comment>) requestedGame.Comments);
 
-            AuthDisplayHelper authHelper = new(User);
-
-            int? userId = authHelper.UserId;
+            int? userId = User.GetId();
 
             if (userId is not null)
             {
