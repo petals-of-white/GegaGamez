@@ -2,7 +2,7 @@
 
 namespace GegaGamez.BLL;
 
-public static class ExpressionExtensions
+internal static class ExpressionExtensions
 {
     public static Expression<Func<T, bool>> Combine<T>(Expression<Func<T, bool>> leftExpression, Expression<Func<T, bool>> rightExpression, Func<Expression, Expression, BinaryExpression> combineOperator)
     {
@@ -19,8 +19,8 @@ public static class ExpressionExtensions
 
     private class ReplaceParameterVisitor : ExpressionVisitor
     {
-        private ParameterExpression _newParameter;
-        private ParameterExpression _oldParameter;
+        private readonly ParameterExpression _newParameter;
+        private readonly ParameterExpression _oldParameter;
 
         protected override Expression VisitParameter(ParameterExpression node)
         {

@@ -3,7 +3,6 @@ using GegaGamez.DAL.Repositories;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.DataAccess.Repositories;
 using GegaGamez.Shared.Exceptions;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.DAL;
@@ -72,35 +71,16 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     /// <exception cref="DatabaseException"></exception>
     public int Save()
     {
-        try
-        {
-            return _dbContext.SaveChanges();
-        }
-        catch (DbUpdateException ex) when (ex.InnerException is SqlException)
-        {
-            throw new DatabaseException("An error occured while trying to update the db", ex);
-        }
+        return _dbContext.SaveChanges();
     }
 
     public Task<int> SaveAsync()
     {
-        try
-        {
-            return _dbContext.SaveChangesAsync();
-        }
-        catch (DbUpdateException ex) when (ex.InnerException is SqlException)
-        {
-            throw new DatabaseException("An error occured while trying to update the db", ex);
-        }
+        return _dbContext.SaveChangesAsync();
     }
 
     public void Update<TEntity>(TEntity entityToUpdate) where TEntity : class
     {
-        //if (_dbContext.Entry(entityToUpdate).State == EntityState.Detached)
-        //{
-            //_dbContext.Set<TEntity>().Attach(entityToUpdate);
-        //}
         _dbContext.Update<TEntity>(entityToUpdate);
-        //_dbContext.Entry(entityToUpdate).State = EntityState.Modified;
     }
 }

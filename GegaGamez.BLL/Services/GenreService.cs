@@ -8,7 +8,7 @@ namespace GegaGamez.BLL.Services;
 public class GenreService : IDisposable, IGenreService
 {
     private readonly IUnitOfWork _db;
-    private Expression<Func<Genre, object>> [] _genreIncludes = {};
+    private readonly Expression<Func<Genre, object>> [] _genreIncludes = {};
 
 
     public GenreService(IUnitOfWork db)

@@ -1,15 +1,17 @@
 ﻿using System.Linq.Expressions;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.BLL.Services;
 
 public class GameCollectionService : IDisposable, IGameCollectionService
 {
     private readonly IUnitOfWork _db;
-    private Expression<Func<DefaultCollection, object>> [] _dcIncludes = { dc => dc.DefaultCollectionType, dc => dc.User };
-    private Expression<Func<UserCollection, object>> [] _ucIncludes = { uc => uc.User };
+    private readonly Expression<Func<DefaultCollection, object>> [] _dcIncludes = { dc => dc.DefaultCollectionType, dc => dc.User };
+    private readonly Expression<Func<UserCollection, object>> [] _ucIncludes = { uc => uc.User };
 
     public GameCollectionService(IUnitOfWork db)
     {
@@ -18,30 +20,72 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
     public void AddGame(DefaultCollection defaultCollection, Game game)
     {
-        var actualGame = _db.Games.Get(game.Id);
-        var dc = _db.DefaultCollections.Get(defaultCollection.Id) ?? throw new ArgumentException("Entry was not found");
-        dc.Games.Add(actualGame);
-        _db.Save();
+        var actualGame = _db.Games.Get(game.Id)
+            ?? throw new EntityNotFoundException($"Game with id {game.Id} does not exist.");
+
+        var dc = _db.DefaultCollections.Get(defaultCollection.Id)
+            ?? throw new EntityNotFoundException($"Default Сollection with id {defaultCollection.Id} does not exist.");
+
+        try
+        {
+            dc.Games.Add(actualGame);
+            _db.Save();
+        }
+        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        {
+            var msg = $"A {typeof(Game).Name} with id {actualGame.Id} already exists in" +
+                $" {typeof(DefaultCollection).Name} with id {defaultCollection.Id}.";
+
+            throw new UniqueEntityException(msg, ex);
+        }
     }
 
     public void AddGame(UserCollection userCollection, Game game)
     {
-        var actualGame = _db.Games.Get(game.Id);
-        var uc = _db.UserCollections.Get(userCollection.Id) ?? throw new ArgumentException("Entry was not found");
-        uc.Games.Add(actualGame);
-        _db.Save();
+        var actualGame = _db.Games.Get(game.Id)
+            ?? throw new EntityNotFoundException($"Game with id {game.Id} does not exist.");
+        var uc = _db.UserCollections.Get(userCollection.Id)
+            ?? throw new EntityNotFoundException($"User Сollection with id {userCollection.Id} does not exist.");
+
+        try
+        {
+            uc.Games.Add(actualGame);
+            _db.Save();
+        }
+        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        {
+            var msg = $"A {typeof(Game).Name} with id {actualGame.Id} already exists in" +
+                $" {typeof(UserCollection).Name} with id {userCollection.Id}.";
+
+            throw new UniqueEntityException(msg, ex);
+        }
     }
 
     public void CreateUserCollection(UserCollection newCollection)
     {
-        _db.UserCollections.Add(newCollection);
-        _db.Save();
+        try
+        {
+            _db.UserCollections.Add(newCollection);
+            _db.Save();
+        }
+        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        {
+            throw new UniqueEntityException(newCollection, ex);
+        }
     }
 
     public void DeleteCollection(UserCollection userCollection)
     {
-        _db.UserCollections.Remove(userCollection);
-        _db.Save();
+        try
+        {
+            _db.UserCollections.Remove(userCollection);
+            _db.Save();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            var msg = $"Failed to remove UserCollection with id {userCollection.Id} because it doesn't exist. See the inner exception for details.";
+            throw new EntityNotFoundException(msg, ex);
+        }
     }
 
     public void Dispose() => _db.Dispose();
@@ -63,37 +107,50 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
     public void RemoveGame(DefaultCollection defaultCollection, Game game)
     {
-        var defaultCollectionEntity = _db.UserCollections.Get(defaultCollection.Id);
+        var defaultCollectionEntity = _db.UserCollections.Get(defaultCollection.Id)
+            ?? throw new EntityNotFoundException(defaultCollection, null);
 
-        var gameEntityToRemove = _db.Games.Get(game.Id);
-
-        if (defaultCollectionEntity is null || gameEntityToRemove is null)
-        {
-            throw new ArgumentException("A collection or game doesn't exist!");
-        }
+        var gameEntityToRemove = _db.Games.Get(game.Id)
+            ?? throw new EntityNotFoundException(game, null); ;
 
         defaultCollectionEntity.Games.Remove(gameEntityToRemove);
 
-        _db.Update(defaultCollectionEntity);
+        try
+        {
+            _db.Update(defaultCollectionEntity);
 
-        _db.Save();
+            _db.Save();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            var msg = $"Failed to remove Game (id: {game.Id}) from Default Collection (id: {defaultCollection.Id}). " +
+                $"See the inner exception for details.";
+
+            throw new EntityNotFoundException(msg, ex);
+        }
     }
 
     public void RemoveGame(UserCollection userCollection, Game game)
     {
-        var collection = _db.UserCollections.Get(userCollection.Id);
+        var collection = _db.UserCollections.Get(userCollection.Id)
+            ?? throw new EntityNotFoundException(userCollection, null);
 
-        var gameToRemove = _db.Games.Get(game.Id);
-
-        if (collection is null || gameToRemove is null)
-        {
-            throw new ArgumentException("A collection or game doesn't exist!");
-        }
+        var gameToRemove = _db.Games.Get(game.Id)
+            ?? throw new EntityNotFoundException(game, null);
 
         collection.Games.Remove(gameToRemove);
 
-        _db.Update(collection);
+        try
+        {
+            //_db.Update(collection);
+            _db.Save();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            var msg = $"Failed to remove Game (id: {game.Id}) from User Collection (id: {userCollection.Id}). " +
+                $"See the inner exception for details.";
 
-        _db.Save();
+            throw new EntityNotFoundException(msg, ex);
+        }
     }
 }

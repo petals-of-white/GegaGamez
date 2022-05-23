@@ -8,8 +8,13 @@ namespace GegaGamez.BLL.Services;
 public class DeveloperService : IDisposable, IDeveloperService
 {
     private readonly IUnitOfWork _db;
-    private Expression<Func<Developer, object>> [] _devIncludes = {};
+    private readonly Expression<Func<Developer, object>> [] _devIncludes = {};
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="db"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public DeveloperService(IUnitOfWork db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");

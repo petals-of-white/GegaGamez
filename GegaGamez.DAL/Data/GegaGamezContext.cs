@@ -36,6 +36,6 @@ public partial class GegaGamezContext : DbContext
     public virtual DbSet<Game> Games { get; set; } = null!;
     public virtual DbSet<Genre> Genres { get; set; } = null!;
     public virtual DbSet<Rating> Ratings { get; set; } = null!;
-    public virtual DbSet<User> Users { get; set; } = null!;
     public virtual DbSet<UserCollection> UserCollections { get; set; } = null!;
+    public virtual DbSet<User> Users { get; set; } = null!;
 }

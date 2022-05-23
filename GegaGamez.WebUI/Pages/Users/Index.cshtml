@@ -2,11 +2,11 @@
 @using GegaGamez.WebUI.Security
 @model IndexModel
 @{
-    AuthDisplayHelper authHelper = new(User);
 
-    bool logedIn = authHelper.IsAuthenticated;
 
-    bool isPageOwner = authHelper.IsAuthorized(Model.UserProfile!.Id);
+    bool authenticated = User.IsAuthenticated();
+
+    bool isPageOwner = User.GetId() == Model.UserProfile.Id;
 
     if (isPageOwner)
     {
@@ -39,7 +39,7 @@
         </section>
 
         <section id="profile-buttons" class="btn-group">
-            @if(logedIn && isPageOwner)
+            @if(authenticated && isPageOwner)
             {
                 <button onclick="showEditProfileModal()" type="button" class="btn-contrast rounded">Edit profile</button>
                 <button onclick="showDeleteAccountModal()" type="button" class="btn-contrast rounded font">Delete my profile</button>

@@ -1,15 +1,16 @@
 ﻿using System.Linq.Expressions;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.BLL.Services;
 
 public class GameService : IDisposable, IGameService
 {
     private readonly IUnitOfWork _db;
-    private Expression<Func<Game, object>> [] _gameIncludes = { g=>g.Developer, g=>g.Genres};
-
+    private readonly Expression<Func<Game, object>> [] _gameIncludes = { g => g.Developer, g => g.Genres };
 
     private List<Genre> LoadActualGenres(List<Genre> genres)
     {
@@ -32,14 +33,28 @@ public class GameService : IDisposable, IGameService
     public void CreateGame(Game game)
     {
         game.Genres = LoadActualGenres(game.Genres.ToList());
-        _db.Games.Add(game);
-        _db.Save();
+        try
+        {
+            _db.Games.Add(game);
+            _db.Save();
+        }
+        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        {
+            throw new UniqueEntityException(game, ex);
+        }
     }
 
     public void DeleteGame(Game game)
     {
-        _db.Games.Remove(game);
-        _db.Save();
+        try
+        {
+            _db.Games.Remove(game);
+            _db.Save();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw new EntityNotFoundException(game, ex);
+        }
     }
 
     public void Dispose() => _db.Dispose();
@@ -116,28 +131,27 @@ public class GameService : IDisposable, IGameService
     /// <exception cref="KeyNotFoundException"></exception>
     public void UpdateGame(Game game)
     {
-        var actualGame = _db.Games.Get(game.Id);
+        var actualGame = _db.Games.Get(game.Id)
+            ?? throw new EntityNotFoundException(game, null);
 
-        if (actualGame is null)
-            throw new KeyNotFoundException($"Game with id {game.Id} wasn't found");
-        else
+        actualGame.Description = game.Description;
+        actualGame.Title = game.Title;
+        actualGame.DeveloperId = game.DeveloperId;
+        actualGame.ReleaseDate = game.ReleaseDate;
+
+        actualGame.Genres = new HashSet<Genre>();
+
+        try
         {
-            actualGame.Description = game.Description;
-            actualGame.Title = game.Title;
-            actualGame.DeveloperId = game.DeveloperId;
-            actualGame.ReleaseDate = game.ReleaseDate;
-
-            actualGame.Genres = new HashSet<Genre>();
-
-            //_db.Update(actualGame);
-
             _db.Save();
 
             actualGame.Genres = LoadActualGenres(game.Genres.ToList());
 
-            //_db.Update(actualGame);
-
             _db.Save();
+        }
+        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        {
+            throw new UniqueEntityException("Can not insert duplicate genres.",ex);
         }
     }
 }

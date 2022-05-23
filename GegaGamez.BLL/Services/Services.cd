@@ -3,7 +3,7 @@
   <Class Name="GegaGamez.BLL.Services.DeveloperService" BaseTypeListCollapsed="true">
     <Position X="1.25" Y="5.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAgAAAACAAAAAAAAAAAAAAAAAAAAAAAgAAAAACAIE=</HashCode>
+      <HashCode>AAAAgAAAACAAAAAAAAAQAAAAAAAIAAAAAAAAAAAAAYA=</HashCode>
       <FileName>Services\DeveloperService.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -11,39 +11,16 @@
   <Class Name="GegaGamez.BLL.Services.GameCollectionService" BaseTypeListCollapsed="true">
     <Position X="9.5" Y="2.25" Width="3.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgAQAACIAAAAAAAAQAAAAAAIAAAAIAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAkMAAACIAAAAEAAAEAAAAAAQAIAAABCAAAIAAAAA=</HashCode>
       <FileName>Services\GameCollectionService.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="GegaGamez.BLL.Services.GameService" BaseTypeListCollapsed="true">
-    <Position X="10" Y="5.25" Width="2" />
-    <TypeIdentifier>
-      <HashCode>ACIAgAAAACAAAAAAAAAAAAAAAQAIAAAAAgAAAAAAAIA=</HashCode>
-      <FileName>Services\GameService.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="GegaGamez.BLL.Services.GenreService" BaseTypeListCollapsed="true">
     <Position X="1.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgAAAACAAAAAAAAAAAAAAAAAAAAAAAgAAAAACAAA=</HashCode>
+      <HashCode>AAAAgAAAACAAAAAAABAQAAAAAAAAAACAAAAAAAACAIA=</HashCode>
       <FileName>Services\GenreService.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="GegaGamez.BLL.Services.UserAuthResult">
-    <Position X="7.5" Y="5.75" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAABAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Services\UserAuthResult.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="GegaGamez.BLL.Services.UserService" BaseTypeListCollapsed="true">
-    <Position X="4.75" Y="3.75" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>CBAAgAACACAAAAAAJAAAAAAAAAAAQAAAAgAQAAAAAIA=</HashCode>
-      <FileName>Services\UserService.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>

@@ -16,6 +16,7 @@ public class GameSearch_Tests
     private readonly Mock<IGameService> _gameServiceMock = new();
     private readonly Mock<IGenreService> _genreServiceMock = new();
     private readonly Mock<IMapper> _mapperMock = new();
+    private readonly Mock<IRatingService> _ratingServiceMock = new();
     private readonly SearchModel _searchPage;
 
     private List<Game> Games { get; } = new() {
@@ -40,7 +41,7 @@ public class GameSearch_Tests
 
     public GameSearch_Tests()
     {
-        _searchPage = new(_gameServiceMock.Object, _genreServiceMock.Object, _mapperMock.Object)
+        _searchPage = new(_gameServiceMock.Object, _genreServiceMock.Object, _mapperMock.Object, _ratingServiceMock.Object)
         {
         };
 
