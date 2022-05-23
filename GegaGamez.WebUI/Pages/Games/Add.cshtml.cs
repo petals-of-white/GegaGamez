@@ -1,5 +1,6 @@
 using AutoMapper;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.ModifyModels;
 using GegaGamez.WebUI.Security;
@@ -15,6 +16,7 @@ public class AddModel : PageModel
 {
     private readonly IDeveloperService _developerService;
     private readonly IGameService _gameService;
+    private readonly ILogger<AddModel> _logger;
     private readonly IGenreService _genreService;
     private readonly IMapper _mapper;
 
@@ -24,10 +26,11 @@ public class AddModel : PageModel
     private List<SelectListItem> GetGenres() =>
       _genreService.FindAll().Select(d => new SelectListItem(d.Name, d.Id.ToString())).ToList();
 
-    public AddModel(IMapper mapper, IDeveloperService developerService, IGenreService genreService, IGameService gameService)
+    public AddModel(IMapper mapper, IDeveloperService developerService, IGenreService genreService, IGameService gameService, ILogger<AddModel> logger)
     {
         _mapper = mapper;
         _gameService = gameService;
+        _logger = logger;
         _developerService = developerService;
         _genreService = genreService;
     }
@@ -48,15 +51,18 @@ public class AddModel : PageModel
     {
         if (ModelState.IsValid)
         {
+            _logger.LogDebug($"Game model has some validation errors: {ModelState.Values}");
+
             var newGame = _mapper.Map<Game>(NewGame);
 
             try
             {
                 _gameService.CreateGame(newGame);
             }
-            catch (Exception ex)
+            catch (UniqueEntityException ex)
             {
-                // log
+                _logger.LogWarning(ex, "Failed to create a new game.");
+
                 ViewData ["InfoMessage"] = "Failed to create a new game. It most likely aleady exists";
                 return RedirectToPage();
             }
@@ -64,7 +70,9 @@ public class AddModel : PageModel
         }
         else
         {
-            ViewData ["InfoMessage"] = "Wrong input. Please check";
+            _logger.LogDebug($"{ModelState.ErrorCount} validation errors.");
+
+            ViewData ["InfoMessage"] = "Wrong input. Please check again.";
             return RedirectToPage();
         }
     }

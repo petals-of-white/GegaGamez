@@ -18,6 +18,13 @@ public class GameCollectionService : IDisposable, IGameCollectionService
         _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="defaultCollection"></param>
+    /// <param name="game"></param>
+    /// <exception cref="EntityNotFoundException"></exception>
+    /// <exception cref="UniqueEntityException"></exception>
     public void AddGame(DefaultCollection defaultCollection, Game game)
     {
         var actualGame = _db.Games.Get(game.Id)
@@ -40,6 +47,13 @@ public class GameCollectionService : IDisposable, IGameCollectionService
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userCollection"></param>
+    /// <param name="game"></param>
+    /// <exception cref="EntityNotFoundException"></exception>
+    /// <exception cref="UniqueEntityException"></exception>
     public void AddGame(UserCollection userCollection, Game game)
     {
         var actualGame = _db.Games.Get(game.Id)

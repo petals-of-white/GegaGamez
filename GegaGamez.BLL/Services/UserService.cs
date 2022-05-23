@@ -38,6 +38,11 @@ public class UserService : IDisposable, IUserService
         _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="newUser"></param>
+    /// <exception cref="EntityNotFoundException"></exception>
     public void CreateUser(User newUser)
     {
         newUser.DefaultCollections = GenerateDefaultCollections();
@@ -51,10 +56,15 @@ public class UserService : IDisposable, IUserService
         }
         catch (UniqueConstraintException ex)
         {
-            throw new EntityNotFoundException(newUser, ex);
+            throw new UniqueEntityException(newUser, ex);
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <exception cref="EntityNotFoundException"></exception>
     public void DeleteUser(User user)
     {
         try
@@ -80,6 +90,12 @@ public class UserService : IDisposable, IUserService
     public User? GetByUsername(string username) =>
         _db.Users.FindAll(u => u.Username == username, _userIncludes).SingleOrDefault();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <exception cref="EntityNotFoundException"></exception>
+    /// <exception cref="UniqueEntityException"></exception>
     public void UpdateUser(User user)
     {
         var actualUser = _db.Users.Get(user.Id)

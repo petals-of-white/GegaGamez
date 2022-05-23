@@ -1,5 +1,6 @@
 using AutoMapper;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.Models.ModifyModels;
@@ -17,11 +18,13 @@ public class IndexModel : PageModel
     private readonly IAuthorizationService _authService;
     private readonly IGameCollectionService _collectionService;
     private readonly ICountryService _countryService;
+    private readonly ILogger<IndexModel> _logger;
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
-    public IndexModel(IUserService userService, IAuthorizationService authService, IGameCollectionService collectionService, ICountryService countryService, IMapper mapper)
+    public IndexModel(ILogger<IndexModel> logger, IUserService userService, IAuthorizationService authService, IGameCollectionService collectionService, ICountryService countryService, IMapper mapper)
     {
+        _logger = logger;
         _userService = userService;
         _countryService = countryService;
         _mapper = mapper;
@@ -44,7 +47,11 @@ public class IndexModel : PageModel
         var user = _userService.GetById(id);
 
         if (user is null)
+        {
+            _logger.LogInformation($"User with id {id} was not found");
+
             return NotFound();
+        }
         else
         {
             user.DefaultCollections = _collectionService.GetDefaultColletionsForUser(user).ToHashSet();
@@ -60,6 +67,8 @@ public class IndexModel : PageModel
             Countries = (from country in countries
                          select new SelectListItem(country.Name, country.Id.ToString(), false, false)).ToArray();
 
+            _logger.LogInformation($"Loading users {id} page.");
+
             return Page();
         }
     }
@@ -70,15 +79,42 @@ public class IndexModel : PageModel
         var isAuthenticated = User.IsAuthenticated();
         bool areTheSameUser = User.GetId() == userId;
 
-        if (isAuthenticated && areTheSameUser)
+        if (isAuthenticated)
         {
-            var userToDelete = new User { Id = userId };
-            _userService.DeleteUser(userToDelete);
-            await HttpContext.SignOutAsync();
-            return RedirectToPage("/Games/Search");
+            if (areTheSameUser)
+            {
+                var userToDelete = new User { Id = userId };
+
+                try
+                {
+                    _userService.DeleteUser(userToDelete);
+
+                    await HttpContext.SignOutAsync();
+
+                    _logger.LogInformation($"Signed out a user with id {userId}");
+
+                    return RedirectToPage("/Games/Search");
+                }
+                catch (EntityNotFoundException ex)
+                {
+                    _logger.LogWarning(ex, "User wasn't found. Can not delete this account.");
+
+                    return RedirectToPage("/Games/Search");
+                }
+            }
+            else
+            {
+                _logger.LogInformation($"User with {User.GetId()} is not the owner of this page.");
+
+                return Forbid();
+            }
         }
         else
+        {
+            _logger.LogInformation("User is not authorized, therefore he/she cannot delete this account.");
+
             return Unauthorized();
+        }
     }
 
     public IActionResult OnPostUpdateProfile()
@@ -91,14 +127,38 @@ public class IndexModel : PageModel
             if (ModelState.IsValid)
             {
                 var user = _mapper.Map<User>(UpdatedUserProfile);
-                _userService.UpdateUser(user);
+
+                try
+                {
+                    _userService.UpdateUser(user);
+                    _logger.LogInformation($"Successfully update user profile. New user data: {UpdatedUserProfile}");
+                }
+                catch (EntityNotFoundException ex)
+                {
+                    _logger.LogWarning(ex, $"An error occured while trying to update the user {user.Id}. See the inner exception.");
+                    ViewData ["InfoMessage"] = "An error has occured while trying to update profile.";
+
+                    return NotFound();
+                }
+                catch (UniqueEntityException ex)
+                {
+                    _logger.LogWarning(ex, $"An error occured while trying to update the user {user.Id}. See the inner exception.");
+                    ViewData ["InfoMessage"] = "An error has occured while trying to update profile.";
+                }
             }
             else
+            {
+                _logger.LogDebug($"Validation errors: {ModelState.ErrorCount}");
                 ViewData ["InfoMessage"] = "Wrong update info. Please try again";
+            }
 
-            return OnGet(UpdatedUserProfile.Id);
+            return RedirectToPage(new { id = UpdatedUserProfile.Id });
         }
         else
+        {
+            _logger.LogInformation("User is not authorized, therefore he/she cannot update this account.");
+
             return Unauthorized();
+        }
     }
 }

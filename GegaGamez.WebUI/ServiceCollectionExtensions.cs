@@ -20,6 +20,7 @@ namespace GegaGamez.WebUI
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
+                        options.LogoutPath = "/Logout";
                         options.LoginPath = "/Login";
                         options.AccessDeniedPath = "/AccessDenied";
                     });

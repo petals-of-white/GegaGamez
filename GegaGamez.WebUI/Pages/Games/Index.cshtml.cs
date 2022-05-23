@@ -1,5 +1,6 @@
 using AutoMapper;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.Models.ModifyModels;
@@ -83,7 +84,10 @@ public class IndexModel : PageModel
         var requestedGame = _gameService.GetById(id);
 
         if (requestedGame is null)
+        {
+            _logger.LogInformation($"Game with id {id} was not found");
             return NotFound();
+        }
         else
         {
             requestedGame.Genres = _genreService.GetGameGenres(requestedGame).ToHashSet();
@@ -94,10 +98,14 @@ public class IndexModel : PageModel
             GameGenres = _mapper.Map<List<GenreModel>>((HashSet<Genre>) requestedGame.Genres);
             Comments = _mapper.Map<List<CommentModel>>((HashSet<Comment>) requestedGame.Comments);
 
+            _logger.LogTrace("Successfully loaded game related information");
+
             int? userId = User.GetId();
 
             if (userId is not null)
             {
+                _logger.LogDebug($"User is authenticated. Id {userId}");
+
                 User user = new() { Id = userId.Value };
                 Rating? userRating = _ratingService.GetUserRating(user, requestedGame);
                 UserRatingForGame = userRating?.RatingScore;
@@ -113,6 +121,8 @@ public class IndexModel : PageModel
                 {
                     return new SelectListItem(uc.Name, uc.Id.ToString());
                 }));
+
+                _logger.LogTrace("User-related stuff has been successfully loaded");
             }
 
             return Page();
@@ -121,45 +131,98 @@ public class IndexModel : PageModel
 
     public IActionResult OnPostComment()
     {
-        bool canPostComments = User.IsUser();
-        if (canPostComments)
+        bool isAuthenticated = User.IsAuthenticated();
+        if (isAuthenticated)
         {
             if (ModelState.IsValid)
             {
                 Comment newComment = _mapper.Map<Comment>(NewComment);
-                _commentService.AddComment(newComment);
+                try
+                {
+                    _logger.LogTrace("Attempting to post a comment");
+
+                    _commentService.AddComment(newComment);
+
+                    _logger.LogInformation($"Added a new comment: {NewComment}");
+                }
+                catch (UniqueEntityException ex)
+                {
+                    _logger.LogWarning(ex, "Failed to post a new comment due to unique constraint. See the exception");
+
+                    return RedirectToPage("/Games/Search");
+                }
             }
             else
+            {
+                _logger.LogInformation($"Comment didn't pass validation. Number of errors {ModelState.ErrorCount}");
                 ViewData ["InfoMessage"] = "Please check comment requirements";
+            }
 
-            return OnGet(NewComment!.GameId);
+            _logger.LogInformation("Redirecting to the /Games/Index");
+
+            return RedirectToPage(new { id = NewComment!.GameId });
         }
         else
+        {
+            _logger.LogInformation("User is not authenticated, therefore he/she cannot post any comments");
+
             return Forbid();
+        }
     }
 
     public IActionResult OnPostDeleteComment(int id)
     {
-        bool canDeleteComments = User.IsUser();
+        bool isAuthenticated = User.IsAuthenticated();
 
-        Comment? actualComment = _commentService.GetById(id);
-
-        if (actualComment is not null)
+        if (isAuthenticated)
         {
-            try
+            Comment? actualComment = _commentService.GetById(id);
+
+            if (actualComment is not null)
             {
-                _commentService.DeleteComment(actualComment);
+                bool isCommentOwner = User.GetId() == actualComment.UserId;
+                var gameId = actualComment.GameId;
+
+                if (isCommentOwner)
+                {
+                    try
+                    {
+                        _commentService.DeleteComment(actualComment);
+
+                        _logger.LogInformation($"Comment with id {id} has been successfully deleted.");
+
+                        return RedirectToPage(new { id = gameId });
+                    }
+                    catch (EntityNotFoundException ex)
+                    {
+                        _logger.LogWarning(ex, $"Could not delete comment with id {id}, most likely because it does not exist");
+                        //ViewData ["InfoMessage"] = "An error occured while trying to delete comment";
+
+                        return NotFound();
+                    }
+                }
+                else
+                {
+                    _logger.LogInformation($"User {actualComment.UserId} tried to delete comment that doesn't belong to them." +
+                        $"Access denied.");
+
+                    return Forbid();
+                }
             }
-            catch (Exception ex)
+            else
             {
-                // log
-                ViewData ["InfoMessage"] = "An error occured while trying to delete comment";
+                _logger.LogWarning($"Could not delete comment with id {id}, most likely because it does not exist");
+                //ViewData ["InfoMessage"] = "An error occured while trying to delete comment";
+
+                return NotFound();
             }
-            return RedirectToPage(new { id = actualComment.GameId });
         }
         else
-            return NotFound();
+        {
+            _logger.LogInformation($"Impossible to delete the comment because user isn't authenticated.");
 
+            return Unauthorized();
+        }
     }
 
     public IActionResult OnPostDeleteGame(int id)
@@ -172,23 +235,35 @@ public class IndexModel : PageModel
             if (isAdmin)
             {
                 var game = new Game { Id = id };
+
                 try
                 {
                     _gameService.DeleteGame(game);
+                    _logger.LogInformation($"Game with id {id} has been successfully deleted.");
+
+                    return RedirectToPage("/Games/Search");
                 }
-                catch (Exception)
+                catch (EntityNotFoundException ex)
                 {
-                    // log
-                    ViewData ["InfoMessage"] = "An error occured while trying to delete this game";
-                    return RedirectToPage(new { id = id });
+                    _logger.LogWarning(ex, "Requested game wasn't found, therefore can not be deleted.");
+                    ViewData ["InfoMessage"] = "An error occured while trying to delete this game.";
+
+                    return NotFound();
                 }
-                return RedirectToPage("/Games/Search");
             }
             else
+            {
+                _logger.LogInformation($"User with id {User.GetId()} does not have admin rights to delete games.");
+
                 return Forbid();
+            }
         }
         else
+        {
+            _logger.LogInformation($"Impossible to delete the game because user isn't authenticated.");
+
             return Unauthorized();
+        }
     }
 
     public IActionResult OnPostMoveGameToCollection()
@@ -203,21 +278,33 @@ public class IndexModel : PageModel
             var gameToAdd = new Game { Id = gameId };
             var wantedUserCollection = new UserCollection { Id = GameToUserCollection.CollectionId };
             var wantedDefaultCollection = new DefaultCollection { Id = GameToDefaultCollection.CollectionId };
+
             try
             {
                 _collectionService.AddGame(wantedDefaultCollection, gameToAdd);
+                _logger.LogInformation($"Game {gameToAdd.Id} added to default collection {wantedDefaultCollection.Id}");
             }
-            catch (ArgumentException ex)
+            catch (EntityNotFoundException ex)
             {
                 _logger.LogWarning(ex, "Something is wrong");
             }
+            catch(UniqueEntityException ex)
+            {
+
+            }
+
             try
             {
                 _collectionService.AddGame(wantedUserCollection, gameToAdd);
             }
-            catch (ArgumentException ex)
+            catch (EntityNotFoundException ex)
             {
                 _logger.LogWarning(ex, "Something is wrong");
+            }
+
+            catch(UniqueEntityException ex)
+            {
+
             }
 
             return Page();
@@ -226,25 +313,47 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnPostRateGameAsync()
     {
-        AuthorizationResult canRateGames = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
+        //AuthorizationResult canRateGames = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
+        bool isAuthenticated = User.IsAuthenticated();
 
-        if (canRateGames.Succeeded)
+        if (isAuthenticated)
         {
             foreach (var entry in ModelState)
             {
                 if (entry.Key.StartsWith(nameof(UpdateUserRating)) == false) ModelState.Remove(entry.Key);
             }
+
             if (ModelState.IsValid)
             {
                 var rating = _mapper.Map<Rating>(UpdateUserRating);
-                _ratingService.RateGame(rating);
+
+                try
+                {
+                    _ratingService.RateGame(rating);
+                    _logger.LogInformation($"Rating added/updated: {UpdateUserRating}");
+                }
+                catch(EntityNotFoundException ex)
+                {
+                    _logger.LogWarning(ex, $"Can not give rating because game or user does not exist");
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, $"An error occured: {UpdateUserRating}");
+                }
             }
             else
-                ViewData ["InfoMessage"] = "Wrong rate input data";
+            {
+                _logger.LogDebug($"Validation Errors: {ModelState.Count}");
+                ViewData ["InfoMessage"] = "Wrong input format";
+            }
 
             return RedirectToPage(new { id = UpdateUserRating.GameId });
         }
         else
-            return Forbid();
+        {
+            _logger.LogInformation("User isn't authenticate, therefore cannot rate games.");
+            return Unauthorized();
+        }
     }
 }
