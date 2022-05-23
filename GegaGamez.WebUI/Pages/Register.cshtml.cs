@@ -1,5 +1,6 @@
 using AutoMapper;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Auth;
 using GegaGamez.WebUI.Models.Display;
@@ -12,18 +13,17 @@ namespace GegaGamez.WebUI.Pages
 {
     public class RegisterModel : PageModel
     {
-        //private readonly IJwtAuthenticationManager _authManager;
         private readonly IAuthManager _authManager;
-
+        private readonly ILogger<RegisterModel> _logger;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
-        private bool IsAnonymous => User.Identity?.IsAuthenticated == false;
 
-        public RegisterModel(IUserService userService, IAuthManager authManager, IMapper mapper)
+        public RegisterModel(IUserService userService, IAuthManager authManager, IMapper mapper, ILogger<RegisterModel> logger)
         {
             _userService = userService;
             _authManager = authManager;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [BindProperty]
@@ -31,15 +31,23 @@ namespace GegaGamez.WebUI.Pages
 
         public IActionResult OnGet()
         {
-            if (IsAnonymous)
+            if (User.IsAuthenticated() == false)
+            {
+                _logger.LogInformation("Showing register page for an unauthenticated user.");
+
                 return Page();
+            }
             else
+            {
+                _logger.LogInformation($"Authenticated user {User.GetId()} tried to access register page. Denying access.");
+
                 return Forbid();
+            }
         }
 
         public async Task<IActionResult> OnPost()
         {
-            if (IsAnonymous)
+            if (User.IsAuthenticated() == false)
             {
                 if (ModelState.IsValid)
                 {
@@ -49,27 +57,37 @@ namespace GegaGamez.WebUI.Pages
                     {
                         _userService.CreateUser(user);
                     }
-                    catch (Exception ex)
+                    catch (UniqueEntityException ex)
                     {
-                        // log...
-                        ViewData ["InfoMessage"] = ex.Message;
+                        _logger.LogWarning(ex, $"Failed to create a user {user.Username} due to unique constraint violation.");
+                        ViewData ["InfoMessage"] = "User alreadye exists. Please choose a different username";
+
                         return Page();
                     }
 
-                    UserModel rightUser = _mapper.Map<UserModel>(user);
-                    //var cookieResult = _authManager.SignInUser(rightUser);
-                    //HttpContext.Response.Cookies
-                    //.Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
-
                     var (principal, properties) = _authManager.CreatePrincipalWithAuthProperties(user);
+
                     await HttpContext.SignInAsync(principal, properties);
+
+                    _logger.LogInformation($"User {User.GetId()} has signed in.");
+                    ViewData ["InfoMessage"] = "Successfully signed out";
+
                     return RedirectToPage("/Games/Search");
                 }
                 else
+                {
+                    _logger.LogDebug($"Validation errors: {ModelState.ErrorCount}");
+                    ViewData ["InfoMessage"] = "Validation erorrs";
+
                     return RedirectToPage("/Register");
+                }
             }
             else
+            {
+                _logger.LogInformation($"Authenticated user {User.GetId()} tried to post registration form. Denying access.");
+
                 return Forbid();
+            }
         }
     }
 }

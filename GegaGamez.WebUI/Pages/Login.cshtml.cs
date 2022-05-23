@@ -12,16 +12,16 @@ namespace GegaGamez.WebUI.Pages
     public class LoginModel : PageModel
     {
         private readonly IAuthManager _authManager;
+        private readonly ILogger<LoginModel> _logger;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
 
-        private bool IsAnonymous => User.Identity?.IsAuthenticated == false;
-
-        public LoginModel(IUserService userService, IAuthManager authManager, IMapper mapper)
+        public LoginModel(IUserService userService, IAuthManager authManager, IMapper mapper, ILogger<LoginModel> logger)
         {
             _authManager = authManager;
             _userService = userService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [BindProperty]
@@ -29,58 +29,70 @@ namespace GegaGamez.WebUI.Pages
 
         public IActionResult OnGet()
         {
-            if (IsAnonymous)
+            if (User.IsAuthenticated() == false)
+            {
+                _logger.LogInformation("Showing loging page for unauthenticated user.");
+
                 return Page();
+            }
             else
             {
+                _logger.LogInformation("Authenticated user tried to access login page.");
                 ViewData ["InfoMessage"] = "You can not do that because you are already logged in!";
+                
                 return Forbid();
             }
-            //if (User?.Identity?.IsAuthenticated == true)
-            //    return BadRequest();
-            //else
-            //    return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            if (IsAnonymous)
+            if (User.IsAuthenticated() == false)
             {
                 if (ModelState.IsValid)
                 {
                     var user = _userService.GetByUsername(LoginForm.Username);
 
                     if (user is null)
+                    {
+                        _logger.LogInformation($"User with username {LoginForm.Username} was not found.");
+                        ViewData ["InfoMessage"] = $"User with username {LoginForm.Username} was not found.";
+
                         return RedirectToPage("/Login");
+                    }
                     else
                     {
                         if (user.Password != LoginForm.Password)
+                        {
+                            _logger.LogInformation($"Incorrect password for user {user.Username}");
+                            ViewData ["InfoMessage"] = $"Incorrect password for user {user.Username}";
+
                             return RedirectToPage("/Login");
+                        }
                         else
                         {
-                            UserModel rightUser = _mapper.Map<UserModel>(user);
-
                             (var principal, var properties) = _authManager.CreatePrincipalWithAuthProperties(user);
+
                             await HttpContext.SignInAsync(principal, properties);
-                            //var signInResult = SignIn(principal, properties, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                            //var cookieResult = _authManager.SignInUser(rightUser);
-
-                            //HttpContext.Response.Cookies
-                            //    .Append(cookieResult.cookieName, cookieResult.tokenValue, cookieResult.cookieOptions);
-
-                            //return signInResult;
+                            _logger.LogInformation($"Successfully signed in user {user.Username}");
+                            ViewData ["InfoMessage"] = "Successfully loged in.";
 
                             return RedirectToPage("/Games/Search");
                         }
                     }
                 }
                 else
+                {
+                    _logger.LogInformation($"Validation Errors: {ModelState.ErrorCount}");
+                    ViewData ["InfoMessage"] = "validation errors.";
+
                     return RedirectToPage("/Login");
+                }
             }
             else
             {
                 ViewData ["InfoMessage"] = "You can not do that because you are already logged in!";
+
                 return Forbid();
             }
         }

@@ -28,15 +28,17 @@ public class CommentService : ICommentService, IDisposable
 
             _db.Save();
         }
-        //catch(EntityFramework.Exceptions.Common.ReferenceConstraintException)
-        //{
-        //}
         catch (UniqueConstraintException ex)
         {
             throw new UniqueEntityException(newComment, ex);
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="actualComment"></param>
+    /// <exception cref="EntityNotFoundException"></exception>
     public void DeleteComment(Comment actualComment)
     {
         try

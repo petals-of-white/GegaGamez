@@ -30,6 +30,11 @@ public class GameService : IDisposable, IGameService
         _db = db ?? throw new ArgumentNullException(nameof(db), "db cannot be null");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="game"></param>
+    /// <exception cref="UniqueEntityException"></exception>
     public void CreateGame(Game game)
     {
         game.Genres = LoadActualGenres(game.Genres.ToList());
@@ -125,13 +130,14 @@ public class GameService : IDisposable, IGameService
         _db.Games.FindAll(g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id), _gameIncludes);
 
     /// <summary>
-    /// ?????
+    /// 
     /// </summary>
     /// <param name="game"></param>
-    /// <exception cref="KeyNotFoundException"></exception>
+    /// <exception cref="EntityNotFoundException"></exception>
+    /// <exception cref="UniqueEntityException"></exception>
     public void UpdateGame(Game game)
     {
-        var actualGame = _db.Games.Get(game.Id)
+        var actualGame = _db.Games.Get(game.Id, _gameIncludes.Append(g=>g.Genres).ToArray())
             ?? throw new EntityNotFoundException(game, null);
 
         actualGame.Description = game.Description;

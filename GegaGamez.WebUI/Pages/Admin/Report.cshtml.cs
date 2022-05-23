@@ -9,10 +9,12 @@ namespace GegaGamez.WebUI.Pages.Admin
     public class ReportModel : PageModel
     {
         private readonly IStatisticsService _statisticsService;
+        private readonly ILogger<ReportModel> _logger;
 
-        public ReportModel(IStatisticsService statisticsService)
+        public ReportModel(IStatisticsService statisticsService, ILogger<ReportModel> logger)
         {
             _statisticsService = statisticsService;
+            _logger = logger;
         }
 
         public int AdminsQuantity { get; set; }
@@ -34,6 +36,8 @@ namespace GegaGamez.WebUI.Pages.Admin
             AdminsQuantity = _statisticsService.AdminsQuantity;
             AvgGameScore = _statisticsService.AvgGameScore;
             LastUpdated = TimeOnly.FromDateTime(DateTime.Now);
+
+            _logger.LogInformation("Admin report has been successfully loaded");
         }
     }
 }

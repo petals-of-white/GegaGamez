@@ -26,6 +26,12 @@ public class RatingService : IRatingService, IDisposable
         _db.Ratings.FindAll(r => r.UserId == user.Id && r.GameId == game.Id, _ratingIncludes)
         .SingleOrDefault();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rating"></param>
+    /// <exception cref="EntityNotFoundException"></exception>
+    /// <exception cref="UniqueEntityException"></exception>
     public void RateGame(Rating rating)
     {
         var actualGame = _db.Games.Get(rating.GameId)

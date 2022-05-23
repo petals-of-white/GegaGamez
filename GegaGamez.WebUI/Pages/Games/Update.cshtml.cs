@@ -1,5 +1,6 @@
 using AutoMapper;
 using GegaGamez.Shared.Entities;
+using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.ModifyModels;
 using GegaGamez.WebUI.Security;
@@ -16,6 +17,7 @@ public class UpdateModel : PageModel
     private readonly IDeveloperService _developerService;
     private readonly IGameService _gameService;
     private readonly IGenreService _genreService;
+    private readonly ILogger<UpdateModel> _logger;
     private readonly IMapper _mapper;
 
     private List<SelectListItem> GetDevelopers() =>
@@ -28,6 +30,7 @@ public class UpdateModel : PageModel
     {
         SelectListItem? dev = Developers.SingleOrDefault(g => g.Value == UpdatedGame?.DeveloperId.ToString());
         if (dev is not null) dev.Selected = true;
+        _logger.LogTrace("Game dev marked selected");
     }
 
     private void MarkGenresSelected()
@@ -36,10 +39,12 @@ public class UpdateModel : PageModel
 
         foreach (var genre in genres)
             genre.Selected = true;
+        _logger.LogTrace("Game genres marked selected");
     }
 
-    public UpdateModel(IMapper mapper, IDeveloperService developerService, IGenreService genreService, IGameService gameService)
+    public UpdateModel(ILogger<UpdateModel> logger, IMapper mapper, IDeveloperService developerService, IGenreService genreService, IGameService gameService)
     {
+        _logger = logger;
         _mapper = mapper;
         _gameService = gameService;
         _developerService = developerService;
@@ -68,10 +73,15 @@ public class UpdateModel : PageModel
             MarkDevSelected();
             MarkGenresSelected();
 
+            _logger.LogInformation($"Loading update page for game {id}");
+
             return Page();
         }
         else
+        {
+            _logger.LogInformation($"A game with id {id} was not found.");
             return NotFound();
+        }
     }
 
     public IActionResult OnPost()
@@ -82,18 +92,30 @@ public class UpdateModel : PageModel
             try
             {
                 _gameService.UpdateGame(updatedGame);
+                _logger.LogInformation($"Game has been updated: {UpdatedGame}");
+
                 return RedirectToPage("/Games/Index", new { id = updatedGame.Id });
             }
-            catch (Exception ex)
+            catch (UniqueEntityException ex)
             {
-                // log
+                _logger.LogWarning(ex, $"Cannot update the game {updatedGame.Id}");
                 ViewData ["InfoMessage"] = "Failed to update the game. Please try again";
+
+                return RedirectToPage(new { updatedGame.Id });
+            }
+            catch(EntityNotFoundException ex)
+            {
+                _logger.LogWarning(ex, $"Cannot update the game {updatedGame.Id}");
+                ViewData ["InfoMessage"] = "Failed to update the game. Please try again";
+
                 return RedirectToPage(new { updatedGame.Id });
             }
         }
         else
         {
+            _logger.LogDebug($"Validation errors: {ModelState.ErrorCount}");
             ViewData ["InfoMessage"] = "Wrong input. Please check";
+
             return RedirectToPage(new { id = UpdatedGame.Id });
         }
     }

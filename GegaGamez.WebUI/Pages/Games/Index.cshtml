@@ -162,7 +162,7 @@
 </form>
 
 <!-- Delete Game modal -->
-<form method="post" asp-page-handler="DeleteGame" id="delete-game-modal" class="popup-interactive bg-secondary border-primary">
+<form method="post" asp-page-handler="DeleteGame" asp-route-gameid=@Model.Game.Id id="delete-game-modal" class="popup-interactive bg-secondary border-primary">
     <h3 class="font-contrast">
         Are you sure you want to delete this game?
     </h3>

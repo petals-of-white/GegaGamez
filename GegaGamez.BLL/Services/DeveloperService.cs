@@ -8,7 +8,7 @@ namespace GegaGamez.BLL.Services;
 public class DeveloperService : IDisposable, IDeveloperService
 {
     private readonly IUnitOfWork _db;
-    private readonly Expression<Func<Developer, object>> [] _devIncludes = {};
+    private readonly Expression<Func<Developer, object>> [] _devIncludes = Array.Empty<Expression<Func<Developer, object>>>();
 
     /// <summary>
     /// 
