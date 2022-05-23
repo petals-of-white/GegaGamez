@@ -4,6 +4,7 @@ using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.Models.ModifyModels;
+using GegaGamez.WebUI.PageHelpers;
 using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -75,7 +76,6 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnPostDeleteAccountAsync(int userId)
     {
-        //var isAuthenticated = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
         var isAuthenticated = User.IsAuthenticated();
         bool areTheSameUser = User.GetId() == userId;
 
@@ -97,9 +97,9 @@ public class IndexModel : PageModel
                 }
                 catch (EntityNotFoundException ex)
                 {
-                    _logger.LogWarning(ex, "User wasn't found. Can not delete this account.");
+                    _logger.LogWarning(ex, $"User {userId} wasn't found. Can not delete this account.");
 
-                    return RedirectToPage("/Games/Search");
+                    return NotFound();
                 }
             }
             else
@@ -136,20 +136,20 @@ public class IndexModel : PageModel
                 catch (EntityNotFoundException ex)
                 {
                     _logger.LogWarning(ex, $"An error occured while trying to update the user {user.Id}. See the inner exception.");
-                    ViewData ["InfoMessage"] = "An error has occured while trying to update profile.";
+                    TempData [Messages.InfoKey] = "An error has occured while trying to update profile.";
 
                     return NotFound();
                 }
                 catch (UniqueEntityException ex)
                 {
                     _logger.LogWarning(ex, $"An error occured while trying to update the user {user.Id}. See the inner exception.");
-                    ViewData ["InfoMessage"] = "An error has occured while trying to update profile.";
+                    TempData [Messages.InfoKey] = "An error has occured while trying to update profile.";
                 }
             }
             else
             {
                 _logger.LogDebug($"Validation errors: {ModelState.ErrorCount}");
-                ViewData ["InfoMessage"] = "Wrong update info. Please try again";
+                TempData [Messages.InfoKey] = "Wrong update info. Please try again";
             }
 
             return RedirectToPage(new { id = UpdatedUserProfile.Id });

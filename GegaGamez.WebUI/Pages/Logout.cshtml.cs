@@ -1,3 +1,4 @@
+using GegaGamez.WebUI.PageHelpers;
 using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +23,7 @@ namespace GegaGamez.WebUI.Pages
             await HttpContext.SignOutAsync();
 
             _logger.LogInformation($"User {userId} was signed out.");
-            ViewData ["InfoMessage"] = "Signed out successfully";
+            TempData [Messages.InfoKey] = "Signed out successfully";
 
             return RedirectToPage("/Games/Search");
         }

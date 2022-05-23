@@ -4,6 +4,7 @@ using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.Models.ModifyModels;
+using GegaGamez.WebUI.PageHelpers;
 using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -155,7 +156,7 @@ public class IndexModel : PageModel
             else
             {
                 _logger.LogInformation($"Comment didn't pass validation. Number of errors {ModelState.ErrorCount}");
-                ViewData ["InfoMessage"] = "Please check comment requirements";
+                TempData [Messages.InfoKey] = "Please check comment requirements";
             }
 
             _logger.LogInformation("Redirecting to the /Games/Index");
@@ -196,7 +197,7 @@ public class IndexModel : PageModel
                     catch (EntityNotFoundException ex)
                     {
                         _logger.LogWarning(ex, $"Could not delete comment with id {id}, most likely because it does not exist");
-                        //ViewData ["InfoMessage"] = "An error occured while trying to delete comment";
+                        //TempData [Messages.InfoKey] = "An error occured while trying to delete comment";
 
                         return NotFound();
                     }
@@ -212,7 +213,7 @@ public class IndexModel : PageModel
             else
             {
                 _logger.LogWarning($"Could not delete comment with id {id}, most likely because it does not exist");
-                //ViewData ["InfoMessage"] = "An error occured while trying to delete comment";
+                //TempData [Messages.InfoKey] = "An error occured while trying to delete comment";
 
                 return NotFound();
             }
@@ -246,7 +247,7 @@ public class IndexModel : PageModel
                 catch (EntityNotFoundException ex)
                 {
                     _logger.LogWarning(ex, "Requested game wasn't found, therefore can not be deleted.");
-                    ViewData ["InfoMessage"] = "An error occured while trying to delete this game.";
+                    TempData [Messages.InfoKey] = "An error occured while trying to delete this game.";
 
                     return NotFound();
                 }
@@ -345,7 +346,7 @@ public class IndexModel : PageModel
             else
             {
                 _logger.LogDebug($"Validation Errors: {ModelState.Count}");
-                ViewData ["InfoMessage"] = "Wrong input format";
+                TempData [Messages.InfoKey] = "Wrong input format";
             }
 
             return RedirectToPage(new { id = UpdateUserRating.GameId });
