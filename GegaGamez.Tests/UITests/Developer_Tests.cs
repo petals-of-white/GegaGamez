@@ -4,6 +4,7 @@ using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Pages.Developers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -14,10 +15,11 @@ public class Developer_Tests
     private readonly IndexModel _devPage;
     private readonly Mock<IDeveloperService> _devServiceMock = new();
     private readonly Mock<IMapper> _mapperMock = new();
+    private readonly Mock<ILogger<IndexModel>> _loggerMock = new();
 
     public Developer_Tests()
     {
-        _devPage = new(_devServiceMock.Object, _mapperMock.Object);
+        _devPage = new(_devServiceMock.Object, _mapperMock.Object, _loggerMock.Object);
     }
 
     [Fact]

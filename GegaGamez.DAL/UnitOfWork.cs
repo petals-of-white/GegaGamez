@@ -65,10 +65,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         _dbContext.Dispose();
     }
 
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="DatabaseException"></exception>
     public int Save()
     {
         return _dbContext.SaveChanges();

@@ -25,8 +25,63 @@ public class IndexModel : PageModel
     private readonly IRatingService _ratingService;
     private readonly IUserService _userService;
 
+    private List<SelectListItem> GenerateDefaultCollectionsItems(User user,
+                                                                     Game requestedGame)
+    {
+        var defaultCollections = _collectionService.GetDefaultColletionsForUser(user).ToList();
+
+        foreach (var dc in defaultCollections)
+            dc.Games = _gameService.GetGamesInCollection(dc).ToHashSet();
+
+        List<SelectListItem> itemList = defaultCollections
+            .Select(dc => new SelectListItem(dc.DefaultCollectionType.Name, dc.Id.ToString()))
+            .ToList();
+
+        //for (int i = 0; i < defaultCollections.Count(); i++)
+        //{
+        //    if (defaultCollections [i].Games.Select(g => g.Id).Contains(requestedGame.Id))
+        //        itemList [i].Selected = true;
+        //}
+
+        return itemList;
+    }
+
+    private List<SelectListItem> GenerateUserCollectionsItems(User user,
+                                                              Game requestedGame)
+    {
+        var userCollections = _collectionService.GetUserCollectionsForUser(user).ToList();
+
+        foreach (var uc in userCollections)
+            uc.Games = _gameService.GetGamesInCollection(uc).ToHashSet();
+
+        List<SelectListItem> itemList = userCollections
+            .Select(uc => new SelectListItem(uc.Name, uc.Id.ToString()))
+            .ToList();
+
+        //for (int i = 0; i < userCollections.Count; i++)
+        //{
+        //    if (userCollections [i].Games.Select(g => g.Id).Contains(requestedGame.Id))
+        //        itemList [i].Selected = true;
+        //}
+
+        return itemList;
+    }
+
+    private void LoadGameInfo(Game requestedGame)
+    {
+        requestedGame.Genres = _genreService.GetGameGenres(requestedGame).ToHashSet();
+        requestedGame.Comments = _commentService.GetGameComments(requestedGame).ToHashSet();
+    }
+
+    private GameModel MapWithAvgScore(Game requestedGame)
+    {
+        var game = _mapper.Map<GameModel>(requestedGame);
+        game.AvgRatingScore = _ratingService.GetAverageRatingScore(requestedGame);
+        return game;
+    }
+
     public IndexModel(IGameService games,
-                      IGameCollectionService collectionService,
+                                          IGameCollectionService collectionService,
                       IRatingService ratingService,
                       ICommentService commentService,
                       IUserService userService,
@@ -87,17 +142,16 @@ public class IndexModel : PageModel
         if (requestedGame is null)
         {
             _logger.LogInformation($"Game with id {id} was not found");
+
             return NotFound();
         }
         else
         {
-            requestedGame.Genres = _genreService.GetGameGenres(requestedGame).ToHashSet();
-            requestedGame.Comments = _commentService.GetGameComments(requestedGame).ToHashSet();
+            LoadGameInfo(requestedGame);
 
-            Game = _mapper.Map<GameModel>(requestedGame);
-            Game.AvgRatingScore = _ratingService.GetAverageRatingScore(requestedGame);
-            GameGenres = _mapper.Map<List<GenreModel>>((HashSet<Genre>) requestedGame.Genres);
-            Comments = _mapper.Map<List<CommentModel>>((HashSet<Comment>) requestedGame.Comments);
+            Game = MapWithAvgScore(requestedGame);
+            GameGenres = _mapper.Map<List<GenreModel>>(requestedGame.Genres);
+            Comments = _mapper.Map<List<CommentModel>>(requestedGame.Comments);
 
             _logger.LogTrace("Successfully loaded game related information");
 
@@ -108,20 +162,15 @@ public class IndexModel : PageModel
                 _logger.LogDebug($"User is authenticated. Id {userId}");
 
                 User user = new() { Id = userId.Value };
+
                 Rating? userRating = _ratingService.GetUserRating(user, requestedGame);
                 UserRatingForGame = userRating?.RatingScore;
-                var defaultCollectionsForUser = _collectionService.GetDefaultColletionsForUser(user);
-                var userCollectionsForUser = _collectionService.GetUserCollectionsForUser(user);
 
-                AvailableDefaultCollections = new(defaultCollectionsForUser.Select(dc =>
-                {
-                    return new SelectListItem(dc.DefaultCollectionType.Name, dc.Id.ToString());
-                }));
+                AvailableDefaultCollections = GenerateDefaultCollectionsItems(user,
+                                                                              requestedGame);
 
-                AvailableUserCollections = new(userCollectionsForUser.Select(uc =>
-                {
-                    return new SelectListItem(uc.Name, uc.Id.ToString());
-                }));
+                AvailableUserCollections = GenerateUserCollectionsItems(user,
+                                                                        requestedGame);
 
                 _logger.LogTrace("User-related stuff has been successfully loaded");
             }
@@ -269,17 +318,39 @@ public class IndexModel : PageModel
 
     public IActionResult OnPostMoveGameToCollection()
     {
-        if (GameToDefaultCollection.GameId != GameToUserCollection.GameId)
+        if (User.IsAuthenticated() == false)
+            return Unauthorized();
+
+        // Validation
+        this.ValidateOnly(new string [] { nameof(GameToUserCollection), nameof(GameToDefaultCollection) });
+        if (ModelState.IsValid == false)
         {
+            _logger.LogInformation($"GameToUserCollection or GameToDefaultCollection didn't pass validation. Number of errors {ModelState.ErrorCount}");
+            TempData [Messages.InfoKey] = "Wrong collection or game data";
+
             return BadRequest();
         }
-        else
-        {
-            var gameId = GameToDefaultCollection.GameId;
-            var gameToAdd = new Game { Id = gameId };
-            var wantedUserCollection = new UserCollection { Id = GameToUserCollection.CollectionId };
-            var wantedDefaultCollection = new DefaultCollection { Id = GameToDefaultCollection.CollectionId };
 
+        // Check whether collections owner is the current user
+        UserCollection? wantedUserCollection = _collectionService
+            .GetUserCollectionById(GameToUserCollection.CollectionId);
+
+        DefaultCollection? wantedDefaultCollection = _collectionService
+            .GetDefaultCollectionById(GameToDefaultCollection.CollectionId);
+
+        int? userId = User.GetId();
+
+        int gameId = GameToDefaultCollection.GameId;
+        var gameToAdd = new Game { Id = gameId };
+
+        // Default Collection First
+        if (wantedDefaultCollection is not null)
+        {
+            if (wantedDefaultCollection.UserId != userId)
+            {
+                _logger.LogInformation($"User {userId} isn't the owner of default collection {wantedDefaultCollection.Id}.");
+                return Forbid();
+            }    
             try
             {
                 _collectionService.AddGame(wantedDefaultCollection, gameToAdd);
@@ -287,32 +358,55 @@ public class IndexModel : PageModel
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogWarning(ex, "Something is wrong");
+                _logger.LogWarning(ex, "Either collection or game wasn't found. See the exception.");
             }
-            catch(UniqueEntityException ex)
+            catch (UniqueEntityException ex)
             {
+                _logger.LogWarning(ex, "Attempting to add an existing game to collection. No changes.");
+                _logger.LogInformation("Redirecting...");
+                TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} is already in {wantedDefaultCollection!.DefaultCollectionType.Name}";
 
+                return RedirectToPage(new { id = gameId });
             }
+        }
 
+
+        // User collection
+        if (wantedUserCollection is not null)
+        {
+            if (wantedUserCollection.UserId != userId)
+            {
+                _logger.LogInformation($"User {userId} isn't the owner of user collection {wantedUserCollection.Id}.");
+                return Forbid();
+            }
             try
             {
                 _collectionService.AddGame(wantedUserCollection, gameToAdd);
+                _logger.LogInformation($"Game {gameToAdd.Id} added to user collection {wantedUserCollection.Id}.");
+
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogWarning(ex, "Something is wrong");
+                _logger.LogWarning(ex, "Either collection or game wasn't found. See the exception.");
             }
-
-            catch(UniqueEntityException ex)
+            catch (UniqueEntityException ex)
             {
-
+                _logger.LogWarning(ex, "Attempting to add an existing game to collection. No changes.");
+                _logger.LogInformation("Redirecting...");
+                TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} is already in {wantedUserCollection.Name}.";
             }
 
-            return Page();
         }
+
+
+        _logger.LogInformation("Successfully added games to collections. Redirecting...");
+
+        TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} has been added to collection";
+
+        return RedirectToPage(new { id = gameId });
     }
 
-    public async Task<IActionResult> OnPostRateGameAsync()
+    public IActionResult OnPostRateGame()
     {
         //AuthorizationResult canRateGames = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
         bool isAuthenticated = User.IsAuthenticated();
@@ -333,10 +427,9 @@ public class IndexModel : PageModel
                     _ratingService.RateGame(rating);
                     _logger.LogInformation($"Rating added/updated: {UpdateUserRating}");
                 }
-                catch(EntityNotFoundException ex)
+                catch (EntityNotFoundException ex)
                 {
                     _logger.LogWarning(ex, $"Can not give rating because game or user does not exist");
-
                 }
                 catch (Exception ex)
                 {
@@ -353,7 +446,8 @@ public class IndexModel : PageModel
         }
         else
         {
-            _logger.LogInformation("User isn't authenticate, therefore cannot rate games.");
+            _logger.LogInformation("User isn't authenticated, therefore cannot rate games.");
+
             return Unauthorized();
         }
     }

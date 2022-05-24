@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using EntityFramework.Exceptions.Common;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Exceptions;
@@ -30,7 +31,9 @@ public class GameCollectionService : IDisposable, IGameCollectionService
         var actualGame = _db.Games.Get(game.Id)
             ?? throw new EntityNotFoundException($"Game with id {game.Id} does not exist.");
 
-        var dc = _db.DefaultCollections.Get(defaultCollection.Id)
+        var dc = _db.DefaultCollections.Get(
+            defaultCollection.Id,
+            _dcIncludes.Append(dc => dc.Games).ToArray())
             ?? throw new EntityNotFoundException($"Default Сollection with id {defaultCollection.Id} does not exist.");
 
         try
@@ -38,7 +41,7 @@ public class GameCollectionService : IDisposable, IGameCollectionService
             dc.Games.Add(actualGame);
             _db.Save();
         }
-        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        catch (UniqueConstraintException ex)
         {
             var msg = $"A {typeof(Game).Name} with id {actualGame.Id} already exists in" +
                 $" {typeof(DefaultCollection).Name} with id {defaultCollection.Id}.";
@@ -66,7 +69,7 @@ public class GameCollectionService : IDisposable, IGameCollectionService
             uc.Games.Add(actualGame);
             _db.Save();
         }
-        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        catch (UniqueConstraintException ex)
         {
             var msg = $"A {typeof(Game).Name} with id {actualGame.Id} already exists in" +
                 $" {typeof(UserCollection).Name} with id {userCollection.Id}.";
@@ -82,7 +85,7 @@ public class GameCollectionService : IDisposable, IGameCollectionService
             _db.UserCollections.Add(newCollection);
             _db.Save();
         }
-        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        catch (UniqueConstraintException ex)
         {
             throw new UniqueEntityException(newCollection, ex);
         }
@@ -121,7 +124,9 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
     public void RemoveGame(DefaultCollection defaultCollection, Game game)
     {
-        var defaultCollectionEntity = _db.UserCollections.Get(defaultCollection.Id)
+        var defaultCollectionEntity = _db.DefaultCollections.Get(
+            defaultCollection.Id,
+            _dcIncludes.Append(dc => dc.Games).ToArray())
             ?? throw new EntityNotFoundException(defaultCollection, null);
 
         var gameEntityToRemove = _db.Games.Get(game.Id)

@@ -5,6 +5,7 @@ using AutoMapper;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Pages.Games;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -18,6 +19,7 @@ public class GameAdd_Tests
     private readonly Mock<IGameService> _gameServiceMock = new();
     private readonly Mock<IGenreService> _genreServiceMock = new();
     private readonly Mock<IMapper> _mapperMock = new();
+    private readonly Mock<ILogger<AddModel>> _loggerMock = new();
 
     private HashSet<Game> Games = new() {
         new ()
@@ -59,7 +61,11 @@ public class GameAdd_Tests
 
     public GameAdd_Tests()
     {
-        _addGamePage = new(_mapperMock.Object, _devServiceMock.Object, _genreServiceMock.Object, _gameServiceMock.Object);
+        _addGamePage = new(_mapperMock.Object,
+                           _devServiceMock.Object,
+                           _genreServiceMock.Object,
+                           _gameServiceMock.Object,
+                           _loggerMock.Object);
     }
 
     [Fact]

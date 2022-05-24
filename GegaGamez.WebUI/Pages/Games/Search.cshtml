@@ -1,5 +1,6 @@
 ﻿@page
 @using System.Collections;
+@using GegaGamez.WebUI.Security
 @model GegaGamez.WebUI.Pages.Games.SearchModel
 @{
     var routeUrl = Url.RouteUrl(ViewContext.RouteData.Values);
@@ -28,10 +29,6 @@
     {
         // generate genre link
         <li>
-            <!-- if genre is selected, apply link-current style -->
-           @* <a asp-page="/Games/Search" class="@(Model.ByGenre.Contains(genre.Id) ? "link-current" : "")"
-            asp-all-route-data="@routeWithGenre(genre.Id)" asp-route-ByGenre="">@genre.Name</a>*@
-
            <a href="@Url.Page("/Games/Search", new {ByGenre=genreFilters(genre.Id), GameTitle = Model.GameTitle})"
                 class="@(Model.ByGenre.Contains(genre.Id) ? "link-current" : "")">@genre.Name</a>
         </li>  
@@ -45,6 +42,11 @@
         <i class="fa-solid fa-magnifying-glass"></i>
     </button>
 </form>
+
+@if(User.IsAdmin())
+{
+    <a title="Add a new game" asp-page="/Games/Add" id="add-game-button"><i class="fa-solid fa-circle-plus"></i></a>
+}
 
 <section id="search-results">
     <h2>Search results:</h2>
@@ -92,3 +94,5 @@
         }
     }
 </section>
+
+

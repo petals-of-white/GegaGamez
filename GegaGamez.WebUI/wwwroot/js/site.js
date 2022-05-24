@@ -44,7 +44,7 @@ function showRemoveFromCollectionModal(gameId)
 {
     const removeFromCollectionModal = document.getElementById("remove-game-from-collection-modal");
 
-    const idField = removeFromCollectionModal.querySelector("input[name=id]");
+    const idField = removeFromCollectionModal.querySelector("input[name=gameId]");
 
     idField.value = gameId;
 
@@ -108,7 +108,7 @@ function hideDeleteGameModal()
 
 function closeInfoMessageShortly()
 {
-    setTimeout(closeInfoMessage, 2000)
+    setTimeout(closeInfoMessage, 1500)
 }
 function closeInfoMessage()
 {

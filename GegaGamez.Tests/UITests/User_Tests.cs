@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoMapper;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Pages.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -16,18 +16,19 @@ public class User_Tests
     private readonly Mock<IAuthorizationService> _authServiceMock = new();
     private readonly Mock<IGameCollectionService> _collectionServiceMock = new();
     private readonly Mock<ICountryService> _countryServiceMock = new();
+    private readonly Mock<ILogger<IndexModel>> _loggerMock = new();
     private readonly Mock<IMapper> _mapperMock = new();
     private readonly IndexModel _userPage;
     private readonly Mock<IUserService> _userServiceMock = new();
 
     public User_Tests()
     {
-        _userPage = new(
-            _userServiceMock.Object,
-            _authServiceMock.Object,
-            _collectionServiceMock.Object,
-            _countryServiceMock.Object,
-            _mapperMock.Object);
+        _userPage = new(_loggerMock.Object,
+                        _userServiceMock.Object,
+                        _authServiceMock.Object,
+                        _collectionServiceMock.Object,
+                        _countryServiceMock.Object,
+                        _mapperMock.Object);
     }
 
     [Fact]
