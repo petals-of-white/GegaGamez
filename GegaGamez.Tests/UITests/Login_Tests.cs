@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -21,10 +22,10 @@ public class Login_Tests
     private readonly Mock<IMapper> _mapperMock = new();
     private readonly Mock<IUserService> _userServiceMock = new();
     private readonly Mock<ClaimsPrincipal> _userMock = new();
-
+    private readonly Mock<ILogger<LoginModel>> _loggerMock = new();
     public Login_Tests()
     {
-        _loginPage = new(_userServiceMock.Object, _authManagerMock.Object, _mapperMock.Object);
+        _loginPage = new(_userServiceMock.Object, _authManagerMock.Object, _mapperMock.Object, _loggerMock.Object);
     }
 
     [Fact]

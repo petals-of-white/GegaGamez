@@ -6,6 +6,7 @@ using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.Pages.Games;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -18,6 +19,7 @@ public class GameSearch_Tests
     private readonly Mock<IMapper> _mapperMock = new();
     private readonly Mock<IRatingService> _ratingServiceMock = new();
     private readonly SearchModel _searchPage;
+    private readonly Mock<ILogger<SearchModel>> _loggerMock = new();
 
     private List<Game> Games { get; } = new() {
         new ()
@@ -41,9 +43,12 @@ public class GameSearch_Tests
 
     public GameSearch_Tests()
     {
-        _searchPage = new(_gameServiceMock.Object, _genreServiceMock.Object, _mapperMock.Object, _ratingServiceMock.Object)
-        {
-        };
+        _searchPage = new(_gameServiceMock.Object,
+                          _genreServiceMock.Object,
+                          _mapperMock.Object,
+                          _ratingServiceMock.Object,
+                          _loggerMock.Object);
+        
 
         _genreServiceMock.Setup(service => service.GetGameGenres(It.IsNotNull<Game>()))
     .Verifiable();
