@@ -20,4 +20,6 @@ public interface IGameService : IDisposable
     void CreateGame(Game game);
 
     void UpdateGame(Game game);
+
+    int GetNumberOfGamesForDeveloper(Developer dev);
 }

@@ -108,7 +108,7 @@ function hideDeleteGameModal()
 
 function closeInfoMessageShortly()
 {
-    setTimeout(closeInfoMessage, 2000)
+    setTimeout(closeInfoMessage, 1500)
 }
 function closeInfoMessage()
 {

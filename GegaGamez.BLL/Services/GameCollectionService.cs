@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using EntityFramework.Exceptions.Common;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Exceptions;
@@ -40,7 +41,7 @@ public class GameCollectionService : IDisposable, IGameCollectionService
             dc.Games.Add(actualGame);
             _db.Save();
         }
-        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        catch (UniqueConstraintException ex)
         {
             var msg = $"A {typeof(Game).Name} with id {actualGame.Id} already exists in" +
                 $" {typeof(DefaultCollection).Name} with id {defaultCollection.Id}.";
@@ -68,7 +69,7 @@ public class GameCollectionService : IDisposable, IGameCollectionService
             uc.Games.Add(actualGame);
             _db.Save();
         }
-        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        catch (UniqueConstraintException ex)
         {
             var msg = $"A {typeof(Game).Name} with id {actualGame.Id} already exists in" +
                 $" {typeof(UserCollection).Name} with id {userCollection.Id}.";
@@ -84,7 +85,7 @@ public class GameCollectionService : IDisposable, IGameCollectionService
             _db.UserCollections.Add(newCollection);
             _db.Save();
         }
-        catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
+        catch (UniqueConstraintException ex)
         {
             throw new UniqueEntityException(newCollection, ex);
         }

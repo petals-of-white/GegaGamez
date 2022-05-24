@@ -23,6 +23,10 @@
 </section>
 
 <section id="games-in-collection">
+    @if (Model.GamesInCollection.Count == 0)
+    {
+        <i id="beatiful-gamepad" class="fa-solid fa-gamepad"></i>
+    }
     @foreach(GameModel game in Model.GamesInCollection)
     {
         <article class="flex-container search-result display-toggler-hover game-item"> 

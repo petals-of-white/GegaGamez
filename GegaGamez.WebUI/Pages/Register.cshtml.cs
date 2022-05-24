@@ -71,7 +71,7 @@ namespace GegaGamez.WebUI.Pages
                     await HttpContext.SignInAsync(principal, properties);
 
                     _logger.LogInformation($"User {User.GetId()} has signed in.");
-                    TempData [Messages.InfoKey] = "Successfully signed in";
+                    TempData [Messages.InfoKey] = "Registration was successful";
 
                     return RedirectToPage("/Games/Search");
                 }

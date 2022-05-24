@@ -14,14 +14,18 @@
 
     <section id="dev-text-info" class="text-info-block">
         <h1>@Model.Developer.Name</h1>
-        
-        <span>Number of games: </span>
+        <span>Games: 
+            <span class="font-contrast">@Model.Developer.NumberOfGames</span>
+        </span>
         
         <span class="font-secondary">
             @{
                 string endDate = Model.Developer.EndDate is null ? "present" : Model.Developer.EndDate.Value.Year.ToString();
             }
             @Model.Developer.BeginDate.Year - @endDate
+        </span>
+        <span>
+            @Model.Developer.Description
         </span>
     </section>
 </article>

@@ -521,3 +521,12 @@ a.inverse-link {
     a.inverse-link:hover {
         color: var(--text-color-primary);
     }
+
+#add-game-button{
+    position: sticky;
+    z-index: 1;
+    top: 20%;
+    left: 83%;
+    font-size: 50px;
+    color: var(--text-color-contrast);
+}

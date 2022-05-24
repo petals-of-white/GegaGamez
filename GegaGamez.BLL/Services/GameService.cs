@@ -31,7 +31,6 @@ public class GameService : IDisposable, IGameService
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="game"></param>
     /// <exception cref="UniqueEntityException"></exception>
@@ -129,15 +128,17 @@ public class GameService : IDisposable, IGameService
     public IEnumerable<Game> GetGamesInCollection(DefaultCollection defaultCollection) =>
         _db.Games.FindAll(g => g.DefaultCollections.Select(dc => dc.Id).Contains(defaultCollection.Id), _gameIncludes);
 
+    public int GetNumberOfGamesForDeveloper(Developer dev) =>
+            _db.Games.CountAll(g => g.DeveloperId == dev.Id);
+
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="game"></param>
     /// <exception cref="EntityNotFoundException"></exception>
     /// <exception cref="UniqueEntityException"></exception>
     public void UpdateGame(Game game)
     {
-        var actualGame = _db.Games.Get(game.Id, _gameIncludes.Append(g=>g.Genres).ToArray())
+        var actualGame = _db.Games.Get(game.Id, _gameIncludes.Append(g => g.Genres).ToArray())
             ?? throw new EntityNotFoundException(game, null);
 
         actualGame.Description = game.Description;
@@ -157,7 +158,7 @@ public class GameService : IDisposable, IGameService
         }
         catch (EntityFramework.Exceptions.Common.UniqueConstraintException ex)
         {
-            throw new UniqueEntityException("Can not insert duplicate genres.",ex);
+            throw new UniqueEntityException("Can not insert duplicate genres.", ex);
         }
     }
 }

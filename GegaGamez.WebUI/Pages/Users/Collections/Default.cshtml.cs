@@ -108,28 +108,29 @@ namespace GegaGamez.WebUI.Pages.Users.Collections
 
         public IActionResult OnPostRemoveGame(int gameId, int collectionId)
         {
-            var game = new Game { Id = gameId };
-            var dc = new DefaultCollection { Id = collectionId };
+            //var game = new Game { Id = gameId };
+
 
             bool isAuthenticated = User.IsAuthenticated();
 
             if (isAuthenticated)
             {
-                var defaultCollection = _collectionService.GetDefaultCollectionById(collectionId);
+                Game? game = _gameService.GetById(gameId);
+                DefaultCollection? dc = _collectionService.GetDefaultCollectionById(collectionId);
 
-                if (defaultCollection is not null)
+                if (dc is not null)
                 {
-                    bool isOwner = User.GetId() == defaultCollection.UserId;
+                    bool isOwner = User.GetId() == dc.UserId;
                     if (isOwner)
                     {
                         try
                         {
                             _collectionService.RemoveGame(dc, game);
-                            _logger.LogInformation($"Game {gameId} has been removed from default collection {collectionId}.");
 
+                            _logger.LogInformation($"Game {gameId} has been removed from default collection {collectionId}.");
                             TempData [Messages.InfoKey] = $"The game {game.Title} has been removed from {dc.DefaultCollectionType.Name}";
 
-                            return RedirectToPage(new { userId = defaultCollection.UserId, defaultCollection = defaultCollection.DefaultCollectionType.Name });
+                            return RedirectToPage(new { userId = dc.UserId, defaultCollection = dc.DefaultCollectionType.Name });
                         }
                         catch (EntityNotFoundException ex)
                         {

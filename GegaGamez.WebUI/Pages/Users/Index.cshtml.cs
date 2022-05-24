@@ -92,6 +92,7 @@ public class IndexModel : PageModel
                     await HttpContext.SignOutAsync();
 
                     _logger.LogInformation($"Signed out a user with id {userId}");
+                    TempData [Messages.InfoKey] = "Your account has been deleted. Thank you for your time.";
 
                     return RedirectToPage("/Games/Search");
                 }
@@ -131,7 +132,8 @@ public class IndexModel : PageModel
                 try
                 {
                     _userService.UpdateUser(user);
-                    _logger.LogInformation($"Successfully update user profile. New user data: {UpdatedUserProfile}");
+                    _logger.LogInformation($"Successfully update user profile. New user data: {UpdatedUserProfile}.");
+                    TempData [Messages.InfoKey] = "Your profile has been updated.";
                 }
                 catch (EntityNotFoundException ex)
                 {

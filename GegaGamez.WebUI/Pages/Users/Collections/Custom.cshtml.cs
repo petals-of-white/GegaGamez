@@ -27,7 +27,6 @@ namespace GegaGamez.WebUI.Pages.Users.Collections
 
         public IActionResult OnGet(int userId, int collectionId)
         {
-            User? user;
             UserCollection? collection;
 
             collection = _collectionService.GetUserCollectionById(collectionId);
@@ -39,7 +38,6 @@ namespace GegaGamez.WebUI.Pages.Users.Collections
             else
             {
                 collection.Games = _gameService.GetGamesInCollection(collection).ToHashSet();
-                //_collectionService.LoadCollectionGames(collection);
 
                 Collection = _mapper.Map<UserCollectionModel>(collection);
 

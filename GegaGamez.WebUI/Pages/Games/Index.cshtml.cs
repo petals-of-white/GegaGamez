@@ -26,7 +26,7 @@ public class IndexModel : PageModel
     private readonly IUserService _userService;
 
     private List<SelectListItem> GenerateDefaultCollectionsItems(User user,
-                                                                 Game requestedGame)
+                                                                     Game requestedGame)
     {
         var defaultCollections = _collectionService.GetDefaultColletionsForUser(user).ToList();
 
@@ -37,11 +37,11 @@ public class IndexModel : PageModel
             .Select(dc => new SelectListItem(dc.DefaultCollectionType.Name, dc.Id.ToString()))
             .ToList();
 
-        for (int i = 0; i < defaultCollections.Count(); i++)
-        {
-            if (defaultCollections [i].Games.Select(g => g.Id).Contains(requestedGame.Id))
-                itemList [i].Selected = true;
-        }
+        //for (int i = 0; i < defaultCollections.Count(); i++)
+        //{
+        //    if (defaultCollections [i].Games.Select(g => g.Id).Contains(requestedGame.Id))
+        //        itemList [i].Selected = true;
+        //}
 
         return itemList;
     }
@@ -58,11 +58,11 @@ public class IndexModel : PageModel
             .Select(uc => new SelectListItem(uc.Name, uc.Id.ToString()))
             .ToList();
 
-        for (int i = 0; i < userCollections.Count; i++)
-        {
-            if (userCollections [i].Games.Select(g => g.Id).Contains(requestedGame.Id))
-                itemList [i].Selected = true;
-        }
+        //for (int i = 0; i < userCollections.Count; i++)
+        //{
+        //    if (userCollections [i].Games.Select(g => g.Id).Contains(requestedGame.Id))
+        //        itemList [i].Selected = true;
+        //}
 
         return itemList;
     }
@@ -318,18 +318,39 @@ public class IndexModel : PageModel
 
     public IActionResult OnPostMoveGameToCollection()
     {
-        if (GameToDefaultCollection.GameId != GameToUserCollection.GameId)
+        if (User.IsAuthenticated() == false)
+            return Unauthorized();
+
+        // Validation
+        this.ValidateOnly(new string [] { nameof(GameToUserCollection), nameof(GameToDefaultCollection) });
+        if (ModelState.IsValid == false)
         {
-            _logger.LogWarning("Something weird happenned... Game ids are different");
+            _logger.LogInformation($"GameToUserCollection or GameToDefaultCollection didn't pass validation. Number of errors {ModelState.ErrorCount}");
+            TempData [Messages.InfoKey] = "Wrong collection or game data";
+
             return BadRequest();
         }
-        else
-        {
-            var gameId = GameToDefaultCollection.GameId;
-            var gameToAdd = new Game { Id = gameId };
-            var wantedUserCollection = new UserCollection { Id = GameToUserCollection.CollectionId };
-            var wantedDefaultCollection = new DefaultCollection { Id = GameToDefaultCollection.CollectionId };
 
+        // Check whether collections owner is the current user
+        UserCollection? wantedUserCollection = _collectionService
+            .GetUserCollectionById(GameToUserCollection.CollectionId);
+
+        DefaultCollection? wantedDefaultCollection = _collectionService
+            .GetDefaultCollectionById(GameToDefaultCollection.CollectionId);
+
+        int? userId = User.GetId();
+
+        int gameId = GameToDefaultCollection.GameId;
+        var gameToAdd = new Game { Id = gameId };
+
+        // Default Collection First
+        if (wantedDefaultCollection is not null)
+        {
+            if (wantedDefaultCollection.UserId != userId)
+            {
+                _logger.LogInformation($"User {userId} isn't the owner of default collection {wantedDefaultCollection.Id}.");
+                return Forbid();
+            }    
             try
             {
                 _collectionService.AddGame(wantedDefaultCollection, gameToAdd);
@@ -338,40 +359,54 @@ public class IndexModel : PageModel
             catch (EntityNotFoundException ex)
             {
                 _logger.LogWarning(ex, "Either collection or game wasn't found. See the exception.");
-                return NotFound();
             }
             catch (UniqueEntityException ex)
             {
                 _logger.LogWarning(ex, "Attempting to add an existing game to collection. No changes.");
                 _logger.LogInformation("Redirecting...");
-                TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} has been added to collection";
+                TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} is already in {wantedDefaultCollection!.DefaultCollectionType.Name}";
 
                 return RedirectToPage(new { id = gameId });
             }
+        }
 
+
+        // User collection
+        if (wantedUserCollection is not null)
+        {
+            if (wantedUserCollection.UserId != userId)
+            {
+                _logger.LogInformation($"User {userId} isn't the owner of user collection {wantedUserCollection.Id}.");
+                return Forbid();
+            }
             try
             {
                 _collectionService.AddGame(wantedUserCollection, gameToAdd);
+                _logger.LogInformation($"Game {gameToAdd.Id} added to user collection {wantedUserCollection.Id}.");
+
             }
             catch (EntityNotFoundException ex)
             {
                 _logger.LogWarning(ex, "Either collection or game wasn't found. See the exception.");
-                return NotFound();
             }
             catch (UniqueEntityException ex)
             {
-                _logger.LogWarning(ex, "Unique constraint violated. See the exception.");
+                _logger.LogWarning(ex, "Attempting to add an existing game to collection. No changes.");
+                _logger.LogInformation("Redirecting...");
+                TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} is already in {wantedUserCollection.Name}.";
             }
 
-            _logger.LogInformation("Successfully added games to collections. Redirecting...");
-
-            TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} has been added to collection";
-
-            return RedirectToPage(new { id = gameId });
         }
+
+
+        _logger.LogInformation("Successfully added games to collections. Redirecting...");
+
+        TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} has been added to collection";
+
+        return RedirectToPage(new { id = gameId });
     }
 
-    public async Task<IActionResult> OnPostRateGameAsync()
+    public IActionResult OnPostRateGame()
     {
         //AuthorizationResult canRateGames = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
         bool isAuthenticated = User.IsAuthenticated();
@@ -411,7 +446,8 @@ public class IndexModel : PageModel
         }
         else
         {
-            _logger.LogInformation("User isn't authenticate, therefore cannot rate games.");
+            _logger.LogInformation("User isn't authenticated, therefore cannot rate games.");
+
             return Unauthorized();
         }
     }
