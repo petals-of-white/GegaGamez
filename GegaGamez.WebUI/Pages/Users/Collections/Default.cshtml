@@ -25,62 +25,49 @@
 <section id="games-in-collection">
     @foreach(GameModel game in Model.GamesInCollection)
     {
-        <article class="flex-container search-result game-item">
-                <a asp-page="/Games/Index" asp-route-id="@game.Id">
-                    <img class="img-standard game-img hover-shadow" 
-                    src="/img/game.png"
-                    alt="Game avatar" />
-                </a>
+        <article class="flex-container search-result display-toggler-hover game-item"> 
+            <a asp-page="/Games/Index" asp-route-id="@game.Id">
+                <img class="img-standard game-img hover-shadow" 
+                src="/img/game.png"
+                alt="Game avatar" />
+            </a>
 
-                <div class="text-info-block">
-                    <h3 class="game-title-small">@game.Title</h3>
+            <div class="text-info-block">
+                <h3 class="game-title-small">@game.Title</h3>
 
-                    <span class="rating-small">
-                        @game.AvgRatingScore / 10
-                    </span>
+                @if (game.AvgRatingScore.HasValue)
+                {
+                    <span class="rating-small">@game.AvgRatingScore / 10</span>
+                }
+                else
+                {
+                    <span class="rating-small font-contrast">No rating yet</span>
+                }
 
-                    <span class="font-secondary">
-                        @game.ReleaseDate.Year, @game.Developer.Name
-                    </span>
+                <span class="font-secondary">
+                    @game.ReleaseDate.Year,
+                    <a asp-page="/Developers/Index" asp-route-id=@game.Developer.Id> @game.Developer.Name</a>
+                </span>
 
-                    <span class="game-description-small">
-                        @game.Description
-                    </span>
-                </div>
-        <div class="btn-group game-action-buttons">
-            @if (authenticated && ownedByThisUser){
-                <button onclick="showCollectionModal(@game.Id)" class="btn-contrast rounded">Move to</button>
-                <button onclick="showRemoveFromCollectionModal(@game.Id)" class="btn-contrast rounded">Remove</button>
-            }
-        </div>
-    </article>  
-}
+                <span class="game-description-small">
+                    @game.Description
+                </span>
+            </div>
+            <div class="btn-group game-action-buttons display-toggled">
+                @if (authenticated && ownedByThisUser){
+                    @*<button onclick="showCollectionModal(@game.Id)" class="btn-contrast rounded">Move to</button>*@
+                    <button type="button" onclick="showRemoveFromCollectionModal(@game.Id)" class="btn-contrast rounded">Remove</button>
+                }
+            </div>
+        </article>
+    }
 </section>
 
-
-<!-- MOVE GAME TO COLLECTION modal!!! -->
-<form method="post" id="move-game-to-collection-modal" class="popup-interactive bg-secondary border-primary">
-    <h3 class="font-contrast">Select collection:</h3>
-    <input type="number" name="id" readonly />
-    <section title="Select collection..." class="main-something">
-        <div>
-            <select size="5" asp-for=GameToDefaultCollection.CollectionId asp-items=@Model.AvailableDefaultCollections></select>
-        </div>
-	    <div>
-            <select size="5" asp-for=GameToUserCollection.CollectionId asp-items=@Model.AvailableUserCollections></select>
-        </div>
-    </section>
-    <section class="popup-actions">
-        <button type="submit" class="borderless">Ok</button>
-        <button type="button" onclick="hideCollectionModal()" class="btn-contrast rounded">Cancel</button>
-    </section>
-</form>
-
-
 <!-- REMOVE GAME FROM COLLECTION modal!!! -->
-<form method="post" id="remove-game-from-collection-modal" class="popup-interactive bg-secondary border-primary">
+<form method="post" asp-page-handler="RemoveGame" id="remove-game-from-collection-modal" class="popup-interactive bg-secondary border-primary">
     <h3 class="font-contrast">Remove this game from collection?</h3>
-    <input type="number" name="id" readonly />
+    <input type="number" name="gameId" readonly hidden />
+    <input type="number" value="@Model.Collection.Id" name="collectionId" readonly hidden/>
     <section class="popup-actions">
         <button type="submit" class="borderless">Yes, remove</button>
         <button type="button" onclick="hideRemoveFromCollectionModal()" class="btn-contrast rounded">Cancel</button>

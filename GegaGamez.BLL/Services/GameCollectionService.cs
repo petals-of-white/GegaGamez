@@ -30,7 +30,9 @@ public class GameCollectionService : IDisposable, IGameCollectionService
         var actualGame = _db.Games.Get(game.Id)
             ?? throw new EntityNotFoundException($"Game with id {game.Id} does not exist.");
 
-        var dc = _db.DefaultCollections.Get(defaultCollection.Id)
+        var dc = _db.DefaultCollections.Get(
+            defaultCollection.Id,
+            _dcIncludes.Append(dc => dc.Games).ToArray())
             ?? throw new EntityNotFoundException($"Default Сollection with id {defaultCollection.Id} does not exist.");
 
         try
@@ -121,7 +123,9 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
     public void RemoveGame(DefaultCollection defaultCollection, Game game)
     {
-        var defaultCollectionEntity = _db.UserCollections.Get(defaultCollection.Id)
+        var defaultCollectionEntity = _db.DefaultCollections.Get(
+            defaultCollection.Id,
+            _dcIncludes.Append(dc => dc.Games).ToArray())
             ?? throw new EntityNotFoundException(defaultCollection, null);
 
         var gameEntityToRemove = _db.Games.Get(game.Id)
