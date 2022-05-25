@@ -12,7 +12,7 @@ internal class RatingConfiguration : IEntityTypeConfiguration<Rating>
 
         builder.ToTable("Rating");
 
-        builder.HasIndex(r => new {r.UserId, r.GameId, r.RatingScore}, "NIX_Rating_UserId_GameId_RatingScore")
+        builder.HasIndex(r => new { r.UserId, r.GameId, r.RatingScore }, "NIX_Rating_UserId_GameId_RatingScore")
             .IsUnique();
         builder.HasIndex(e => e.GameId, "NIX_Rating_GameId");
 

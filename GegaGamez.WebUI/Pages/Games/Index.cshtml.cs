@@ -338,7 +338,7 @@ public class IndexModel : PageModel
             {
                 _logger.LogInformation($"User {userId} isn't the owner of default collection {wantedDefaultCollection.Id}.");
                 return Forbid();
-            }    
+            }
             try
             {
                 _collectionService.AddGame(wantedDefaultCollection, gameToAdd);
@@ -359,7 +359,6 @@ public class IndexModel : PageModel
             }
         }
 
-
         // User collection
         if (wantedUserCollection is not null)
         {
@@ -372,7 +371,6 @@ public class IndexModel : PageModel
             {
                 _collectionService.AddGame(wantedUserCollection, gameToAdd);
                 _logger.LogInformation($"Game {gameToAdd.Id} added to user collection {wantedUserCollection.Id}.");
-
             }
             catch (EntityNotFoundException ex)
             {
@@ -384,7 +382,6 @@ public class IndexModel : PageModel
                 _logger.LogInformation("Redirecting...");
                 TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} is already in {wantedUserCollection.Name}.";
             }
-
         }
 
         _logger.LogInformation("Successfully added games to collections. Redirecting...");
@@ -394,7 +391,6 @@ public class IndexModel : PageModel
 
     public IActionResult OnPostRateGame()
     {
-        //AuthorizationResult canRateGames = await _authService.AuthorizeAsync(User, PolicyNames.UserPolicy);
         bool isAuthenticated = User.IsAuthenticated();
 
         if (isAuthenticated)

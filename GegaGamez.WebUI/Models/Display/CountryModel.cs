@@ -1,6 +1,6 @@
 ﻿namespace GegaGamez.WebUI.Models.Display;
 
-public struct CountryModel
+public record struct CountryModel
 {
     public int Id { get; set; }
     public string Name { get; set; }

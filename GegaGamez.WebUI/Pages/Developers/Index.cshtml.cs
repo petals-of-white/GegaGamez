@@ -8,10 +8,10 @@ namespace GegaGamez.WebUI.Pages.Developers;
 
 public class IndexModel : PageModel
 {
-    private readonly IMapper _mapper;
     private readonly IDeveloperService _devService;
     private readonly IGameService _gameService;
     private readonly ILogger<IndexModel> _logger;
+    private readonly IMapper _mapper;
 
     public IndexModel(IDeveloperService devService, IGameService gameService, IMapper mapper, ILogger<IndexModel> logger)
     {
@@ -36,6 +36,7 @@ public class IndexModel : PageModel
         {
             Developer = _mapper.Map<DeveloperModel>(dev);
             _logger.LogInformation($"Found a developer: {Developer}");
+
             Developer.NumberOfGames = _gameService.GetNumberOfGamesForDeveloper(dev);
 
             return Page();

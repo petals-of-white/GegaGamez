@@ -77,43 +77,9 @@ public class GameService : IDisposable, IGameService
             {
                 filter = filter.AndAlso(g => g.Genres.Select(g => g.Id).Contains(filterGenreId));
             }
-            //filter = filter.AndAlso(g => filterGenreIds.All(gid => g.Genres.Select(gr => gr.Id).Contains(gid)));
         }
         return _db.Games.FindAll(filter, _gameIncludes);
     }
-
-    /*
-    public IEnumerable<Game> Find(string? byTitle, params Genre [] byGenre)
-    {
-        Expression<Func<Game, bool>> filter;
-
-        IEnumerable<Game> filteredGames;
-
-        var genresIds = byGenre.Select(genre => genre.Id);
-
-        if (string.IsNullOrWhiteSpace(byTitle))
-        {
-            if (byGenre is null || byGenre.Length == 0)
-                filter = g => true;
-            else
-                filter = g => g.Genres.Select(genre => genre.Id).All(id => genresIds.Contains(id));
-        }
-        else
-        {
-            if (byGenre is null || byGenre.Length == 0)
-                filter = g => g.Title.ToLower().Contains(byTitle.ToLower());
-            else
-            {
-                filter = g => g.Title.ToLower().Contains(byTitle.ToLower())
-                    && g.Genres.Select(genre => genre.Id).All(id => genresIds.Contains(id));
-            }
-        }
-
-        filteredGames = _db.Games.FindAll(filter);
-
-        return filteredGames;
-    }
-    */
 
     public IEnumerable<Game> FindAll() => _db.Games.AsEnumerable(_gameIncludes);
 

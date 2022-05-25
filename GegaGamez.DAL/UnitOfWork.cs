@@ -2,7 +2,6 @@
 using GegaGamez.DAL.Repositories;
 using GegaGamez.Shared.DataAccess;
 using GegaGamez.Shared.DataAccess.Repositories;
-using GegaGamez.Shared.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace GegaGamez.DAL;
@@ -60,20 +59,11 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     public IUserRepository Users => _users;
 
-    public void Dispose()
-    {
-        _dbContext.Dispose();
-    }
+    public void Dispose() => _dbContext.Dispose();
 
-    public int Save()
-    {
-        return _dbContext.SaveChanges();
-    }
+    public int Save() => _dbContext.SaveChanges();
 
-    public Task<int> SaveAsync()
-    {
-        return _dbContext.SaveChangesAsync();
-    }
+    public Task<int> SaveAsync() => _dbContext.SaveChangesAsync();
 
     public void Update<TEntity>(TEntity entityToUpdate) where TEntity : class
     {

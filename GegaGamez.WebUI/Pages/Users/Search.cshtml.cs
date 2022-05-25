@@ -8,8 +8,8 @@ namespace GegaGamez.WebUI.Pages.Users;
 
 public class SearchModel : PageModel
 {
-    private readonly IMapper _mapper;
     private readonly ILogger<SearchModel> _logger;
+    private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
     public SearchModel(IUserService users, IMapper mapper, ILogger<SearchModel> logger)
@@ -42,6 +42,5 @@ public class SearchModel : PageModel
         }
 
         _logger.LogInformation($"User search gave {Users.Count} results");
-
     }
 }

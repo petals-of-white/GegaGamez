@@ -16,10 +16,10 @@ public class GameSearch_Tests
 {
     private readonly Mock<IGameService> _gameServiceMock = new();
     private readonly Mock<IGenreService> _genreServiceMock = new();
+    private readonly Mock<ILogger<SearchModel>> _loggerMock = new();
     private readonly Mock<IMapper> _mapperMock = new();
     private readonly Mock<IRatingService> _ratingServiceMock = new();
     private readonly SearchModel _searchPage;
-    private readonly Mock<ILogger<SearchModel>> _loggerMock = new();
 
     private List<Game> Games { get; } = new() {
         new ()
@@ -48,7 +48,6 @@ public class GameSearch_Tests
                           _mapperMock.Object,
                           _ratingServiceMock.Object,
                           _loggerMock.Object);
-        
 
         _genreServiceMock.Setup(service => service.GetGameGenres(It.IsNotNull<Game>()))
     .Verifiable();

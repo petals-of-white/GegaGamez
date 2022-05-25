@@ -10,8 +10,8 @@ namespace GegaGamez.BLL.Services;
 
 public class CommentService : ICommentService, IDisposable
 {
-    private readonly IUnitOfWork _db;
     private readonly Expression<Func<Comment, object>> [] _commentInclues = { c => c.User, c => c.Game };
+    private readonly IUnitOfWork _db;
 
     public CommentService(IUnitOfWork db)
     {
@@ -35,7 +35,6 @@ public class CommentService : ICommentService, IDisposable
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="actualComment"></param>
     /// <exception cref="EntityNotFoundException"></exception>

@@ -12,14 +12,14 @@ namespace GegaGamez.Shared.DataAccess
         IGameRepository Games { get; }
         IGenreRepository Genres { get; }
         IRatingRepository Ratings { get; }
-        IUserRepository Users { get; }
-        IUserCollectionRepository UserCollections { get; }
         IRoleRepository Roles { get; }
-
-        void Update<TEntity>(TEntity entityToUpdate) where TEntity : class;
+        IUserCollectionRepository UserCollections { get; }
+        IUserRepository Users { get; }
 
         int Save();
 
         Task<int> SaveAsync();
+
+        void Update<TEntity>(TEntity entityToUpdate) where TEntity : class;
     }
 }

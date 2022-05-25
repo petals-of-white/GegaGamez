@@ -11,7 +11,6 @@ public class DeveloperService : IDisposable, IDeveloperService
     private readonly Expression<Func<Developer, object>> [] _devIncludes = Array.Empty<Expression<Func<Developer, object>>>();
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="db"></param>
     /// <exception cref="ArgumentNullException"></exception>

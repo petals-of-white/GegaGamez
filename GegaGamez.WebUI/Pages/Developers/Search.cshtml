@@ -16,8 +16,6 @@
 
     @foreach (var dev in Model.Developers)
     {
-        // render each dev
-
         <article class="flex-container search-result game-item">
             <a asp-page="/Developers/Index" asp-route-id="@dev.Id"> 
                 <img class="img-standard game-img hover-shadow" src="/img/developer.png" alt="Game image" />

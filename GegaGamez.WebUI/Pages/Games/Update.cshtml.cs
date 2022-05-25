@@ -104,7 +104,7 @@ public class UpdateModel : PageModel
 
                 return RedirectToPage(new { updatedGame.Id });
             }
-            catch(EntityNotFoundException ex)
+            catch (EntityNotFoundException ex)
             {
                 _logger.LogWarning(ex, $"Cannot update the game {updatedGame.Id}");
                 TempData [Messages.InfoKey] = "Failed to update the game. Please try again";

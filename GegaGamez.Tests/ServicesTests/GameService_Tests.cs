@@ -10,6 +10,7 @@ public class GameService_Tests
 {
     private readonly GameService _gameService;
     private readonly Mock<IUnitOfWork> _uowMock = new();
+
     public GameService_Tests()
     {
         _gameService = new(_uowMock.Object);
@@ -19,11 +20,6 @@ public class GameService_Tests
     public void Constructor_ShouldThrowNullReferenceException()
     {
         GameService serviceWithNullUoW;
-        Assert.Throws<ArgumentNullException>(() => serviceWithNullUoW = new(null));
-    }
-
-    [Fact]
-    public void Filter_Works()
-    {
+        Assert.Throws<ArgumentNullException>(() => serviceWithNullUoW = new(null!));
     }
 }

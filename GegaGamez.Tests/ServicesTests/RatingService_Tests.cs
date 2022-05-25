@@ -13,17 +13,11 @@ public class RatingService_Tests : IDisposable
     private readonly ITestOutputHelper _outputHelper;
     private readonly RatingService _ratingService;
     private readonly Mock<IUnitOfWork> _uowMock = new();
+
     public RatingService_Tests(ITestOutputHelper outputHelper)
     {
         _ratingService = new(_uowMock.Object);
         _outputHelper = outputHelper;
-    }
-
-    [Fact]
-    public void Constructor_ShouldThrowNullReferenceException()
-    {
-        RatingService serviceWithNullUoW;
-        Assert.Throws<ArgumentNullException>(() => serviceWithNullUoW = new(null));
     }
 
     [Fact]
@@ -38,11 +32,7 @@ public class RatingService_Tests : IDisposable
             RatingScore = It.IsInRange((byte) 1, (byte) 10, Moq.Range.Inclusive)
         };
 
-        //_uowMock.Setup(uow => uow.Ratings.FindAll(r => r.UserId == oldRating.User.Id && r.GameId == oldRating.Game.Id))
-        //        .Returns(new Rating [] { new() { GameId = oldRating.GameId, UserId = oldRating.UserId } })
-        //        .Verifiable();
-
-        _uowMock.Setup(uow => uow.Update<Rating>(updatedRating)).Callback(() =>
+        _uowMock.Setup(uow => uow.Update(updatedRating)).Callback(() =>
         {
             _outputHelper.WriteLine("Updating entity called");
         });
@@ -58,6 +48,13 @@ public class RatingService_Tests : IDisposable
 
         // Assert
         Assert.Equal(updatedRating, actualRating);
+    }
+
+    [Fact]
+    public void Constructor_ShouldThrowNullReferenceException()
+    {
+        RatingService serviceWithNullUoW;
+        Assert.Throws<ArgumentNullException>(() => serviceWithNullUoW = new(null));
     }
 
     public void Dispose() => _ratingService.Dispose();

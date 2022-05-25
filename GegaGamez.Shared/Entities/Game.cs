@@ -11,17 +11,15 @@ public partial class Game : IEntity
         UserCollections = new HashSet<UserCollection>();
     }
 
-    public int Id { get; set; }
-    public string Title { get; set; } = null!;
-    public DateTime ReleaseDate { get; set; }
-    public string Description { get; set; } = null!;
-    public int DeveloperId { get; set; }
-
-    public virtual Developer Developer { get; set; } = null!;
     public virtual ICollection<Comment> Comments { get; set; }
-    public virtual ICollection<Rating> Ratings { get; set; }
-
     public virtual ICollection<DefaultCollection> DefaultCollections { get; set; }
+    public string Description { get; set; } = null!;
+    public virtual Developer Developer { get; set; } = null!;
+    public int DeveloperId { get; set; }
     public virtual ICollection<Genre> Genres { get; set; }
+    public int Id { get; set; }
+    public virtual ICollection<Rating> Ratings { get; set; }
+    public DateTime ReleaseDate { get; set; }
+    public string Title { get; set; } = null!;
     public virtual ICollection<UserCollection> UserCollections { get; set; }
 }

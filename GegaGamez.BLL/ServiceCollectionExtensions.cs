@@ -23,7 +23,8 @@ namespace GegaGamez.BLL
             var connectionString = config.GetConnectionString("GegaGamezDev");
 
             // EFCore SqlServer
-            services.AddSqlServer<GegaGamezContext>(connectionString, optionsAction: builder => {
+            services.AddSqlServer<GegaGamezContext>(connectionString, optionsAction: builder =>
+            {
                 builder.EnableSensitiveDataLogging();
                 builder.UseExceptionProcessor();
             });

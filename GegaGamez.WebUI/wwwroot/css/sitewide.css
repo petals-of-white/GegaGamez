@@ -21,11 +21,10 @@
         white-space: nowrap;
     }
 
-
 #info-message {
     display: flex;
-    justify-content:space-around;
-    align-items:center;
+    justify-content: space-around;
+    align-items: center;
     color: black;
     width: 100%;
     height: 80px;
@@ -36,12 +35,14 @@
     background-color: yellow;
     transition: left 2s, opacity 2s;
 }
+
     #info-message.closed {
         left: -100%;
         opacity: 0;
         /*transform: scaleX(0);*/
     }
-#info-message button{
-    font-size: 30px;
-}
+
+    #info-message button {
+        font-size: 30px;
+    }
 /* END */

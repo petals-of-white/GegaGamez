@@ -33,68 +33,6 @@ public class UnitOfWork_Tests : IDisposable
         _dbContext = new(contextOptions);
         _db = new(_dbContext);
 
-        /*
-        var contextOptions = new DbContextOptionsBuilder<GegaGamezContext>().UseInMemoryDatabase("TestDb").Options;
-        _dbContext = new(contextOptions);
-
-        _db = new(_dbContext);
-        _users = new User [] {
-            new()
-            {
-                Username="Rerorer",
-                Password="SpookyScary"
-            },
-
-            new()
-            {
-                Username="BigBlackCat",
-                Password="SoNeedlessToSay"
-            },
-
-            new()
-            {
-                Username="ZombieO",
-                Password="Yuyuyu"
-            }
-        };
-        _db.Users.AddRange(_users);
-
-        _games = new Game []
-        {
-            new()
-            {
-                Title="TestGameOne",
-                ReleaseDate= DateTime.Today,
-                Description="TastyTest",
-                DeveloperId=3
-            },
-            new()
-            {
-                Title="TestGameTwo",
-                ReleaseDate= DateTime.Today.AddYears(-1),
-                Description="TestyTasty",
-                DeveloperId=5
-            },
-            new()
-            {
-                Title="TestGameThree",
-                ReleaseDate= DateTime.Today.AddYears(-2),
-                Description="West?",
-                DeveloperId=1
-            },
-        };
-        _db.Games.AddRange(_games);
-
-        _ratings = new Rating []
-        {
-            new () { User = _users[0], Game = _games[0], RatingScore = 5},
-            new () { User = _users[1], Game = _games[1], RatingScore = 8},
-            new () { User = _users[2], Game = _games[2], RatingScore = 10},
-        };
-
-        _db.Ratings.AddRange(_ratings);
-        _db.Save();
-        */
         _output = outputHelper;
     }
 

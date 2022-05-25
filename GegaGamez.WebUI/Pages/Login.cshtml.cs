@@ -1,7 +1,6 @@
 using AutoMapper;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Auth;
-using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.PageHelpers;
 using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authentication;
@@ -40,7 +39,7 @@ namespace GegaGamez.WebUI.Pages
             {
                 _logger.LogInformation("Authenticated user tried to access login page.");
                 TempData [Messages.InfoKey] = "You can not do that because you are already logged in!";
-                
+
                 return Forbid();
             }
         }
@@ -56,7 +55,7 @@ namespace GegaGamez.WebUI.Pages
                     if (user is null)
                     {
                         _logger.LogInformation($"User with username {LoginForm.Username} was not found.");
-                        this.UserDoesNotExist(LoginForm.Username);    
+                        this.UserDoesNotExist(LoginForm.Username);
 
                         return RedirectToPage("/Login");
                     }

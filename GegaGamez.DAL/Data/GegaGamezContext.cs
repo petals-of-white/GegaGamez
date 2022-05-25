@@ -5,7 +5,7 @@ namespace GegaGamez.DAL.Data;
 
 public partial class GegaGamezContext : DbContext
 {
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    private partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

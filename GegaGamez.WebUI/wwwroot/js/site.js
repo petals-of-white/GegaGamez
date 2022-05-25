@@ -115,4 +115,3 @@ function closeInfoMessage()
     const infoMsg = document.getElementById("info-message");
     infoMsg.classList.add("closed");
 }
-

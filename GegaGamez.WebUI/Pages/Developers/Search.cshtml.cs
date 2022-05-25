@@ -8,8 +8,8 @@ namespace GegaGamez.WebUI.Pages.Developers;
 
 public class SearchModel : PageModel
 {
-    private readonly IMapper _mapper;
     private readonly ILogger<SearchModel> _logger;
+    private readonly IMapper _mapper;
     private IDeveloperService _devService;
 
     public SearchModel(IDeveloperService devService, IMapper mapper, ILogger<SearchModel> logger)

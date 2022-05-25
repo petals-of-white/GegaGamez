@@ -76,13 +76,14 @@
     display: block !important;
 }
 
-.display-toggler-hover{
+.display-toggler-hover {
     --visibility: none;
 }
-.display-toggler-hover:hover{
-    --visibility: unset;
-}
 
-.display-toggled{
+    .display-toggler-hover:hover {
+        --visibility: unset;
+    }
+
+.display-toggled {
     display: var(--visibility);
 }

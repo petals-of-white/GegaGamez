@@ -6,8 +6,6 @@ namespace GegaGamez.DAL.Repositories;
 
 public class RatingRepository : Repository<Rating>, IRatingRepository
 {
-    //protected override IQueryable<Rating> DbSetWithIncludedProperties => _dbSet.Include(r => r.User).Include(r => r.Game);
-
     public RatingRepository(DbContext dbContext) : base(dbContext)
     {
     }
@@ -19,7 +17,6 @@ public class RatingRepository : Repository<Rating>, IRatingRepository
         else
             return (byte) Math.Round(_dbSet.Average(r => r.RatingScore));
     }
-
 
     public byte? GetAvgRating(Game game)
     {
