@@ -115,7 +115,7 @@ public class UpdateModel : PageModel
         else
         {
             _logger.LogDebug($"Validation errors: {ModelState.ErrorCount}");
-            TempData [Messages.InfoKey] = "Wrong input. Please check";
+            this.ValidationError();
 
             return RedirectToPage(new { id = UpdatedGame.Id });
         }

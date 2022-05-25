@@ -56,7 +56,7 @@ namespace GegaGamez.WebUI.Pages
                     if (user is null)
                     {
                         _logger.LogInformation($"User with username {LoginForm.Username} was not found.");
-                        TempData [Messages.InfoKey] = $"User with username {LoginForm.Username} was not found.";
+                        this.UserDoesNotExist(LoginForm.Username);    
 
                         return RedirectToPage("/Login");
                     }
@@ -65,7 +65,7 @@ namespace GegaGamez.WebUI.Pages
                         if (user.Password != LoginForm.Password)
                         {
                             _logger.LogInformation($"Incorrect password for user {user.Username}");
-                            TempData [Messages.InfoKey] = $"Incorrect password for user {user.Username}";
+                            this.IncorrectPassword();
 
                             return RedirectToPage("/Login");
                         }
@@ -76,7 +76,7 @@ namespace GegaGamez.WebUI.Pages
                             await HttpContext.SignInAsync(principal, properties);
 
                             _logger.LogInformation($"Successfully signed in user {user.Username}");
-                            TempData [Messages.InfoKey] = "Successfully loged in.";
+                            this.LoggedIn(user.Username);
 
                             return RedirectToPage("/Games/Search");
                         }
@@ -85,7 +85,7 @@ namespace GegaGamez.WebUI.Pages
                 else
                 {
                     _logger.LogInformation($"Validation Errors: {ModelState.ErrorCount}");
-                    TempData [Messages.InfoKey] = "validation errors.";
+                    this.ValidationError();
 
                     return RedirectToPage("/Login");
                 }

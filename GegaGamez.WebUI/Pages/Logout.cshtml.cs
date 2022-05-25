@@ -23,7 +23,8 @@ namespace GegaGamez.WebUI.Pages
             await HttpContext.SignOutAsync();
 
             _logger.LogInformation($"User {userId} was signed out.");
-            TempData [Messages.InfoKey] = "Signed out successfully";
+
+            this.Logout();
 
             return RedirectToPage("/Games/Search");
         }

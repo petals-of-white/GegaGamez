@@ -1,11 +1,12 @@
 ﻿@page "{id:int}"
 @model GegaGamez.WebUI.Pages.Games.UpdateModel
 @{
+	ViewData ["Title"] = "Update game";
 }
 
-<form method="post" id="update-game-form">
-	<img src="img/game.png" alt="Game image" />
-
+<form method="post" id="update-game-form" class="game-form">
+	<h2>Update game</h2>
+	<br />
 	<div>
 		<label asp-for="UpdatedGame.Id">Game id</label>
 		<input asp-for="UpdatedGame.Id" value="@Model.UpdatedGame.Id" readonly />
@@ -30,7 +31,7 @@
 		<textarea asp-for="UpdatedGame.Description"></textarea>
 	</div>
 
-	<div>
+	<div class="vertical-container"> 
 		<label asp-for="UpdatedGame.GenreIds">Genres</label>
 		<select asp-for="UpdatedGame.GenreIds" multiple asp-items="@Model.Genres"></select>
 	</div>
