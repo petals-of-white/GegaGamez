@@ -27,7 +27,6 @@ public class RatingService : IRatingService, IDisposable
         .SingleOrDefault();
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="rating"></param>
     /// <exception cref="EntityNotFoundException"></exception>

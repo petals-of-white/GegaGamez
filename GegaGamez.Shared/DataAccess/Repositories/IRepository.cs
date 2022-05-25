@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using GegaGamez.Shared.Entities;
+﻿using GegaGamez.Shared.Entities;
 
 namespace GegaGamez.Shared.DataAccess.Repositories;
 
@@ -9,5 +8,4 @@ namespace GegaGamez.Shared.DataAccess.Repositories;
 /// <typeparam name="TEntity"></typeparam>
 public interface IRepository<TEntity> : IRepositoryBase<TEntity>, IRepositoryAsync<TEntity> where TEntity : class, IEntity
 {
-
 }

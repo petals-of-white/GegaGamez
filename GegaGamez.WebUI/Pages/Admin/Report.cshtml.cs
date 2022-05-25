@@ -8,8 +8,8 @@ namespace GegaGamez.WebUI.Pages.Admin
     [Authorize(PolicyNames.AdminPolicy)]
     public class ReportModel : PageModel
     {
-        private readonly IStatisticsService _statisticsService;
         private readonly ILogger<ReportModel> _logger;
+        private readonly IStatisticsService _statisticsService;
 
         public ReportModel(IStatisticsService statisticsService, ILogger<ReportModel> logger)
         {

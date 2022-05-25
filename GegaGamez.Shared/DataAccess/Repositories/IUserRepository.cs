@@ -4,6 +4,5 @@ namespace GegaGamez.Shared.DataAccess.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
-
     }
 }

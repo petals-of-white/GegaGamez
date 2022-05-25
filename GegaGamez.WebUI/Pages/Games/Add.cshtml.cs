@@ -17,8 +17,8 @@ public class AddModel : PageModel
 {
     private readonly IDeveloperService _developerService;
     private readonly IGameService _gameService;
-    private readonly ILogger<AddModel> _logger;
     private readonly IGenreService _genreService;
+    private readonly ILogger<AddModel> _logger;
     private readonly IMapper _mapper;
 
     private List<SelectListItem> GetDevelopers() =>
@@ -65,6 +65,7 @@ public class AddModel : PageModel
                 _logger.LogWarning(ex, "Failed to create a new game.");
 
                 TempData [Messages.InfoKey] = "Failed to create a new game. It most likely aleady exists";
+
                 return RedirectToPage();
             }
             return RedirectToPage("/Games/Index", new { id = newGame.Id });
@@ -72,8 +73,8 @@ public class AddModel : PageModel
         else
         {
             _logger.LogDebug($"{ModelState.ErrorCount} validation errors.");
-
             this.ValidationError();
+
             return RedirectToPage();
         }
     }

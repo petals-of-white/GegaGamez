@@ -110,7 +110,6 @@ namespace GegaGamez.WebUI.Pages.Users.Collections
         {
             //var game = new Game { Id = gameId };
 
-
             bool isAuthenticated = User.IsAuthenticated();
 
             if (isAuthenticated)

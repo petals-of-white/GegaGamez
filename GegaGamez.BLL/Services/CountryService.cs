@@ -7,11 +7,10 @@ namespace GegaGamez.BLL.Services;
 
 public class CountryService : ICountryService, IDisposable
 {
+    private readonly Expression<Func<Country, object>> [] _countryIncludes = { };
     private readonly IUnitOfWork _db;
-    private readonly Expression<Func<Country, object>> [] _countryIncludes = {};
-    
+
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="db"></param>
     /// <exception cref="ArgumentNullException"></exception>

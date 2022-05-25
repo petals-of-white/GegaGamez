@@ -11,9 +11,9 @@ public class SearchModel : PageModel
 {
     private readonly IGameService _gameService;
     private readonly IGenreService _genreService;
+    private readonly ILogger<SearchModel> _logger;
     private readonly IMapper _mapper;
     private readonly IRatingService _ratingService;
-    private readonly ILogger<SearchModel> _logger;
 
     public SearchModel(IGameService gameService,
                        IGenreService genreService,
@@ -70,7 +70,7 @@ public class SearchModel : PageModel
 
         Games = _mapper.Map<List<GameModel>>(games);
 
-        for (var i = 0; i< avgScores.Count; i++)
+        for (var i = 0; i < avgScores.Count; i++)
         {
             Games [i].AvgRatingScore = avgScores [i];
         }

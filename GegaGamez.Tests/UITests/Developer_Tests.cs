@@ -14,12 +14,14 @@ public class Developer_Tests
 {
     private readonly IndexModel _devPage;
     private readonly Mock<IDeveloperService> _devServiceMock = new();
-    private readonly Mock<IMapper> _mapperMock = new();
+    private readonly Mock<IGameService> _gameServiceMock = new();
+
     private readonly Mock<ILogger<IndexModel>> _loggerMock = new();
+    private readonly Mock<IMapper> _mapperMock = new();
 
     public Developer_Tests()
     {
-        _devPage = new(_devServiceMock.Object, _mapperMock.Object, _loggerMock.Object);
+        _devPage = new(_devServiceMock.Object, _gameServiceMock.Object, _mapperMock.Object, _loggerMock.Object);
     }
 
     [Fact]

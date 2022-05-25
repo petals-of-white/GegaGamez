@@ -11,7 +11,7 @@ var builderConfig = builder.Configuration;
 builder.Services.AddRazorPages()
     .AddJsonOptions(opt => opt.UseDateOnlyTimeOnlyStringConverters());
 
-// controllers
+// Controllers
 builder.Services
     .AddControllers(opt => opt.UseDateOnlyTimeOnlyStringConverters())
     .AddJsonOptions(opt => opt.UseDateOnlyTimeOnlyStringConverters());
@@ -22,15 +22,12 @@ builder.Services
     .AddFluentValidation(
                         fv =>
                         {
-                            // Validate collections of models
                             fv.ImplicitlyValidateRootCollectionElements = true;
-
-                            // Validate properties that have registered validators
                             fv.ImplicitlyValidateChildProperties = true;
                             fv.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
-                        })
-    // Mapping profiles
-    .AddAutoMapper(typeof(MainProfile));
+                        });
+// Mapping profiles
+builder.Services.AddAutoMapper(typeof(MainProfile));
 
 // DB
 builder.Services.AddGegaGamezDB(builderConfig);

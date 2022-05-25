@@ -39,7 +39,6 @@ public class UserService : IDisposable, IUserService
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="newUser"></param>
     /// <exception cref="EntityNotFoundException"></exception>
@@ -61,7 +60,6 @@ public class UserService : IDisposable, IUserService
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="user"></param>
     /// <exception cref="EntityNotFoundException"></exception>
@@ -91,7 +89,6 @@ public class UserService : IDisposable, IUserService
         _db.Users.FindAll(u => u.Username == username, _userIncludes).SingleOrDefault();
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="user"></param>
     /// <exception cref="EntityNotFoundException"></exception>
@@ -101,11 +98,9 @@ public class UserService : IDisposable, IUserService
         var actualUser = _db.Users.Get(user.Id)
             ?? throw new EntityNotFoundException(user, null);
 
-
         var actualCountry = user.CountryId.HasValue
             ? _db.Countries.Get(user.CountryId.Value)
             : null;
-
 
         actualUser.About = user.About;
 

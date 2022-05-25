@@ -6,6 +6,7 @@ public partial class Role : IEntity
     {
         Users = new HashSet<User>();
     }
+
     public int Id { get; set; }
     public string Name { get; set; }
 

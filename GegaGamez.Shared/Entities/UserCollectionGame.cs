@@ -2,6 +2,6 @@
 
 public partial class UserCollectionGame
 {
-    public int UserCollectionId { get; set; }
     public int GameId { get; set; }
+    public int UserCollectionId { get; set; }
 }

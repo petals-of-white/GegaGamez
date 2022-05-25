@@ -54,8 +54,6 @@ public class User_Tests
     [Fact]
     public void UnauthroziedUser_ReturnsUnauthorizedResult()
     {
-        /*(auS => auS.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>()).Result)*/
-
         // Arrange
         _authServiceMock.Setup(aus => aus.AuthorizeAsync(
             It.IsAny<ClaimsPrincipal>(),

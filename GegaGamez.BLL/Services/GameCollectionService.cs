@@ -20,7 +20,6 @@ public class GameCollectionService : IDisposable, IGameCollectionService
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="defaultCollection"></param>
     /// <param name="game"></param>
@@ -51,7 +50,6 @@ public class GameCollectionService : IDisposable, IGameCollectionService
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="userCollection"></param>
     /// <param name="game"></param>
@@ -161,7 +159,6 @@ public class GameCollectionService : IDisposable, IGameCollectionService
 
         try
         {
-            //_db.Update(collection);
             _db.Save();
         }
         catch (DbUpdateConcurrencyException ex)

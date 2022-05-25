@@ -10,6 +10,7 @@ namespace GegaGamez.WebUI.Pages
         {
             _logger = logger;
         }
+
         public void OnGet()
         {
             _logger.LogInformation("Access denied");

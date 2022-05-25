@@ -14,24 +14,14 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
     protected DbContext _dbContext;
     protected DbSet<TEntity> _dbSet;
 
-    /// <summary>
-    /// Override this property to include more
-    /// </summary>
-    protected virtual IQueryable<TEntity> DbSetWithIncludedProperties { get => _dbSet.AsQueryable(); }
-
     protected static IQueryable<TEntity> QueryWithIncludes(IQueryable<TEntity> initialQuery, Expression<Func<TEntity, object>> [] includes)
     {
         initialQuery = includes.Aggregate(initialQuery, (current, property) => current.Include(property));
         return initialQuery;
     }
 
-    protected IQueryable<TEntity> DbSetQueryWithIncludes(Expression<Func<TEntity, object>> [] includes)
-    {
-        return QueryWithIncludes(_dbSet.AsQueryable(), includes);
-        //var query = _dbSet.AsQueryable();
-        //query = includes.Aggregate(query, (current, property) => current.Include(property));
-        //return query;
-    }
+    protected IQueryable<TEntity> DbSetQueryWithIncludes(Expression<Func<TEntity, object>> [] includes) =>
+        QueryWithIncludes(_dbSet.AsQueryable(), includes);
 
     public Repository(DbContext dbContext)
     {
@@ -46,29 +36,26 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
         return _dbSet.AddAsync(entity).AsTask();
     }
 
-    public void AddRange(IEnumerable<TEntity> entities) => _dbSet.AddRange(entities);
+    public void AddRange(IEnumerable<TEntity> entities) =>
+        _dbSet.AddRange(entities);
 
-    public Task AddRangeAsync(IEnumerable<TEntity> entities) => _dbSet.AddRangeAsync(entities);
+    public Task AddRangeAsync(IEnumerable<TEntity> entities) =>
+        _dbSet.AddRangeAsync(entities);
 
     public virtual IEnumerable<TEntity> AsEnumerable(params Expression<Func<TEntity, object>> [] includes)
-    {
-        return DbSetQueryWithIncludes(includes).ToList();
-        //return DbSetWithIncludedProperties.ToList();
-    }
+        => DbSetQueryWithIncludes(includes).ToList();
 
-    public virtual async Task<IEnumerable<TEntity>> AsEnumerableAsync(params Expression<Func<TEntity, object>> [] includes)
-    {
-        return await DbSetQueryWithIncludes(includes).ToListAsync();
-        //var list = await DbSetWithIncludedProperties.ToListAsync();
-
-        //return list;
-    }
+    public virtual async Task<IEnumerable<TEntity>> AsEnumerableAsync(
+        params Expression<Func<TEntity, object>> [] includes)
+        => await DbSetQueryWithIncludes(includes).ToListAsync();
 
     public int Count() => _dbSet.Count();
 
-    public int CountAll(Expression<Func<TEntity, bool>> predicate) => _dbSet.Count(predicate);
+    public int CountAll(Expression<Func<TEntity, bool>> predicate) =>
+        _dbSet.Count(predicate);
 
-    public Task<int> CountAllAsync(Expression<Func<TEntity, bool>> predicate) => _dbSet.CountAsync(predicate);
+    public Task<int> CountAllAsync(Expression<Func<TEntity, bool>> predicate) =>
+        _dbSet.CountAsync(predicate);
 
     public Task<int> CountAsync() => _dbSet.CountAsync();
 
@@ -77,21 +64,18 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
     /// </summary>
     /// <param name="predicate"></param>
     /// <returns></returns>
-    public virtual IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>> [] includes)
-    {
-        //DbSetWithIncludedProperties.Where(predicate).ToList();
-        return DbSetQueryWithIncludes(includes).Where(predicate).ToList();
-    }
+    public virtual IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> predicate,
+                                                params Expression<Func<TEntity, object>> [] includes) =>
+        DbSetQueryWithIncludes(includes).Where(predicate).ToList();
 
     /// <summary>
     /// </summary>
     /// <param name="predicate"></param>
     /// <returns></returns>
-    public virtual async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>> [] includes)
-    {
-        //var list = await DbSetWithIncludedProperties.Where(predicate).ToListAsync();
-        return await DbSetQueryWithIncludes(includes).Where(predicate).ToListAsync();
-    }
+    public virtual async Task<IEnumerable<TEntity>> FindAllAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        params Expression<Func<TEntity, object>> [] includes)
+        => await DbSetQueryWithIncludes(includes).Where(predicate).ToListAsync();
 
     /// <summary>
     /// Finds an entry by Id. This method doesn't use eager loading by default, So it can be
@@ -99,17 +83,9 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
     /// </summary>
     /// <param name="id"></param>
     /// <returns>TEntity if found, otherwise null</returns>
-    public virtual TEntity? Get(int id, params Expression<Func<TEntity, object>> [] includes)
-    {
-        //return _dbSet.Find(id);
-        return DbSetQueryWithIncludes(includes).SingleOrDefault(entity => entity.Id == id);
-    }
+    public virtual TEntity? Get(int id, params Expression<Func<TEntity, object>> [] includes) =>
+         DbSetQueryWithIncludes(includes).SingleOrDefault(entity => entity.Id == id);
 
-    /// <summary>
-    /// This method doesn't use eager loading by default, So it can be overriden to do so
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
     public virtual Task<TEntity?> GetAsync(int id, params Expression<Func<TEntity, object>> [] includes)
     {
         return DbSetQueryWithIncludes(includes).SingleOrDefaultAsync(entity => entity.Id == id);
@@ -117,22 +93,19 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
 
     public void Remove(int id)
     {
-        // TEntity? entity = _dbSet.Find(id);
         TEntity? entity = Get(id);
 
         if (entity is not null)
-        {
             Remove(entity);
-        }
         else
-        {
             throw new ArgumentOutOfRangeException(nameof(id), $"Record with Id {id} does not exist");
-        }
     }
 
     public void Remove(TEntity entity) => _dbSet.Remove(entity);
 
-    public void RemoveAll(Expression<Func<TEntity, bool>> predicate) => RemoveRange(FindAll(predicate));
+    public void RemoveAll(Expression<Func<TEntity, bool>> predicate) =>
+        RemoveRange(FindAll(predicate));
 
-    public void RemoveRange(IEnumerable<TEntity> entities) => _dbSet.RemoveRange(entities);
+    public void RemoveRange(IEnumerable<TEntity> entities) =>
+        _dbSet.RemoveRange(entities);
 }

@@ -9,8 +9,8 @@ public static class Validations
     /// </summary>
     /// <param name="page"></param>
     /// <param name="entryKeys"></param>
-    public static void ValidateOnly(this PageModel page, string [] entryKeys) {
-
+    public static void ValidateOnly(this PageModel page, string [] entryKeys)
+    {
         foreach (var entry in page.ModelState)
         {
             if (entryKeys.Any(k => entry.Key.StartsWith(k)) == false)

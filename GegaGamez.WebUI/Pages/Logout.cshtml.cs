@@ -16,6 +16,7 @@ namespace GegaGamez.WebUI.Pages
         {
             _logger = logger;
         }
+
         public async Task<IActionResult> OnGet()
         {
             int userId = User.GetId().GetValueOrDefault();

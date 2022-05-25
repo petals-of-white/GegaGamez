@@ -18,8 +18,8 @@ public class GameAdd_Tests
     private readonly Mock<IDeveloperService> _devServiceMock = new();
     private readonly Mock<IGameService> _gameServiceMock = new();
     private readonly Mock<IGenreService> _genreServiceMock = new();
-    private readonly Mock<IMapper> _mapperMock = new();
     private readonly Mock<ILogger<AddModel>> _loggerMock = new();
+    private readonly Mock<IMapper> _mapperMock = new();
 
     private HashSet<Game> Games = new() {
         new ()
@@ -69,7 +69,7 @@ public class GameAdd_Tests
     }
 
     [Fact]
-    public void kek()
+    public void Test()
     {
         _genreServiceMock.Setup(s => s.FindAll()).Returns(Genres).Verifiable();
         _gameServiceMock.Setup(s => s.FindAll()).Returns(Games).Verifiable();
@@ -78,6 +78,7 @@ public class GameAdd_Tests
 
         IEnumerable<int>? expected = Genres.Select(g => g.Id);
         IEnumerable<int>? actual = _addGamePage.Genres.Select(g => int.Parse(g.Value));
+
         Assert.Equal(expected, actual);
         _genreServiceMock.Verify();
         _gameServiceMock.Verify();

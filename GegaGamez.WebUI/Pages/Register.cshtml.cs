@@ -3,7 +3,6 @@ using GegaGamez.Shared.Entities;
 using GegaGamez.Shared.Exceptions;
 using GegaGamez.Shared.Services;
 using GegaGamez.WebUI.Models.Auth;
-using GegaGamez.WebUI.Models.Display;
 using GegaGamez.WebUI.PageHelpers;
 using GegaGamez.WebUI.Security;
 using Microsoft.AspNetCore.Authentication;
