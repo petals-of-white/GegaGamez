@@ -61,7 +61,7 @@ namespace GegaGamez.WebUI.Pages
                     catch (UniqueEntityException ex)
                     {
                         _logger.LogWarning(ex, $"Failed to create a user {user.Username} due to unique constraint violation.");
-                        TempData [Messages.InfoKey] = "User alreadye exists. Please choose a different username";
+                        this.UserExists(user.Username);
 
                         return Page();
                     }
@@ -71,14 +71,14 @@ namespace GegaGamez.WebUI.Pages
                     await HttpContext.SignInAsync(principal, properties);
 
                     _logger.LogInformation($"User {User.GetId()} has signed in.");
-                    TempData [Messages.InfoKey] = "Registration was successful";
+                    this.Registered(user.Username);
 
                     return RedirectToPage("/Games/Search");
                 }
                 else
                 {
                     _logger.LogDebug($"Validation errors: {ModelState.ErrorCount}");
-                    TempData [Messages.InfoKey] = "Validation erorrs";
+                    this.ValidationError();
 
                     return RedirectToPage("/Register");
                 }

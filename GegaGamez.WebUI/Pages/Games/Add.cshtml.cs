@@ -73,7 +73,7 @@ public class AddModel : PageModel
         {
             _logger.LogDebug($"{ModelState.ErrorCount} validation errors.");
 
-            TempData [Messages.InfoKey] = "Wrong input. Please check again.";
+            this.ValidationError();
             return RedirectToPage();
         }
     }

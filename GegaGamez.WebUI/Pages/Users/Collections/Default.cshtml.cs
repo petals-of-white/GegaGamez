@@ -128,7 +128,7 @@ namespace GegaGamez.WebUI.Pages.Users.Collections
                             _collectionService.RemoveGame(dc, game);
 
                             _logger.LogInformation($"Game {gameId} has been removed from default collection {collectionId}.");
-                            TempData [Messages.InfoKey] = $"The game {game.Title} has been removed from {dc.DefaultCollectionType.Name}";
+                            this.GameRemoved(game.Title, dc.DefaultCollectionType.Name);
 
                             return RedirectToPage(new { userId = dc.UserId, defaultCollection = dc.DefaultCollectionType.Name });
                         }

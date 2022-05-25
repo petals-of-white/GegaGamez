@@ -37,12 +37,6 @@ public class IndexModel : PageModel
             .Select(dc => new SelectListItem(dc.DefaultCollectionType.Name, dc.Id.ToString()))
             .ToList();
 
-        //for (int i = 0; i < defaultCollections.Count(); i++)
-        //{
-        //    if (defaultCollections [i].Games.Select(g => g.Id).Contains(requestedGame.Id))
-        //        itemList [i].Selected = true;
-        //}
-
         return itemList;
     }
 
@@ -57,12 +51,6 @@ public class IndexModel : PageModel
         List<SelectListItem> itemList = userCollections
             .Select(uc => new SelectListItem(uc.Name, uc.Id.ToString()))
             .ToList();
-
-        //for (int i = 0; i < userCollections.Count; i++)
-        //{
-        //    if (userCollections [i].Games.Select(g => g.Id).Contains(requestedGame.Id))
-        //        itemList [i].Selected = true;
-        //}
 
         return itemList;
     }
@@ -205,7 +193,7 @@ public class IndexModel : PageModel
             else
             {
                 _logger.LogInformation($"Comment didn't pass validation. Number of errors {ModelState.ErrorCount}");
-                TempData [Messages.InfoKey] = "Please check comment requirements";
+                this.ValidationError();
             }
 
             _logger.LogInformation("Redirecting to the /Games/Index");
@@ -240,13 +228,13 @@ public class IndexModel : PageModel
                         _commentService.DeleteComment(actualComment);
 
                         _logger.LogInformation($"Comment with id {id} has been successfully deleted.");
+                        this.CommentDeleted();
 
                         return RedirectToPage(new { id = gameId });
                     }
                     catch (EntityNotFoundException ex)
                     {
                         _logger.LogWarning(ex, $"Could not delete comment with id {id}, most likely because it does not exist");
-                        //TempData [Messages.InfoKey] = "An error occured while trying to delete comment";
 
                         return NotFound();
                     }
@@ -262,7 +250,6 @@ public class IndexModel : PageModel
             else
             {
                 _logger.LogWarning($"Could not delete comment with id {id}, most likely because it does not exist");
-                //TempData [Messages.InfoKey] = "An error occured while trying to delete comment";
 
                 return NotFound();
             }
@@ -284,19 +271,20 @@ public class IndexModel : PageModel
         {
             if (isAdmin)
             {
-                var game = new Game { Id = id };
+                var game = _gameService.GetById(id)!;
 
                 try
                 {
                     _gameService.DeleteGame(game);
+
                     _logger.LogInformation($"Game with id {id} has been successfully deleted.");
+                    this.GameDeleted(game.Title);
 
                     return RedirectToPage("/Games/Search");
                 }
                 catch (EntityNotFoundException ex)
                 {
                     _logger.LogWarning(ex, "Requested game wasn't found, therefore can not be deleted.");
-                    TempData [Messages.InfoKey] = "An error occured while trying to delete this game.";
 
                     return NotFound();
                 }
@@ -326,7 +314,7 @@ public class IndexModel : PageModel
         if (ModelState.IsValid == false)
         {
             _logger.LogInformation($"GameToUserCollection or GameToDefaultCollection didn't pass validation. Number of errors {ModelState.ErrorCount}");
-            TempData [Messages.InfoKey] = "Wrong collection or game data";
+            this.ValidationError();
 
             return BadRequest();
         }
@@ -355,6 +343,7 @@ public class IndexModel : PageModel
             {
                 _collectionService.AddGame(wantedDefaultCollection, gameToAdd);
                 _logger.LogInformation($"Game {gameToAdd.Id} added to default collection {wantedDefaultCollection.Id}");
+                this.GameAdded(gameToAdd.Title, wantedDefaultCollection.DefaultCollectionType.Name);
             }
             catch (EntityNotFoundException ex)
             {
@@ -398,10 +387,7 @@ public class IndexModel : PageModel
 
         }
 
-
         _logger.LogInformation("Successfully added games to collections. Redirecting...");
-
-        TempData [Messages.InfoKey] = $"Game {gameToAdd.Title} has been added to collection";
 
         return RedirectToPage(new { id = gameId });
     }
@@ -439,7 +425,7 @@ public class IndexModel : PageModel
             else
             {
                 _logger.LogDebug($"Validation Errors: {ModelState.Count}");
-                TempData [Messages.InfoKey] = "Wrong input format";
+                this.ValidationError();
             }
 
             return RedirectToPage(new { id = UpdateUserRating.GameId });

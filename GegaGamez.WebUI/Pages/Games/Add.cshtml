@@ -1,10 +1,12 @@
 ﻿@page
 @model GegaGamez.WebUI.Pages.Games.AddModel
 @{
+	ViewData ["Title"] = "Add a new game";
 }
 
-<form method="post" id="add-game-form" class="vertical-container">
-	<img src="img/game.png" alt="New game image" />
+<form method="post" id="add-game-form" class="game-form">
+	<h2>Add a new game</h2>
+	<br />
 	<div>
 		<label asp-for="NewGame.Title"></label>
 		<input asp-for="NewGame.Title" />
@@ -31,7 +33,7 @@
 	</div>
 
 	<div class="flex-container">
-		<button type="submit" class="btn-contrast rounded">Submit new game</button>
+		<button type="submit" class="btn-contrast rounded">Submit</button>
 		<button type="reset" class="btn-contrast rounded">Reset</button>
 	</div>
 	
