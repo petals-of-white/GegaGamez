@@ -22,7 +22,7 @@
         <span>
             @if(Model.Game.AvgRatingScore.HasValue)
             {
-                <span>@Model.Game.AvgRatingScore</span>
+                <span>Average: @Model.Game.AvgRatingScore / 10</span>
             }
             else
             {
@@ -30,7 +30,7 @@
             }
             @if (Model.UserRatingForGame.HasValue)
             {
-                <span class="font-contrast"> / My rating - @Model.UserRatingForGame.Value</span>
+                <span class="font-contrast"> | My rating - @Model.UserRatingForGame.Value</span>
             }
          
         </span>
@@ -129,12 +129,9 @@
     <input asp-for=GameToDefaultCollection.GameId value=@Model.Game.Id readonly hidden />
     <input asp-for=GameToUserCollection.GameId value=@Model.Game.Id readonly hidden />
     <section title="Select collection..." class="main-something">
-        <div>
-            <select size="5" asp-for=GameToDefaultCollection.CollectionId asp-items=@Model.AvailableDefaultCollections></select>
-        </div>
-	    <div>
-            <select size="5" asp-for=GameToUserCollection.CollectionId asp-items=@Model.AvailableUserCollections></select>
-        </div>
+        <select size="5" asp-for=GameToDefaultCollection.CollectionId asp-items=@Model.AvailableDefaultCollections></select>
+      
+        <select size="5" hidden asp-for=GameToUserCollection.CollectionId asp-items=@Model.AvailableUserCollections></select>
     </section>
     <section class="popup-actions">
         <button type="submit" class="borderless">Ok</button>

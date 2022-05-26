@@ -553,3 +553,7 @@ a.inverse-link {
     .game-form input, .game-form select, .game-form textarea {
         width: 50%;
     }
+
+    #move-game-to-collection-modal select {
+        width: 100%;
+    }
