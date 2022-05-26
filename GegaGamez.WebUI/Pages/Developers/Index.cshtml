@@ -13,7 +13,7 @@
     <img id="dev-img" class="img-standard" src="/img/developer.png" alt="Game img" />
 
     <section id="dev-text-info" class="text-info-block">
-        <h1>@Model.Developer.Name</h1>
+        <h1>Developer: <span class="font-secondary">@Model.Developer.Name</span></h1>
         <span>Games: 
             <span class="font-contrast">@Model.Developer.NumberOfGames</span>
         </span>
@@ -25,7 +25,7 @@
             @Model.Developer.BeginDate.Year - @endDate
         </span>
         <span>
-            @Model.Developer.Description
+            About: <span class="font-secondary">@Model.Developer.Description</span>
         </span>
     </section>
 </article>

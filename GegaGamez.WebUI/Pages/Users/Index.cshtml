@@ -26,15 +26,15 @@
             </h2>
 
             <span class="font-secondary">
-                @Model.UserProfile.Country?.Name
+                Country: <span class="font-secondary">@Model.UserProfile.Country?.Name</span>
             </span>
 
             <span>
-                @Model.UserProfile.Name
+                Name: <span class="font-secondary">@Model.UserProfile.Name</span>
             </span>
 
             <span>
-                @Model.UserProfile.About
+                About: <span class="font-secondary">@Model.UserProfile.About</span>
             </span>
         </section>
 
@@ -42,7 +42,7 @@
             @if(authenticated && isPageOwner)
             {
                 <button onclick="showEditProfileModal()" type="button" class="btn-contrast rounded">Edit profile</button>
-                <button onclick="showDeleteAccountModal()" type="button" class="btn-contrast rounded font">Delete my profile</button>
+                <button onclick="showDeleteAccountModal()" type="button" class="btn-contrast rounded font">Delete my account</button>
             }
         </section>
     </div>
